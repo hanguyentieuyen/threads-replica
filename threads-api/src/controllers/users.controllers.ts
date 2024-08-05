@@ -1,12 +1,10 @@
 import { Request, Response } from 'express'
+import { ObjectId } from 'mongodb'
+import User from '~/models/schemas/User.schema'
 
 export const loginController = (req: Request, res: Response) => {
-  const { email, password } = req.body
-  if (email === 'a@gmail.com' && password === '123') {
-    return res.status(200).json({
-      message: 'Login success'
-    })
-  }
+  const user = req.body as User
+  const userId = user._id as ObjectId
   return res.status(400).json({
     message: 'Login failed'
   })
