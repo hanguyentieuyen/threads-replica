@@ -5,7 +5,7 @@ import { omit } from 'lodash'
 
 export const defaultErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log('ERROR123: ', err.message)
+    console.log('ERROR: ', err.message)
     if (err instanceof ErrorWithStatus) {
       return res.status(err.status).json(omit(err, ['status']))
     }
