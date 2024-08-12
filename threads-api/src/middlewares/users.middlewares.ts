@@ -3,6 +3,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import databaseService from '~/services/database.services'
 import { hashPassword } from '~/utils/hash'
 import { validate } from '~/utils/validation'
+
 export const loginValidator = validate(
   checkSchema({
     email: {

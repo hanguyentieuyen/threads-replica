@@ -58,11 +58,10 @@ class UsersService {
       verify
     })
     const { iat, exp } = await this.decodeRefreshToken(refresh_token)
-    // Insert a new refresh token to collection db
+
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
     )
-
     return {
       access_token,
       refresh_token

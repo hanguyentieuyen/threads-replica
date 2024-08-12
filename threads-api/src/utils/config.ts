@@ -1,3 +1,6 @@
+import { config } from 'dotenv'
+
+config()
 export const envConfig = {
   dbName: process.env.DB_NAME as string,
   dbUsersCollection: process.env.DB_USERS_COLLECTION as string,

@@ -4,7 +4,6 @@ import { loginValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const userRouter = Router()
-
 /**
  * Description: Login
  * Path: /login

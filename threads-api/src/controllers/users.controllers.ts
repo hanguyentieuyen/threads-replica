@@ -1,12 +1,13 @@
 import { Request, Response } from 'express'
+import { ParamsDictionary } from 'express-serve-static-core'
 import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/messages'
+import { LoginReqBody } from '~/models/requestType/User.requests'
 import User from '~/models/schemas/User.schema'
 import usersService from '~/services/users.services'
 
-export const loginController = async (req: Request, res: Response) => {
-  console.log(req)
-  const user = req.body as User
+export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
+  const user = req.user as User
   const userId = user._id as ObjectId
   const result = await usersService.login({ user_id: userId.toString(), verify: user.verify })
   return res.status(400).json({
