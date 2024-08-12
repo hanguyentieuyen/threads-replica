@@ -1,5 +1,8 @@
 import { useRoutes } from 'react-router-dom'
 import Login from './pages/Login'
+import Register from './pages/Register'
+import path from './constant/path'
+import RegisterLayout from './layouts/RegisterLayout'
 export default function useRouteElement() {
   const routeElements = useRoutes([
     {
@@ -7,8 +10,20 @@ export default function useRouteElement() {
       element: <>Posts</>
     },
     {
-      path: '/login',
-      element: <Login />
+      path: path.login,
+      element: (
+        <RegisterLayout>
+          <Login />
+        </RegisterLayout>
+      )
+    },
+    {
+      path: path.register,
+      element: (
+        <RegisterLayout>
+          <Register />
+        </RegisterLayout>
+      )
     },
     {
       path: '*',
