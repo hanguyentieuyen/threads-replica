@@ -1,14 +1,32 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import path from '~/constant/path'
+import { registerSchemaYup, RegisterSchemaYup } from '~/utils/yupSchema'
 
+type FormData = Pick<RegisterSchemaYup, 'email' | 'password'>
+const loginSchema = registerSchemaYup.pick(['email', 'password'])
 export default function Login() {
+  const {
+    register,
+    setError,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<FormData>({
+    resolver: yupResolver(loginSchema)
+  })
+
+  const handleSubmitForm = handleSubmit((data) => {
+    console.log(data)
+  })
   return (
     <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
-      <form>
+      <form onSubmit={handleSubmitForm}>
         <div className='p-6 flex flex-col justify-between items-center'>
           <span className='text-md text-stone-950 font-bold'>Đăng nhập tài khoản Threads</span>
           <div className='mt-4 w-full'>
             <input
+              {...register('email')}
               type='email'
               name='email'
               placeholder='Email'
@@ -17,6 +35,7 @@ export default function Login() {
           </div>
           <div className='mt-2 w-full'>
             <input
+              {...register('password')}
               type='password'
               name='password'
               placeholder='Mật khẩu'
