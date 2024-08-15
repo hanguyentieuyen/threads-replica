@@ -1,22 +1,29 @@
-import axios, { Axios, AxiosError, AxiosInstance } from 'axios'
+import axios, { AxiosError, type AxiosInstance } from 'axios'
 import config from '~/constant/config'
+import { toast } from 'react-toastify'
 import {
+  clearLocalStorage,
   getAccessTokenFromLocalStorage,
   getRefreshTokenFromLocalStorage,
+  isAxiosExpiredTokenError,
+  isAxiosUnauthorizedError,
   setAccessTokenToLocalStorage,
   setRefreshTokenToLocalStorage
 } from './auth'
 import { AuthResponse } from '~/types/auth.type'
 import HttpStatusCode from '~/constant/httpStatusCode.enum'
+import { ErrorResponse } from '~/types/utils.type'
 
 export class Http {
   instance: AxiosInstance
   private accessToken: string
   private refreshToken: string
+  private refreshTokenRequest: Promise<string> | null
   constructor() {
     // create instance
     this.accessToken = getAccessTokenFromLocalStorage()
     this.refreshToken = getRefreshTokenFromLocalStorage()
+    this.refreshTokenRequest = null
     this.instance = axios.create({
       baseURL: config.baseUrl,
       timeout: 10000,
@@ -68,13 +75,57 @@ export class Http {
           const data: any | undefined = error.response?.data
           const message = data?.message || error.message
           // toast message here
+          toast.error(message)
         }
 
         // Case error code: 401 (wrong token, expired token, no token)
-        if (isAxiosUnauthorizedError)
+        if (isAxiosUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(error)) {
+          const configError = error.response?.config || {}
+          const { url } = configError
 
+          // Case error: token expired and current request is not refresh token request , then request refresh token
+          if (isAxiosExpiredTokenError(error) && url !== config.refreshTokenUrl) {
+            this.refreshTokenRequest = this.refreshTokenRequest
+              ? this.refreshTokenRequest
+              : this.handleRefreshToken().finally(() => {
+                  // Giữ refreshTokenRequest trong 10s cho những request tiếp theo nếu có 401 thì dùng
+                  setTimeout(() => {
+                    this.refreshTokenRequest = null
+                  }, 10000)
+                })
+            return this.refreshTokenRequest.then((access_token) => {
+              // Nghĩa là chúng ta tiếp tục gọi lại request cũ vừa bị lỗi
+              return this.instance({ ...configError, headers: { ...configError.headers, authorization: access_token } })
+            })
+          }
+
+          // Other error cases
+          clearLocalStorage()
+          this.accessToken = ''
+          this.refreshToken = ''
+        }
+        return Promise.reject(error)
       }
     )
+  }
+
+  private handleRefreshToken() {
+    return this.instance
+      .post(config.refreshTokenUrl, {
+        refresh_token: this.refreshToken
+      })
+      .then((res) => {
+        const { access_token } = res.data.data
+        setAccessTokenToLocalStorage(access_token)
+        this.accessToken = access_token
+        return access_token
+      })
+      .catch((error) => {
+        clearLocalStorage()
+        this.accessToken = ''
+        this.refreshToken = ''
+        throw error
+      })
   }
 }
 const http = new Http().instance
