@@ -10,7 +10,7 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
   const user = req.user as User
   const userId = user._id as ObjectId
   const result = await usersService.login({ user_id: userId.toString(), verify: user.verify })
-  return res.status(400).json({
+  return res.json({
     message: USERS_MESSAGES.LOGIN_SUCCESS,
     result
   })
@@ -18,7 +18,7 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
 
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
   const result = await usersService.register(req.body)
-  return res.status(400).json({
+  return res.json({
     message: USERS_MESSAGES.REGISTER_SUCCESS,
     result
   })
