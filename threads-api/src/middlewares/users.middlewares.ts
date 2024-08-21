@@ -13,6 +13,66 @@ import { JsonWebTokenError } from 'jsonwebtoken'
 import { verifyToken } from '~/utils/jwt'
 import { envConfig } from '~/utils/config'
 
+export const accessTokenValidator = validate(
+  checkSchema(
+    {
+      Authorization: {
+        trim: true,
+        custom: {
+          options: async (value: string, { req }) => {
+            const accessToken = value.split(' ')[1]
+            return await verifyAccessToken(accessToken, req as Request)
+          }
+        }
+      }
+    },
+    ['headers']
+  )
+)
+
+export const refreshTokenValidator = validate(
+  checkSchema({
+    refresh_token: {
+      trim: true,
+      custom: {
+        options: async (value: string, { req }) => {
+          if (!value) {
+            throw new ErrorWithStatus({
+              message: USERS_MESSAGES.REFRESH_TOKEN_IS_REQUIRED,
+              status: HTTP_STATUS.UNAUTHORIZED
+            })
+          }
+
+          try {
+            const [decodedRefreshToken, existedRefreshToken] = await Promise.all([
+              verifyToken({ token: value, secretOrPublicKey: envConfig.jwtSecretRefreshToken }),
+              databaseService.refreshTokens.findOne({ token: value })
+            ])
+
+            if (existedRefreshToken === null) {
+              throw new ErrorWithStatus({
+                message: USERS_MESSAGES.USED_REFRESH_TOKEN_OR_NOT_EXIST,
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+
+            ;(req as Request).decodedAuthorization = decodedRefreshToken
+          } catch (error) {
+            if (error instanceof JsonWebTokenError) {
+              throw new ErrorWithStatus({
+                message: capitalize(error.message),
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+            throw error
+          }
+          return true
+        }
+      }
+    }
+  })
+)
+
 export const loginValidator = validate(
   checkSchema({
     email: {
@@ -159,62 +219,28 @@ export const registerValidator = validate(
   })
 )
 
-export const accessTokenValidator = validate(
+export const forgotPasswordValidator = validate(
   checkSchema(
     {
-      Authorization: {
+      email: {
+        notEmpty: {
+          errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED
+        },
+        isEmail: {
+          errorMessage: USERS_MESSAGES.EMAIL_IS_INVALID
+        },
         trim: true,
         custom: {
-          options: async (value: string, { req }) => {
-            const accessToken = value.split(' ')[1]
-            return await verifyAccessToken(accessToken, req as Request)
+          options: async (value, { req }) => {
+            const user = await databaseService.users.findOne({ email: value })
+            if (user === null) {
+              throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
+            }
+            req.user = user
           }
         }
       }
     },
-    ['headers']
+    ['body']
   )
-)
-
-export const refreshTokenValidator = validate(
-  checkSchema({
-    refresh_token: {
-      trim: true,
-      custom: {
-        options: async (value: string, { req }) => {
-          if (!value) {
-            throw new ErrorWithStatus({
-              message: USERS_MESSAGES.REFRESH_TOKEN_IS_REQUIRED,
-              status: HTTP_STATUS.UNAUTHORIZED
-            })
-          }
-
-          try {
-            const [decodedRefreshToken, existedRefreshToken] = await Promise.all([
-              verifyToken({ token: value, secretOrPublicKey: envConfig.jwtSecretRefreshToken }),
-              databaseService.refreshTokens.findOne({ token: value })
-            ])
-
-            if (existedRefreshToken === null) {
-              throw new ErrorWithStatus({
-                message: USERS_MESSAGES.USED_REFRESH_TOKEN_OR_NOT_EXIST,
-                status: HTTP_STATUS.UNAUTHORIZED
-              })
-            }
-
-            ;(req as Request).decodedAuthorization = decodedRefreshToken
-          } catch (error) {
-            if (error instanceof JsonWebTokenError) {
-              throw new ErrorWithStatus({
-                message: capitalize(error.message),
-                status: HTTP_STATUS.UNAUTHORIZED
-              })
-            }
-            throw error
-          }
-          return true
-        }
-      }
-    }
-  })
 )

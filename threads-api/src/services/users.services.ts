@@ -12,7 +12,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 class UsersService {
   private createtAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return createToken({
-      payload: { user_id, verify },
+      payload: { user_id, verify, token_type: TokenType.AccessToken },
       privateKey: envConfig.jwtSecretAccessToken,
       options: {
         expiresIn: envConfig.accessTokenExpiresIn
@@ -47,10 +47,24 @@ class UsersService {
 
   private createEmailVerifyToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return createToken({
-      payload: { user_id, verify },
+      payload: { user_id, verify, token_type: TokenType.EmailVerifyToken },
       privateKey: envConfig.jwtSecretVerifyMailToken,
       options: {
         expiresIn: envConfig.emailVerifyTokenExpiresIn
+      }
+    })
+  }
+
+  private createForgotPasswordToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+    return createToken({
+      payload: {
+        user_id,
+        verify,
+        token_type: TokenType.ForgotPasswordToken
+      },
+      privateKey: envConfig.jwtSecretForgotPasswordToken,
+      options: {
+        expiresIn: envConfig.forgotPasswordTokenExpiresIn
       }
     })
   }
@@ -117,6 +131,8 @@ class UsersService {
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(userId), token: refresh_token, iat, exp })
     )
+
+    // Todo: Send mail to verify registration
     return {
       access_token,
       refresh_token
@@ -127,6 +143,28 @@ class UsersService {
     await databaseService.refreshTokens.deleteOne({ token: refreshToken })
     return {
       message: USERS_MESSAGES.LOGOUT_SUCCESS
+    }
+  }
+
+  async forgotPassword({ user_id, verify, email }: { user_id: string; verify: UserVerifyStatus; email: string }) {
+    // Create new forgot password token
+    const forgotPasswordToken = await this.createForgotPasswordToken({
+      user_id,
+      verify
+    })
+    // Update token for user
+    await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
+      {
+        $set: {
+          forgot_password_token: forgotPasswordToken,
+          updated_at: '$NOW'
+        }
+      }
+    ])
+    // Send mail included link to user mail: http://example.com/forgot-password?token=token
+    //console.log('forgotPasswordToken: ', forgotPasswordToken)
+    return {
+      message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
     }
   }
 }

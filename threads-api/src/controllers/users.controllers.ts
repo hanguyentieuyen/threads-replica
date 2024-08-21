@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/messages'
-import { LoginReqBody, LogoutReqBody, RegisterReqBody } from '~/models/requestType/User.requests'
+import { ForgotPasswordReqBody, LoginReqBody, LogoutReqBody, RegisterReqBody } from '~/models/requestType/User.requests'
 import User from '~/models/schemas/User.schema'
 import usersService from '~/services/users.services'
 
@@ -27,5 +27,14 @@ export const registerController = async (req: Request<ParamsDictionary, any, Reg
 export const logoutController = async (req: Request<ParamsDictionary, any, LogoutReqBody>, res: Response) => {
   const { refresh_token } = req.body
   const data = await usersService.logout(refresh_token)
+  return res.json(data)
+}
+
+export const forgotPasswordController = async (
+  req: Request<ParamsDictionary, any, ForgotPasswordReqBody>,
+  res: Response
+) => {
+  const { _id, verify, email } = req.user as User
+  const data = await usersService.forgotPassword({ user_id: (_id as ObjectId).toString(), verify, email })
   return res.json(data)
 }
