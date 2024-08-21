@@ -62,7 +62,9 @@ export class Http {
         } else if (url === config.logoutUrl) {
           this.accessToken = ''
           this.refreshToken = ''
+          clearLocalStorage()
         }
+        return response
       },
       (error: AxiosError) => {
         // Any status codes that falls outside the range of 2xx cause this function to trigger
@@ -80,7 +82,7 @@ export class Http {
 
         // Case error code: 401 (wrong token, expired token, no token)
         if (isAxiosUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(error)) {
-          const configError = error.response?.config || {}
+          const configError = error.response?.config || { headers: {}, url: '' }
           const { url } = configError
 
           // Case error: token expired and current request is not refresh token request , then request refresh token
@@ -93,16 +95,24 @@ export class Http {
                     this.refreshTokenRequest = null
                   }, 10000)
                 })
-            return this.refreshTokenRequest.then((access_token) => {
-              // Nghĩa là chúng ta tiếp tục gọi lại request cũ vừa bị lỗi
-              return this.instance({ ...configError, headers: { ...configError.headers, authorization: access_token } })
-            })
+            return (
+              this.refreshTokenRequest &&
+              this.refreshTokenRequest.then((access_token) => {
+                if (configError.headers) configError.headers.authorization = access_token
+                // Nghĩa là chúng ta tiếp tục gọi lại request cũ vừa bị lỗi
+                return this.instance({
+                  ...configError,
+                  headers: { ...configError.headers, authorization: access_token }
+                })
+              })
+            )
           }
 
-          // Other error cases
+          // Other error cases: wrong token, miss token, refresh token fail. Show toast
           clearLocalStorage()
           this.accessToken = ''
           this.refreshToken = ''
+          toast.error(error.response?.data.data?.message || error.response?.data.message)
         }
         return Promise.reject(error)
       }

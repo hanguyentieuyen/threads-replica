@@ -3,6 +3,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
 import { hashPassword } from '~/utils/hash'
+import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
 
 export const loginValidator = validate(
@@ -17,6 +18,7 @@ export const loginValidator = validate(
       trim: true,
       custom: {
         options: async (value, { req }) => {
+          // Find existed account in database
           const user = await databaseService.users.findOne({ email: value, password: hashPassword(req.body.password) })
           if (user === null) {
             throw new Error(USERS_MESSAGES.EMAIL_OR_PASSWORD_IS_INCORRECT)
@@ -149,3 +151,18 @@ export const registerValidator = validate(
     }
   })
 )
+
+export const accessTokenValidator = validate(
+  checkSchema({
+    Authorization: {
+      trim: true,
+      custom: {
+        options: async (value: string, { req }) => {
+          const accessToken = value.split(' ')[1]
+        }
+      }
+    }
+  })
+)
+
+export const refreshTokenValidator = validate(checkSchema({}))

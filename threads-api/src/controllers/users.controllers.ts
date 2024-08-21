@@ -2,24 +2,30 @@ import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/messages'
-import { LoginReqBody, RegisterReqBody } from '~/models/requestType/User.requests'
+import { LoginReqBody, LogoutReqBody, RegisterReqBody } from '~/models/requestType/User.requests'
 import User from '~/models/schemas/User.schema'
 import usersService from '~/services/users.services'
 
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
   const user = req.user as User
   const userId = user._id as ObjectId
-  const result = await usersService.login({ user_id: userId.toString(), verify: user.verify })
+  const data = await usersService.login({ user_id: userId.toString(), verify: user.verify })
   return res.json({
     message: USERS_MESSAGES.LOGIN_SUCCESS,
-    result
+    data
   })
 }
 
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
-  const result = await usersService.register(req.body)
+  const data = await usersService.register(req.body)
   return res.json({
     message: USERS_MESSAGES.REGISTER_SUCCESS,
-    result
+    data
   })
+}
+
+export const logoutController = async (req: Request<ParamsDictionary, any, LogoutReqBody>, res: Response) => {
+  const { refresh_token } = req.body
+  const data = await usersService.logout(refresh_token)
+  return res.json(data)
 }

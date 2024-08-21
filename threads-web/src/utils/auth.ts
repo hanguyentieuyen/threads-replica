@@ -30,3 +30,7 @@ export function isAxiosExpiredTokenError<UnauthorizedError>(error: unknown): err
     error.response?.data?.data?.name === 'EXPIRED_TOKEN'
   )
 }
+
+export function isAxiosUnprocessableEntityError<FormError>(error: unknown): error is AxiosError<FormError> {
+  return isAxiosError(error) && error.response?.status === HttpStatusCode.UnprocessableEntity
+}

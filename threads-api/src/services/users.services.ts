@@ -7,6 +7,7 @@ import { ObjectId } from 'mongodb'
 import { RegisterReqBody } from '~/models/requestType/User.requests'
 import User from '~/models/schemas/User.schema'
 import { hashPassword } from '~/utils/hash'
+import { USERS_MESSAGES } from '~/constants/messages'
 
 class UsersService {
   private createtAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
@@ -119,6 +120,13 @@ class UsersService {
     return {
       access_token,
       refresh_token
+    }
+  }
+
+  async logout(refreshToken: string) {
+    await databaseService.refreshTokens.deleteOne({ token: refreshToken })
+    return {
+      message: USERS_MESSAGES.LOGOUT_SUCCESS
     }
   }
 }

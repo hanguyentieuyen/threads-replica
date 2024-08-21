@@ -1,12 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { authApi } from '~/apis/auth.api'
 import path from '~/constant/path'
+import { ErrorResponse } from '~/types/utils.type'
+import { isAxiosUnprocessableEntityError } from '~/utils/auth'
 import { registerSchemaYup, RegisterSchemaYup } from '~/utils/yupSchema'
 
 type FormData = Pick<RegisterSchemaYup, 'email' | 'password'>
 const loginSchema = registerSchemaYup.pick(['email', 'password'])
 export default function Login() {
+  const navigate = useNavigate()
   const {
     register,
     setError,
@@ -16,12 +22,35 @@ export default function Login() {
     resolver: yupResolver(loginSchema)
   })
 
-  const handleSubmitForm = handleSubmit((data) => {
-    console.log(data)
+  const loginMutation = useMutation({
+    mutationFn: (body: FormData) => authApi.login(body)
+  })
+  const onSubmit = handleSubmit((data) => {
+    loginMutation.mutate(data, {
+      onSuccess: (data) => {
+        console.log('click: ', data.data)
+        toast.success(data.data.message, { autoClose: 3000 })
+        navigate('/')
+      },
+      onError: (error) => {
+        if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
+          const formError = error.response?.data.data
+          if (formError) {
+            console.log('formError: ', formError)
+            Object.keys(formError).forEach((key) => {
+              setError(key as keyof FormData, {
+                message: formError[key as keyof Omit<FormData, 'confirm_password'>],
+                type: 'Server'
+              })
+            })
+          }
+        }
+      }
+    })
   })
   return (
     <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
-      <form onSubmit={handleSubmitForm}>
+      <form onSubmit={onSubmit}>
         <div className='p-6 flex flex-col justify-between items-center'>
           <span className='text-md text-stone-950 font-bold'>Đăng nhập tài khoản Threads</span>
           <div className='mt-4 w-full'>
