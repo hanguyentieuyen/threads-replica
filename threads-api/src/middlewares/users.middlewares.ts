@@ -1,10 +1,17 @@
 import { checkSchema } from 'express-validator'
+import { NextFunction, Request, Response } from 'express'
 import { USERS_MESSAGES } from '~/constants/messages'
 import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
 import { hashPassword } from '~/utils/hash'
-import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
+import { verifyAccessToken } from './common.middlewares'
+import { ErrorWithStatus } from '~/models/schemas/Errors.schema'
+import { HTTP_STATUS } from '~/constants/httpStatus'
+import { capitalize } from 'lodash'
+import { JsonWebTokenError } from 'jsonwebtoken'
+import { verifyToken } from '~/utils/jwt'
+import { envConfig } from '~/utils/config'
 
 export const loginValidator = validate(
   checkSchema({
@@ -153,16 +160,61 @@ export const registerValidator = validate(
 )
 
 export const accessTokenValidator = validate(
+  checkSchema(
+    {
+      Authorization: {
+        trim: true,
+        custom: {
+          options: async (value: string, { req }) => {
+            const accessToken = value.split(' ')[1]
+            return await verifyAccessToken(accessToken, req as Request)
+          }
+        }
+      }
+    },
+    ['headers']
+  )
+)
+
+export const refreshTokenValidator = validate(
   checkSchema({
-    Authorization: {
+    refresh_token: {
       trim: true,
       custom: {
         options: async (value: string, { req }) => {
-          const accessToken = value.split(' ')[1]
+          if (!value) {
+            throw new ErrorWithStatus({
+              message: USERS_MESSAGES.REFRESH_TOKEN_IS_REQUIRED,
+              status: HTTP_STATUS.UNAUTHORIZED
+            })
+          }
+
+          try {
+            const [decodedRefreshToken, existedRefreshToken] = await Promise.all([
+              verifyToken({ token: value, secretOrPublicKey: envConfig.jwtSecretRefreshToken }),
+              databaseService.refreshTokens.findOne({ token: value })
+            ])
+
+            if (existedRefreshToken === null) {
+              throw new ErrorWithStatus({
+                message: USERS_MESSAGES.USED_REFRESH_TOKEN_OR_NOT_EXIST,
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+
+            ;(req as Request).decodedAuthorization = decodedRefreshToken
+          } catch (error) {
+            if (error instanceof JsonWebTokenError) {
+              throw new ErrorWithStatus({
+                message: capitalize(error.message),
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+            throw error
+          }
+          return true
         }
       }
     }
   })
 )
-
-export const refreshTokenValidator = validate(checkSchema({}))

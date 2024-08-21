@@ -59,7 +59,7 @@ class UsersService {
     return Promise.all([this.createtAccessToken({ user_id, verify }), this.createRefreshToken({ user_id, verify })])
   }
 
-  private decodeRefreshToken(refresh_token: string) {
+  private decodedRefreshToken(refresh_token: string) {
     return verifyToken({
       token: refresh_token,
       secretOrPublicKey: envConfig.jwtSecretRefreshToken
@@ -76,7 +76,7 @@ class UsersService {
       user_id,
       verify
     })
-    const { iat, exp } = await this.decodeRefreshToken(refresh_token)
+    const { iat, exp } = await this.decodedRefreshToken(refresh_token)
     // Insert refresh toke to db
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
@@ -112,7 +112,7 @@ class UsersService {
       verify: UserVerifyStatus.Unverified
     })
 
-    const { iat, exp } = await this.decodeRefreshToken(refresh_token)
+    const { iat, exp } = await this.decodedRefreshToken(refresh_token)
     // Insert refresh token to db
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(userId), token: refresh_token, iat, exp })
