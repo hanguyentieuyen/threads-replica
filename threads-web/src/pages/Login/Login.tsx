@@ -28,13 +28,12 @@ export default function Login() {
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
-        console.log('click: ', data.data)
         toast.success(data.data.message, { autoClose: 3000 })
         navigate('/')
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
-          const formError = error.response?.data.data
+          const formError = error.response?.data.errors
           if (formError) {
             console.log('formError: ', formError)
             Object.keys(formError).forEach((key) => {
@@ -78,7 +77,7 @@ export default function Login() {
           </div>
           <div className='mt-5 w-full flex justify-between flex-shrink-0'>
             <span className='text-sm text-gray-400'>
-              <a href=''>Quên mật khẩu?</a>
+              <Link to={path.forgotPassword}>Quên mật khẩu?</Link>
             </span>
             <span className='text-sm text-gray-400'>
               <Link to={path.register}>Tạo tài khoản</Link>

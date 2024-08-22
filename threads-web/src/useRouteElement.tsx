@@ -3,6 +3,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import path from './constant/path'
 import RegisterLayout from './layouts/RegisterLayout'
+import ForgotPassword from './pages/ForgotPassword'
+
 export default function useRouteElement() {
   const routeElements = useRoutes([
     {
@@ -22,6 +24,14 @@ export default function useRouteElement() {
       element: (
         <RegisterLayout>
           <Register />
+        </RegisterLayout>
+      )
+    },
+    {
+      path: path.forgotPassword,
+      element: (
+        <RegisterLayout>
+          <ForgotPassword />
         </RegisterLayout>
       )
     },

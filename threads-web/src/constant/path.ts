@@ -1,6 +1,7 @@
 const path = {
   register: '/register',
-  login: '/login'
+  login: '/login',
+  forgotPassword: '/forgot-password'
 }
 
 export default path

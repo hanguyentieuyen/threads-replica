@@ -4,6 +4,7 @@ const config = {
   loginUrl: '/users/login',
   logoutUrl: '/users/logout',
   registerUrl: '/users/register',
+  forgotPassword: '/users/forgot-password',
   refreshTokenUrl: 'refresh-access-token'
 }
 
