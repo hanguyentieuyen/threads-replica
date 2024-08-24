@@ -152,7 +152,7 @@ class UsersService {
       user_id,
       verify
     })
-    // Update token for user
+    // Update token for user document
     await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
       {
         $set: {
@@ -162,9 +162,24 @@ class UsersService {
       }
     ])
     // Send mail included link to user mail: http://example.com/forgot-password?token=token
-    //console.log('forgotPasswordToken: ', forgotPasswordToken)
+    console.log('forgotPasswordToken: ', forgotPasswordToken)
     return {
       message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
+    }
+  }
+
+  async resetPassword({ user_id, password }: { user_id: string; password: string }) {
+    await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
+      {
+        $set: {
+          forgot_password_token: '',
+          password: hashPassword(password),
+          updated_at: '$NOW'
+        }
+      }
+    ])
+    return {
+      message: USERS_MESSAGES.RESET_PASSWORD_SUCCESS
     }
   }
 }

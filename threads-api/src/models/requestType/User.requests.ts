@@ -29,3 +29,9 @@ export interface LogoutReqBody {
 export interface ForgotPasswordReqBody {
   email: string
 }
+
+export interface ResetPasswordReqBody {
+  password: string
+  forgot_password_token: string
+  confirm_password_token: string
+}

@@ -3,14 +3,16 @@ import {
   forgotPasswordController,
   loginController,
   logoutController,
-  registerController
+  registerController,
+  resetPasswordController
 } from '~/controllers/users.controllers'
 import {
   accessTokenValidator,
   forgotPasswordValidator,
   loginValidator,
   refreshTokenValidator,
-  registerValidator
+  registerValidator,
+  resetPasswordValidator
 } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -46,4 +48,13 @@ userRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequ
  * Body: {email: string}
  */
 userRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(forgotPasswordController))
+
+/**
+ * Description: Reset password and update new password for user document
+ * Path: /reset-password
+ * Method: POST
+ * Body: {password: string, confirm_password: string, forgot_password_token: string}
+ */
+userRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(resetPasswordController))
+
 export default userRouter
