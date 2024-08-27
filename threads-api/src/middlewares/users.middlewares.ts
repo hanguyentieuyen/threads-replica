@@ -13,6 +13,7 @@ import { JsonWebTokenError } from 'jsonwebtoken'
 import { verifyToken } from '~/utils/jwt'
 import { envConfig } from '~/utils/config'
 import { ObjectId } from 'mongodb'
+import { TokenPayload } from '~/models/requestType/User.requests'
 
 const passwordSchema: ParamSchema = {
   notEmpty: {
@@ -335,7 +336,7 @@ export const forgotPasswordValidator = validate(
         },
         trim: true,
         custom: {
-          options: async (value, { req }) => {
+          options: async (value: string, { req }) => {
             const user = await databaseService.users.findOne({ email: value })
             if (user === null) {
               throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
@@ -358,4 +359,34 @@ export const resetPasswordValidator = validate(
     },
     ['body']
   )
+)
+
+export const changePasswordValidator = validate(
+  checkSchema({
+    old_password: {
+      custom: {
+        options: async (value: string, { req }) => {
+          const { user_id } = (req as Request).decodedAuthorization as TokenPayload
+          const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+
+          if (!user) {
+            throw new ErrorWithStatus({
+              message: USERS_MESSAGES.USER_NOT_FOUND,
+              status: HTTP_STATUS.NOT_FOUND
+            })
+          }
+
+          const isMatch = hashPassword(value) === user.password
+          if (!isMatch) {
+            throw new ErrorWithStatus({
+              message: USERS_MESSAGES.OLD_PASSWORD_NOT_MATCH,
+              status: HTTP_STATUS.UNAUTHORIZED
+            })
+          }
+        }
+      }
+    },
+    password: passwordSchema,
+    confirm_password: confirmPasswordSchema
+  })
 )

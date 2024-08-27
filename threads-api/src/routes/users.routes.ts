@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  changePasswordController,
   forgotPasswordController,
   loginController,
   logoutController,
@@ -8,6 +9,7 @@ import {
 } from '~/controllers/users.controllers'
 import {
   accessTokenValidator,
+  changePasswordValidator,
   forgotPasswordValidator,
   loginValidator,
   refreshTokenValidator,
@@ -57,4 +59,16 @@ userRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(
  */
 userRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(resetPasswordController))
 
+/**
+ * Description: Change password
+ * Path: /reset-password
+ * Method: PUT
+ * Body: {old_password: string, password: string, confirm_password: string}
+ */
+userRouter.put(
+  '/change-password',
+  accessTokenValidator,
+  changePasswordValidator,
+  wrapRequestHandler(changePasswordController)
+)
 export default userRouter

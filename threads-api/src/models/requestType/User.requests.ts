@@ -35,3 +35,7 @@ export interface ResetPasswordReqBody {
   forgot_password_token: string
   confirm_password_token: string
 }
+
+export interface ChangePasswordReqBody {
+  password: string
+}

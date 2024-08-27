@@ -3,6 +3,7 @@ import { ParamsDictionary } from 'express-serve-static-core'
 import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/messages'
 import {
+  ChangePasswordReqBody,
   ForgotPasswordReqBody,
   LoginReqBody,
   LogoutReqBody,
@@ -53,5 +54,15 @@ export const resetPasswordController = async (
   const { user_id } = req.decodedForgotPasswordToken as TokenPayload
   const { password } = req.body
   const data = await usersService.resetPassword({ user_id, password })
+  return res.json(data)
+}
+
+export const changePasswordController = async (
+  req: Request<ParamsDictionary, any, ChangePasswordReqBody>,
+  res: Response
+) => {
+  const { user_id } = req.decodedAuthorization
+  const { password } = req.body
+  const data = await usersService.changePassword({ user_id, password })
   return res.json(data)
 }
