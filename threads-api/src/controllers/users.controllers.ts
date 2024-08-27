@@ -5,6 +5,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import {
   ChangePasswordReqBody,
   ForgotPasswordReqBody,
+  GetUserProfileReqBody,
   LoginReqBody,
   LogoutReqBody,
   RegisterReqBody,
@@ -64,5 +65,17 @@ export const changePasswordController = async (
   const { user_id } = req.decodedAuthorization
   const { password } = req.body
   const data = await usersService.changePassword({ user_id, password })
+  return res.json(data)
+}
+
+export const getMyProfileController = async (req: Request, res: Response) => {
+  const { user_id } = req.decodedAuthorization
+  const data = await usersService.getMyProfile(user_id)
+  return res.json(data)
+}
+
+export const getUserProfileController = async (req: Request<GetUserProfileReqBody>, res: Response) => {
+  const { username } = req.params
+  const data = await usersService.getUserProfile(username)
   return res.json(data)
 }

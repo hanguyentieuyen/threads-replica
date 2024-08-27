@@ -8,6 +8,8 @@ import { RegisterReqBody } from '~/models/requestType/User.requests'
 import User from '~/models/schemas/User.schema'
 import { hashPassword } from '~/utils/hash'
 import { USERS_MESSAGES } from '~/constants/messages'
+import { ErrorWithStatus } from '~/models/schemas/Errors.schema'
+import { HTTP_STATUS } from '~/constants/httpStatus'
 
 class UsersService {
   private createtAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
@@ -198,6 +200,41 @@ class UsersService {
     return {
       message: USERS_MESSAGES.CHANGE_PASSWORD_SUCCESS
     }
+  }
+
+  async getMyProfile(user_id: string) {
+    const user = await databaseService.users.findOne(
+      { _id: new ObjectId(user_id) },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    return user
+  }
+
+  async getUserProfile(username: string) {
+    const user = await databaseService.users.findOne(
+      { username: username },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0,
+          created_at: 0
+        }
+      }
+    )
+    if (user === null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    return user
   }
 }
 
