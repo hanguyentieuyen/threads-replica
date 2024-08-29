@@ -3,8 +3,8 @@ import { envConfig } from '~/utils/config'
 import { createToken, verifyToken } from '~/utils/jwt'
 import databaseService from './database.services'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
-import { ObjectId } from 'mongodb'
-import { RegisterReqBody } from '~/models/requestType/User.requests'
+import { ObjectId, WithId } from 'mongodb'
+import { RegisterReqBody, UpdateMyProfileReqBody } from '~/models/requestType/User.requests'
 import User from '~/models/schemas/User.schema'
 import { hashPassword } from '~/utils/hash'
 import { USERS_MESSAGES } from '~/constants/messages'
@@ -206,6 +206,33 @@ class UsersService {
     const user = await databaseService.users.findOne(
       { _id: new ObjectId(user_id) },
       {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    return user
+  }
+
+  async updateMyProfile({ user_id, payload }: { user_id: string; payload: UpdateMyProfileReqBody }) {
+    const formatPayload = payload.date_of_birth
+      ? { ...payload, date_of_birth: new Date(payload.date_of_birth) }
+      : payload
+
+    const user = await databaseService.users.findOneAndUpdate(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          formatPayload
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after', // return new document after update
         projection: {
           password: 0,
           email_verify_token: 0,

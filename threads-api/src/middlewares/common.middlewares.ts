@@ -1,4 +1,4 @@
-import { Request } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { JsonWebTokenError } from 'jsonwebtoken'
@@ -6,6 +6,7 @@ import { ErrorWithStatus } from '~/models/schemas/Errors.schema'
 import { envConfig } from '~/utils/config'
 import { verifyToken } from '~/utils/jwt'
 import { capitalize } from 'lodash'
+import { pick } from 'lodash'
 
 export const verifyAccessToken = async (accessToken: string, req?: Request) => {
   if (!accessToken) {
@@ -32,3 +33,11 @@ export const verifyAccessToken = async (accessToken: string, req?: Request) => {
     }
   }
 }
+
+type FilterKeys<T> = Array<keyof T>
+export const filterMiddleware =
+  <T>(filterKeys: FilterKeys<T>) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = pick(req.body, filterKeys)
+    next()
+  }

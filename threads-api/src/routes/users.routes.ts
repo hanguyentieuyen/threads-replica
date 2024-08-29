@@ -7,8 +7,10 @@ import {
   loginController,
   logoutController,
   registerController,
-  resetPasswordController
+  resetPasswordController,
+  updateMyProfileController
 } from '~/controllers/users.controllers'
+import { filterMiddleware } from '~/middlewares/common.middlewares'
 import {
   accessTokenValidator,
   changePasswordValidator,
@@ -18,6 +20,7 @@ import {
   registerValidator,
   resetPasswordValidator
 } from '~/middlewares/users.middlewares'
+import { UpdateMyProfileReqBody } from '~/models/requestType/User.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const userRouter = Router()
@@ -82,6 +85,29 @@ userRouter.put(
  * Header: { Authorization: Bearer <access_token>}
  */
 userRouter.get('/me', accessTokenValidator, wrapRequestHandler(getMyProfileController))
+
+/**
+ * Description: Update my profile
+ * Path: /me
+ * Method: PATCH
+ * Header: { Authorization: Bearer <access_token>}
+ * Body: UserSchema
+ */
+userRouter.patch(
+  '/me',
+  accessTokenValidator,
+  filterMiddleware<UpdateMyProfileReqBody>([
+    'name',
+    'date_of_birth',
+    'bio',
+    'location',
+    'website',
+    'username',
+    'avatar',
+    'cover_photo'
+  ]),
+  wrapRequestHandler(updateMyProfileController)
+)
 
 /**
  * Description: Get user profile
