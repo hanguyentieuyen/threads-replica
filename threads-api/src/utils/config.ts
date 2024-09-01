@@ -4,6 +4,7 @@ config()
 export const envConfig = {
   dbName: process.env.DB_NAME as string,
   dbUsersCollection: process.env.DB_USERS_COLLECTION as string,
+  dbFollowersCollection: process.env.DB_FOLLOWERS_COLLECTION as string,
   dbRefreshTokensCollection: process.env.DB_REFRESHTOKEN_COLLECTION as string,
   jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,
   jwtSecretRefreshToken: process.env.JWT_SECRET_REFRESH_TOKEN as string,

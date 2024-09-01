@@ -4,6 +4,7 @@ import { ObjectId } from 'mongodb'
 import { USERS_MESSAGES } from '~/constants/messages'
 import {
   ChangePasswordReqBody,
+  FollowReqBody,
   ForgotPasswordReqBody,
   GetUserProfileReqBody,
   LoginReqBody,
@@ -11,6 +12,7 @@ import {
   RegisterReqBody,
   ResetPasswordReqBody,
   TokenPayload,
+  UnFollowReqBody,
   UpdateMyProfileReqBody
 } from '~/models/requestType/User.requests'
 import User from '~/models/schemas/User.schema'
@@ -91,5 +93,19 @@ export const updateMyProfileController = async (
 export const getUserProfileController = async (req: Request<GetUserProfileReqBody>, res: Response) => {
   const { username } = req.params
   const data = await usersService.getUserProfile(username)
+  return res.json(data)
+}
+
+export const followController = async (req: Request<ParamsDictionary, any, FollowReqBody>, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { followed_user_id } = req.body
+  const data = await usersService.follow({ user_id, followed_user_id })
+  return res.json(data)
+}
+
+export const unFollowController = async (req: Request<UnFollowReqBody>, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { user_id: followed_user_id } = req.params
+  const data = await usersService.unfollow({ user_id, followed_user_id })
   return res.json(data)
 }

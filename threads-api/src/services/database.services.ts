@@ -3,6 +3,7 @@ import { config } from 'dotenv'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import { envConfig } from '~/utils/config'
 import User from '~/models/schemas/User.schema'
+import Follower from '~/models/schemas/Follower.schema'
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@threads-replica.ugxgau4.mongodb.net/?retryWrites=true&w=majority&appName=Threads-Replica`
 
@@ -30,6 +31,10 @@ class DatabaseService {
 
   get users(): Collection<User> {
     return this.db.collection(envConfig.dbUsersCollection)
+  }
+
+  get followers(): Collection<Follower> {
+    return this.db.collection(envConfig.dbFollowersCollection)
   }
 }
 
