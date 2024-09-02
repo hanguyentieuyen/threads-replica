@@ -432,3 +432,7 @@ export const unFollowValidator = validate(
     ['params']
   )
 )
+
+export const likeValidator = validate(checkSchema({}))
+
+export const unLikeValidator = validate(checkSchema({}))

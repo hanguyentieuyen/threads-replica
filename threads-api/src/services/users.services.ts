@@ -10,7 +10,7 @@ import { hashPassword } from '~/utils/hash'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/schemas/Errors.schema'
 import { HTTP_STATUS } from '~/constants/httpStatus'
-import Follower from '~/models/schemas/Follower.schema'
+import Follow from '~/models/schemas/Follow.schema'
 
 class UsersService {
   private createtAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
@@ -266,14 +266,14 @@ class UsersService {
   }
 
   async follow({ user_id, followed_user_id }: { user_id: string; followed_user_id: string }) {
-    const follower = await databaseService.followers.findOne({
+    const follower = await databaseService.follows.findOne({
       user_id: new ObjectId(user_id),
       followed_user_id: new ObjectId(followed_user_id)
     })
 
     if (follower === null) {
-      await databaseService.followers.insertOne(
-        new Follower({
+      await databaseService.follows.insertOne(
+        new Follow({
           user_id: new ObjectId(user_id),
           followed_user_id: new ObjectId(followed_user_id)
         })
@@ -287,7 +287,7 @@ class UsersService {
   }
 
   async unfollow({ user_id, followed_user_id }: { user_id: string; followed_user_id: string }) {
-    const follower = await databaseService.followers.findOne({
+    const follower = await databaseService.follows.findOne({
       user_id: new ObjectId(user_id),
       followed_user_id: new ObjectId(followed_user_id)
     })
@@ -298,12 +298,16 @@ class UsersService {
       }
     }
 
-    await databaseService.followers.deleteOne({
+    await databaseService.follows.deleteOne({
       user_id: new ObjectId(user_id),
       followed_user_id: new ObjectId(followed_user_id)
     })
     return { message: USERS_MESSAGES.UNFOLLOWED_SUCCESS }
   }
+
+  async like({ user_id, liked_post_id }: { user_id: string; liked_post_id: string }) {}
+
+  async unlike({ user_id, liked_post_id }: { user_id: string; liked_post_id: string }) {}
 }
 
 const usersService = new UsersService()

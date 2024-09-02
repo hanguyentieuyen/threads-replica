@@ -7,12 +7,14 @@ import {
   FollowReqBody,
   ForgotPasswordReqBody,
   GetUserProfileReqBody,
+  LikeReqBody,
   LoginReqBody,
   LogoutReqBody,
   RegisterReqBody,
   ResetPasswordReqBody,
   TokenPayload,
   UnFollowReqBody,
+  UnLikeReqBody,
   UpdateMyProfileReqBody
 } from '~/models/requestType/User.requests'
 import User from '~/models/schemas/User.schema'
@@ -107,5 +109,19 @@ export const unFollowController = async (req: Request<UnFollowReqBody>, res: Res
   const { user_id } = req.decodedAuthorization as TokenPayload
   const { user_id: followed_user_id } = req.params
   const data = await usersService.unfollow({ user_id, followed_user_id })
+  return res.json(data)
+}
+
+export const likeController = async (req: Request<ParamsDictionary, any, LikeReqBody>, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { liked_post_id } = req.body
+  const data = await usersService.like({ user_id, liked_post_id })
+  return res.json(data)
+}
+
+export const unLikeController = async (req: Request<ParamsDictionary, any, UnLikeReqBody>, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { liked_post_id } = req.params
+  const data = await usersService.unlike({ user_id, liked_post_id })
   return res.json(data)
 }
