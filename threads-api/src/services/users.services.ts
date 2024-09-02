@@ -11,6 +11,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/schemas/Errors.schema'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import Follow from '~/models/schemas/Follow.schema'
+import Like from '~/models/schemas/Like.schema'
 
 class UsersService {
   private createtAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
@@ -305,9 +306,41 @@ class UsersService {
     return { message: USERS_MESSAGES.UNFOLLOWED_SUCCESS }
   }
 
-  async like({ user_id, liked_post_id }: { user_id: string; liked_post_id: string }) {}
+  async like({ user_id, liked_post_id }: { user_id: string; liked_post_id: string }) {
+    const like = await databaseService.likes.findOne({
+      user_id: new ObjectId(user_id),
+      liked_post_id: new ObjectId(liked_post_id)
+    })
 
-  async unlike({ user_id, liked_post_id }: { user_id: string; liked_post_id: string }) {}
+    if (like === null) {
+      await databaseService.likes.insertOne(
+        new Like({
+          user_id: new ObjectId(user_id),
+          liked_post_id: new ObjectId(liked_post_id)
+        })
+      )
+      return { message: USERS_MESSAGES.LIKE_SUCCESS }
+    }
+    return { message: USERS_MESSAGES.LIKED }
+  }
+
+  async unlike({ user_id, liked_post_id }: { user_id: string; liked_post_id: string }) {
+    const unlike = await databaseService.likes.findOne({
+      user_id: new ObjectId(user_id),
+      liked_post_id: new ObjectId(liked_post_id)
+    })
+
+    if (unlike !== null) {
+      await databaseService.likes.deleteOne({
+        user_id: new ObjectId(user_id),
+        liked_post_id: new ObjectId(liked_post_id)
+      })
+
+      return { message: USERS_MESSAGES.UNLIKED_SUCCESS }
+    }
+
+    return { message: USERS_MESSAGES.ALREADY_UNLIKED }
+  }
 }
 
 const usersService = new UsersService()

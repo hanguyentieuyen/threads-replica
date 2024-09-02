@@ -1,7 +1,6 @@
 export enum UserVerifyStatus {
   Unverified, // 0
-  Verified,
-  Banned
+  Verified
 }
 
 export enum TokenType {
@@ -9,4 +8,19 @@ export enum TokenType {
   RefreshToken,
   ForgotPasswordToken,
   EmailVerifyToken
+}
+
+export enum PostType {
+  Post,
+  RePost
+}
+
+export enum PostAudience {
+  Everyone,
+  FewSomeone
+}
+
+export enum MediaType {
+  Image = 'image',
+  Video = 'video'
 }

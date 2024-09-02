@@ -50,11 +50,15 @@ export const USERS_MESSAGES = {
   IMAGE_LENGTH: 'Image length must be from 1 to 200',
   UPDATE_ME_SUCCESS: 'Update my profile success',
   GET_PROFILE_SUCCESS: 'Get profile success',
-  FOLLOW_SUCCESS: 'Follow success',
   INVALID_USER_ID: 'Invalid followed user id',
+  FOLLOW_SUCCESS: 'Follow success',
   FOLLOWED: 'Followed',
   ALREADY_UNFOLLOWED: 'Already unfollowed',
   UNFOLLOWED_SUCCESS: 'Unfollowed success',
+  LIKE_SUCCESS: 'Like success',
+  LIKED: 'Liked',
+  UNLIKED_SUCCESS: 'Unlike success',
+  ALREADY_UNLIKED: 'Already unliked',
   CHANGE_PASSWORD_SUCCESS: 'Change password success',
   OLD_PASSWORD_NOT_MATCH: 'Old password not match',
   GMAIL_NOT_VERIFIED: 'Gmail not verified',
@@ -63,22 +67,22 @@ export const USERS_MESSAGES = {
   GET_VIDEO_STATUS_SUCCESS: 'Get video status success'
 } as const
 
-export const TWEETS_MESSAGES = {
-  INVALID_TWEET: 'Invalid tweet',
+export const POSTS_MESSAGES = {
+  INVALID_POST: 'Invalid post',
   INVALID_AUDIENCE: 'Invalid audience',
-  PARENT_ID_MUST_BE_A_VALID_TWEET_ID: 'Parent id must be a valid tweet id',
+  PARENT_ID_MUST_BE_A_VALID_POST_ID: 'Parent id must be a valid post id',
   CONTENT_MUST_BE_A_NON_EMPTY_STRING: 'Content must be a none empty string',
   CONTENT_MUST_BE_EMPTY_STRING: 'Content must be empty string',
   HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING: 'Hashtags must be an array of string',
   MENTIONS_MUST_BE_AN_ARRAY_OF_USER_ID: 'Mentions must be an array of user id',
   MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Medias must be an array of media object',
-  CREATE_TWEET_SUCCESS: 'Create tweet success',
-  INVALID_TWEET_ID: 'Invalid tweet id',
-  TWEET_NOT_FOUND: 'Tweet not found',
-  GET_TWEET_SUCCESS: 'Get tweet success',
-  TWEET_IS_NOT_PUBLIC: 'Tweet is not public',
+  CREATE_POST_SUCCESS: 'Create post success',
+  INVALID_POST_ID: 'Invalid post id',
+  POST_NOT_FOUND: 'Post not found',
+  GET_POST_SUCCESS: 'Get post success',
+  POST_IS_NOT_PUBLIC: 'Post is not public',
   INVALID_TYPE: 'Ivalid type',
-  SEARCH_TWEET_SUCCESS: 'Search tweets successfully',
+  SEARCH_POST_SUCCESS: 'Search posts successfully',
   SEARCH_CONTENT_MUST_BE_STRING: 'Search content must be string',
   MEDIA_TYPE_MUST_BE_ONE_OF_VALUES: 'Media type must be one of values',
   PEOPLE_FOLLOW_MUST_BE_0_OR_1: 'Peole follow must be 0 or 1'
@@ -87,8 +91,4 @@ export const TWEETS_MESSAGES = {
 export const BOOKMARKS_MESSAGES = {
   BOOKMARK_SUCCESS: 'Bookmark success',
   UNBOOKMARK_SUCCESS: 'Unbookmark success'
-}
-
-export const CHATS_MESSAGES = {
-  GET_CHATS_SUCCESSFULLY: 'Get chats successfully'
 }

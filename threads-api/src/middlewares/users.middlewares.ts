@@ -1,6 +1,6 @@
 import { checkSchema, ParamSchema } from 'express-validator'
 import { NextFunction, Request, Response } from 'express'
-import { USERS_MESSAGES } from '~/constants/messages'
+import { POSTS_MESSAGES, USERS_MESSAGES } from '~/constants/messages'
 import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
 import { hashPassword } from '~/utils/hash'
@@ -142,6 +142,31 @@ const userIdSchema: ParamSchema = {
     }
   }
 }
+
+const postIdSchema: ParamSchema = {
+  custom: {
+    options: async (value, { req }) => {
+      if (!ObjectId.isValid(value)) {
+        throw new ErrorWithStatus({
+          message: POSTS_MESSAGES.INVALID_POST_ID,
+          status: HTTP_STATUS.NOT_FOUND
+        })
+      }
+
+      const liked_post_id = await databaseService.posts.findOne({
+        _id: new ObjectId(value)
+      })
+
+      if (liked_post_id === null) {
+        throw new ErrorWithStatus({
+          message: POSTS_MESSAGES.POST_NOT_FOUND,
+          status: HTTP_STATUS.NOT_FOUND
+        })
+      }
+    }
+  }
+}
+
 export const accessTokenValidator = validate(
   checkSchema(
     {
@@ -433,6 +458,20 @@ export const unFollowValidator = validate(
   )
 )
 
-export const likeValidator = validate(checkSchema({}))
+export const likeValidator = validate(
+  checkSchema(
+    {
+      liked_post_id: postIdSchema
+    },
+    ['body']
+  )
+)
 
-export const unLikeValidator = validate(checkSchema({}))
+export const unLikeValidator = validate(
+  checkSchema(
+    {
+      liked_post_id: postIdSchema
+    },
+    ['params']
+  )
+)

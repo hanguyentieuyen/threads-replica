@@ -5,6 +5,7 @@ import { envConfig } from '~/utils/config'
 import User from '~/models/schemas/User.schema'
 import Follower from '~/models/schemas/Follow.schema'
 import Like from '~/models/schemas/Like.schema'
+import Post from '~/models/schemas/Post.schema'
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@threads-replica.ugxgau4.mongodb.net/?retryWrites=true&w=majority&appName=Threads-Replica`
 
@@ -40,6 +41,10 @@ class DatabaseService {
 
   get likes(): Collection<Like> {
     return this.db.collection(envConfig.dbLikesCollection)
+  }
+
+  get posts(): Collection<Post> {
+    return this.db.collection(envConfig.dbPostsCollection)
   }
 }
 

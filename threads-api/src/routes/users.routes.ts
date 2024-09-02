@@ -156,5 +156,5 @@ userRouter.post('/like', accessTokenValidator, likeValidator, wrapRequestHandler
  * Method: DELETE
  * Header: { Authorization: Bearer <access_token>}
  */
-userRouter.delete('/like/:user_id', accessTokenValidator, unLikeValidator, wrapRequestHandler(unLikeController))
+userRouter.delete('/like/:liked_post_id', accessTokenValidator, unLikeValidator, wrapRequestHandler(unLikeController))
 export default userRouter
