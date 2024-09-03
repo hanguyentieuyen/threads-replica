@@ -6,6 +6,7 @@ export const envConfig = {
   dbUsersCollection: process.env.DB_USERS_COLLECTION as string,
   dbFollowsCollection: process.env.DB_FOLLOWS_COLLECTION as string,
   dbLikesCollection: process.env.DB_LIKES_COLLECTION as string,
+  dbBookmarksCollection: process.env.DB_BOOKMARKS_COLLECTION as string,
   dbPostsCollection: process.env.DB_POSTS_COLLECTION as string,
   dbRefreshTokensCollection: process.env.DB_REFRESHTOKEN_COLLECTION as string,
   jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,
