@@ -5,6 +5,7 @@ import { defaultErrorHandler } from './utils/error.middlewares'
 import cors, { CorsOptions } from 'cors'
 import postsRouter from './routes/posts.routes'
 import bookmarkRouter from './routes/bookmarks.routes'
+import likeRouter from './routes/likes.routes'
 const app = express()
 const port = 4000
 
@@ -22,6 +23,7 @@ app.use(cors(corsOption))
 app.use('/users', usersRouter)
 app.use('/posts', postsRouter)
 app.use('/bookmarks', bookmarkRouter)
+app.use('/likes', likeRouter)
 
 databaseService.connect()
 

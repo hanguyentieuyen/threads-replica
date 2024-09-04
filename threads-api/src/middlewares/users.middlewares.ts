@@ -143,30 +143,6 @@ const userIdSchema: ParamSchema = {
   }
 }
 
-const postIdSchema: ParamSchema = {
-  custom: {
-    options: async (value, { req }) => {
-      if (!ObjectId.isValid(value)) {
-        throw new ErrorWithStatus({
-          message: POSTS_MESSAGES.INVALID_POST_ID,
-          status: HTTP_STATUS.NOT_FOUND
-        })
-      }
-
-      const liked_post_id = await databaseService.posts.findOne({
-        _id: new ObjectId(value)
-      })
-
-      if (liked_post_id === null) {
-        throw new ErrorWithStatus({
-          message: POSTS_MESSAGES.POST_NOT_FOUND,
-          status: HTTP_STATUS.NOT_FOUND
-        })
-      }
-    }
-  }
-}
-
 export const accessTokenValidator = validate(
   checkSchema(
     {
@@ -453,24 +429,6 @@ export const unFollowValidator = validate(
   checkSchema(
     {
       user_id: userIdSchema
-    },
-    ['params']
-  )
-)
-
-export const likeValidator = validate(
-  checkSchema(
-    {
-      liked_post_id: postIdSchema
-    },
-    ['body']
-  )
-)
-
-export const unLikeValidator = validate(
-  checkSchema(
-    {
-      liked_post_id: postIdSchema
     },
     ['params']
   )

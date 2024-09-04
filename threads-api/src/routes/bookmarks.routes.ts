@@ -6,7 +6,7 @@ import { wrapRequestHandler } from '~/utils/handlers'
 const bookmarkRouter = Router()
 
 /**
- * Description: Bookmark tweet
+ * Description: Bookmark post
  * Path: /
  * Method: POST
  * Body: {post_id: string}
@@ -16,7 +16,7 @@ const bookmarkRouter = Router()
 bookmarkRouter.post('/', accessTokenValidator, wrapRequestHandler(bookmarksController))
 
 /**
- * Description: Unbookmark tweet
+ * Description: Unbookmark post
  * Path: /posts/:post_id
  * Method: DELETE
  * Header: { Authorization: Bearer <access_token>}

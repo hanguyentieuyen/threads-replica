@@ -5,13 +5,11 @@ import {
   forgotPasswordController,
   getMyProfileController,
   getUserProfileController,
-  likeController,
   loginController,
   logoutController,
   registerController,
   resetPasswordController,
   unFollowController,
-  unLikeController,
   updateMyProfileController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
@@ -20,13 +18,11 @@ import {
   changePasswordValidator,
   followValidator,
   forgotPasswordValidator,
-  likeValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator,
-  unFollowValidator,
-  unLikeValidator
+  unFollowValidator
 } from '~/middlewares/users.middlewares'
 import { UpdateMyProfileReqBody } from '~/models/requestType/User.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -141,20 +137,4 @@ userRouter.post('/follow', accessTokenValidator, followValidator, wrapRequestHan
  */
 userRouter.delete('/follow/:user_id', accessTokenValidator, unFollowValidator, wrapRequestHandler(unFollowController))
 
-/**
- * Description: Like a post
- * Path: /like
- * Method: POST
- * Header: { Authorization: Bearer <access_token>}
- * Body: { liked_post_id: string }
- */
-userRouter.post('/like', accessTokenValidator, likeValidator, wrapRequestHandler(likeController))
-
-/**
- * Description: Unlike a post
- * Path: like/:liked_post_id
- * Method: DELETE
- * Header: { Authorization: Bearer <access_token>}
- */
-userRouter.delete('/like/:liked_post_id', accessTokenValidator, unLikeValidator, wrapRequestHandler(unLikeController))
 export default userRouter
