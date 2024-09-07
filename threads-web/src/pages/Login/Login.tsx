@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { authApi } from '~/apis/auth.api'
+import Button from '~/components/Button'
+import InputText from '~/components/InputText'
 import path from '~/constant/path'
 import { ErrorResponse } from '~/types/utils.type'
 import { isAxiosUnprocessableEntityError } from '~/utils/auth'
@@ -51,29 +53,35 @@ export default function Login() {
     <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
       <form onSubmit={onSubmit}>
         <div className='p-6 flex flex-col justify-between items-center'>
-          <span className='text-md text-stone-950 font-bold'>Đăng nhập tài khoản Threads</span>
+          <span className='text-md text-stone-950 font-bold'>Đăng nhập tài khoản</span>
           <div className='mt-4 w-full'>
-            <input
-              {...register('email')}
+            <InputText
+              register={register}
               type='email'
               name='email'
               placeholder='Email'
-              className='bg-[#f5f5f5] w-full p-4 rounded-xl outline-none'
+              errorMessage={errors.email?.message}
             />
           </div>
           <div className='mt-2 w-full'>
-            <input
-              {...register('password')}
+            <InputText
+              register={register}
               type='password'
               name='password'
               placeholder='Mật khẩu'
-              className='bg-[#f5f5f5] w-full p-4 rounded-xl outline-none'
+              errorMessage={errors.password?.message}
+              autoComplete='on'
             />
           </div>
           <div className='mt-2 w-full'>
-            <button type='submit' className='bg-gray-950 text-white text-sm p-4 rounded-xl w-full'>
+            <Button
+              type='submit'
+              isLoading={loginMutation.isPending}
+              disabled={loginMutation.isPending}
+              className='w-[100%] flex justify-center bg-gray-950 text-white text-sm p-4 rounded-xl'
+            >
               Đăng nhập
-            </button>
+            </Button>
           </div>
           <div className='mt-5 w-full flex justify-between flex-shrink-0'>
             <span className='text-sm text-gray-400'>
