@@ -1,7 +1,7 @@
 import { validate } from '~/utils/validation'
 import { checkSchema, ParamSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
-import { ErrorWithStatus } from '~/models/schemas/Errors.schema'
+import { ErrorWithStatus } from '~/models/error.model'
 import databaseService from '~/services/database.services'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'

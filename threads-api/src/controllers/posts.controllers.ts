@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { ObjectId } from 'mongodb'
 import { POSTS_MESSAGES } from '~/constants/messages'
 import { PostReqBody } from '~/models/requestType/Post.requests'
 import { TokenPayload } from '~/models/requestType/User.requests'

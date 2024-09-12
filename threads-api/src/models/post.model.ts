@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { PostAudience, PostType } from '~/constants/enum'
-import { Media } from './Media.schema'
+import { Media } from '../Media.schema'
 
 interface PostConstructor {
   _id?: ObjectId

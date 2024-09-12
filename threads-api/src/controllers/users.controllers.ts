@@ -15,7 +15,7 @@ import {
   UnFollowReqBody,
   UpdateMyProfileReqBody
 } from '~/models/requestType/User.requests'
-import User from '~/models/schemas/User.schema'
+import User from '~/models/user.model'
 import usersService from '~/services/users.services'
 
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {

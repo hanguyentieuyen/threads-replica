@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { likesController, unlikesController } from '~/controllers/likes.controllers'
-import { likeValidator, unlikeValidator } from '~/middlewares/posts.middlewares'
-import { accessTokenValidator } from '~/middlewares/users.middlewares'
-import { wrapRequestHandler } from '~/utils/handlers'
+import { likeValidator, unlikeValidator } from '~/validations/posts.validations'
+import { accessTokenValidator } from '~/validations/users.validations'
+import { requestHandler } from '~/utils/requestHandlers'
 
 const likeRouter = Router()
 
@@ -14,7 +14,7 @@ const likeRouter = Router()
  * Header: { Authorization: Bearer <access_token>}
  */
 
-likeRouter.post('/', accessTokenValidator, likeValidator, wrapRequestHandler(likesController))
+likeRouter.post('/', accessTokenValidator, likeValidator, requestHandler(likesController))
 
 /**
  * Description: Unlike Post
@@ -23,5 +23,5 @@ likeRouter.post('/', accessTokenValidator, likeValidator, wrapRequestHandler(lik
  * Header: { Authorization: Bearer <access_token>}
  */
 
-likeRouter.delete('/posts/:post_id', accessTokenValidator, unlikeValidator, wrapRequestHandler(unlikesController))
+likeRouter.delete('/posts/:post_id', accessTokenValidator, unlikeValidator, requestHandler(unlikesController))
 export default likeRouter
