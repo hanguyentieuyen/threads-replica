@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { bookmarksController, unbookmarksController } from '~/controllers/bookmarks.controllers'
 import { accessTokenValidator } from '~/validations/users.validations'
-import { requestHandler } from '~/utils/requestHandlers'
+import { requestHandler } from '~/utils/requestHandler'
 
 const bookmarkRouter = Router()
 

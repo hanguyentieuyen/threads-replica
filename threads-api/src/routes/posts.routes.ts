@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { createPostController } from '~/controllers/posts.controllers'
 import { createPostValidator } from '~/validations/posts.validations'
 import { accessTokenValidator } from '~/validations/users.validations'
-import { requestHandler } from '~/utils/requestHandlers'
+import { requestHandler } from '~/utils/requestHandler'
 
 const postsRouter = Router()
 

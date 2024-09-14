@@ -1,5 +1,3 @@
-import { validate } from '~/utils/validation'
-import { checkSchema, ParamSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
 import { ErrorWithStatus } from '~/models/error.model'
 import databaseService from '~/services/database.services'
@@ -8,142 +6,133 @@ import { POSTS_MESSAGES } from '~/constants/messages'
 import { convertEnumToArray } from '~/utils/common'
 import { MediaType, PostAudience, PostType } from '~/constants/enum'
 import { isEmpty } from 'lodash'
-
+import Joi from 'joi'
+import { Request, Response, NextFunction } from 'express'
+import { validateHandler } from '~/utils/validateHandler'
 const postTypes = convertEnumToArray(PostType)
 const postAudience = convertEnumToArray(PostAudience)
 const mediaTypes = convertEnumToArray(MediaType)
 
-const postIdSchema: ParamSchema = {
-  custom: {
-    options: async (value, { req }) => {
-      if (!ObjectId.isValid(value)) {
-        throw new ErrorWithStatus({
-          message: POSTS_MESSAGES.INVALID_POST_ID,
-          status: HTTP_STATUS.NOT_FOUND
-        })
-      }
-
-      const liked_post_id = await databaseService.posts.findOne({
-        _id: new ObjectId(value)
-      })
-
-      if (liked_post_id === null) {
-        throw new ErrorWithStatus({
-          message: POSTS_MESSAGES.POST_NOT_FOUND,
-          status: HTTP_STATUS.NOT_FOUND
-        })
-      }
-    }
+const postIdSchema = Joi.string().custom(async (value) => {
+  if (!ObjectId.isValid(value)) {
+    throw new ErrorWithStatus({
+      message: POSTS_MESSAGES.INVALID_POST_ID,
+      status: HTTP_STATUS.NOT_FOUND
+    })
   }
+
+  const liked_post_id = await databaseService.posts.findOne({
+    _id: new ObjectId(value)
+  })
+
+  if (liked_post_id === null) {
+    throw new ErrorWithStatus({
+      message: POSTS_MESSAGES.POST_NOT_FOUND,
+      status: HTTP_STATUS.NOT_FOUND
+    })
+  }
+
+  return value // Return value when validation passes
+})
+
+export const likeValidator = async (req: Request, res: Response, next: NextFunction) => {
+  const schemas = Joi.object({
+    post_id: postIdSchema
+  })
+  await validateHandler(schemas, req.body, next)
 }
 
-export const likeValidator = validate(
-  checkSchema(
-    {
-      liked_post_id: postIdSchema
-    },
-    ['body']
-  )
-)
-
-export const unlikeValidator = validate(
-  checkSchema(
-    {
-      liked_post_id: postIdSchema
-    },
-    ['params']
-  )
-)
-
-export const createPostValidator = validate(
-  checkSchema({
-    type: {
-      isIn: {
-        options: [postTypes],
-        errorMessage: POSTS_MESSAGES.INVALID_POST
-      }
-    },
-    audience: {
-      isIn: {
-        options: [postAudience],
-        errorMessage: POSTS_MESSAGES.INVALID_AUDIENCE
-      }
-    },
-    hashtags: {
-      isArray: true,
-      custom: {
-        options: (value, { req }) => {
-          // Yêu cầu mỗi phần tử trong array là string
-          if (value.some((item: any) => typeof item !== 'string')) {
-            throw new Error(POSTS_MESSAGES.HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING)
-          }
-          return true
-        }
-      }
-    },
-    mentions: {
-      isArray: true,
-      custom: {
-        options: (value, { req }) => {
-          // Yêu cầu mỗi phần tử trong array là user_id
-          if (value.some((item: any) => !ObjectId.isValid(item))) {
-            throw new Error(POSTS_MESSAGES.MENTIONS_MUST_BE_AN_ARRAY_OF_USER_ID)
-          }
-          return true
-        }
-      }
-    },
-    medias: {
-      isArray: true,
-      custom: {
-        options: (value, { req }) => {
-          // Yêu cầu mỗi phần tử trong array là Media Object
-          if (
-            value.some((item: any) => {
-              return typeof item.url !== 'string' || !mediaTypes.includes(item.type)
-            })
-          ) {
-            throw new Error(POSTS_MESSAGES.MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT)
-          }
-          return true
-        }
-      }
-    },
-    content: {
-      isString: true,
-      custom: {
-        options: (value, { req }) => {
-          const type = req.body.type as PostType
-          const hashtags = req.body.hashtags as string
-          const mentions = req.body.mentions as string
-
-          // nếu type là repost và ko có mentions và hashtags thì content phải là string và ko dc rỗng
-          if ([PostType.RePost].includes(type) && isEmpty(hashtags) && isEmpty(mentions) && value === '') {
-            throw new Error(POSTS_MESSAGES.CONTENT_MUST_BE_A_NON_EMPTY_STRING)
-          }
-          // nêu type là tweet thì parent_id phải là null
-          if (type === PostType.RePost && value !== '') {
-            throw new Error(POSTS_MESSAGES.CONTENT_MUST_BE_EMPTY_STRING)
-          }
-          return true
-        }
-      }
-    },
-    parent_id: {
-      custom: {
-        options: (value, { req }) => {
-          const type = req.body.type as PostType
-          // nếu type là repost thì parent_id phải là tweet_id của tweet cha
-          if ([PostType.RePost].includes(type) && !ObjectId.isValid(value)) {
-            throw new Error(POSTS_MESSAGES.PARENT_ID_MUST_BE_A_VALID_POST_ID)
-          }
-          // nêu type là post thì parent_id phải là null
-          if (type === PostType.Post && value !== null) {
-            throw new Error(POSTS_MESSAGES.PARENT_ID_MUST_BE_A_VALID_POST_ID)
-          }
-          return true
-        }
-      }
-    }
+export const unlikeValidator = async (req: Request, res: Response, next: NextFunction) => {
+  const schemas = Joi.object({
+    liked_post_id: postIdSchema
   })
-)
+  await validateHandler(schemas, req.body, next)
+}
+
+export const createPostValidator = async (req: Request, res: Response, next: NextFunction) => {
+  const schemas = Joi.object({
+    type: Joi.string()
+      .valid(...postTypes)
+      .required()
+      .messages({
+        'any.only': POSTS_MESSAGES.INVALID_POST,
+        'any.required': POSTS_MESSAGES.INVALID_POST
+      }),
+
+    audience: Joi.string()
+      .valid(...postAudience)
+      .required()
+      .messages({
+        'any.only': POSTS_MESSAGES.INVALID_AUDIENCE,
+        'any.required': POSTS_MESSAGES.INVALID_AUDIENCE
+      }),
+
+    hashtags: Joi.array().items(Joi.string()).required().messages({
+      'array.includes': POSTS_MESSAGES.HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING
+    }),
+
+    mentions: Joi.array()
+      .items(
+        Joi.string().custom((value, helpers) => {
+          if (!ObjectId.isValid(value)) {
+            return helpers.error(POSTS_MESSAGES.MENTIONS_MUST_BE_AN_ARRAY_OF_USER_ID)
+          }
+          return value
+        })
+      )
+      .required()
+      .messages({
+        'array.includes': POSTS_MESSAGES.MENTIONS_MUST_BE_AN_ARRAY_OF_USER_ID
+      }),
+
+    medias: Joi.array()
+      .items(
+        Joi.object({
+          url: Joi.string().required(),
+          type: Joi.string()
+            .valid(...mediaTypes)
+            .required()
+        }).messages({
+          'object.base': POSTS_MESSAGES.MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT
+        })
+      )
+      .required(),
+
+    content: Joi.string()
+      .allow('')
+      .custom((value, helpers) => {
+        const { type, hashtags, mentions } = helpers.state.ancestors[0]
+
+        if (type === PostType.RePost && isEmpty(hashtags) && isEmpty(mentions) && value === '') {
+          return helpers.error(POSTS_MESSAGES.CONTENT_MUST_BE_A_NON_EMPTY_STRING)
+        }
+
+        if (type === PostType.Post && value !== '') {
+          return helpers.error(POSTS_MESSAGES.CONTENT_MUST_BE_EMPTY_STRING)
+        }
+
+        return value
+      })
+      .messages({
+        'any.custom': POSTS_MESSAGES.CONTENT_MUST_BE_A_NON_EMPTY_STRING
+      }),
+
+    parent_id: Joi.alternatives()
+      .conditional('type', {
+        is: PostType.RePost,
+        then: Joi.string()
+          .custom((value, helpers) => {
+            if (!ObjectId.isValid(value)) {
+              return helpers.error(POSTS_MESSAGES.PARENT_ID_MUST_BE_A_VALID_POST_ID)
+            }
+            return value
+          })
+          .required(),
+        otherwise: Joi.allow(null)
+      })
+      .messages({
+        'any.custom': POSTS_MESSAGES.PARENT_ID_MUST_BE_A_VALID_POST_ID
+      })
+  })
+  await validateHandler(schemas, req.body, next)
+}

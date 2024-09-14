@@ -25,7 +25,7 @@ import {
   unFollowValidator
 } from '~/validations/users.validations'
 import { UpdateMyProfileReqBody } from '~/models/requestType/User.requests'
-import { requestHandler } from '~/utils/requestHandlers'
+import { requestHandler } from '~/utils/requestHandler'
 
 const userRouter = Router()
 /**

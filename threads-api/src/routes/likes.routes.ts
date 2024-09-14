@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { likesController, unlikesController } from '~/controllers/likes.controllers'
 import { likeValidator, unlikeValidator } from '~/validations/posts.validations'
 import { accessTokenValidator } from '~/validations/users.validations'
-import { requestHandler } from '~/utils/requestHandlers'
+import { requestHandler } from '~/utils/requestHandler'
 
 const likeRouter = Router()
 
