@@ -1,7 +1,7 @@
 import { PostReqBody } from '~/models/requestType/Post.requests'
 import databaseService from './database.services'
 import { ObjectId } from 'mongodb'
-import Post from '~/models/schemas/Post.schema'
+import Post from '~/models/post.model'
 
 class PostsService {
   async createPost({ user_id, body }: { user_id: string; body: PostReqBody }) {

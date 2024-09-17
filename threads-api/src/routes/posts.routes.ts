@@ -1,8 +1,9 @@
 import { Router } from 'express'
 import { createPostController } from '~/controllers/posts.controllers'
-import { createPostValidator } from '~/middlewares/posts.middlewares'
-import { accessTokenValidator } from '~/middlewares/users.middlewares'
-import { wrapRequestHandler } from '~/utils/handlers'
+import { createPostValidator } from '~/validations/posts.validations'
+import { accessTokenValidator } from '~/validations/users.validations'
+import { requestHandler } from '~/utils/requestHandler'
+import { validateMiddleware } from '~/utils/validateMiddleware'
 
 const postsRouter = Router()
 
@@ -13,6 +14,11 @@ const postsRouter = Router()
  * Header: { Authorization: Bearer <access_token>}
  * Body: PostRequestBody
  */
-postsRouter.post('/', accessTokenValidator, createPostValidator, wrapRequestHandler(createPostController))
+postsRouter.post(
+  '/',
+  validateMiddleware(accessTokenValidator),
+  validateMiddleware(createPostValidator),
+  requestHandler(createPostController)
+)
 
 export default postsRouter

@@ -12,7 +12,7 @@ import {
   unFollowController,
   updateMyProfileController
 } from '~/controllers/users.controllers'
-import { filterMiddleware } from '~/middlewares/common.middlewares'
+import { filterMiddleware } from '~/validations/common.validations'
 import {
   accessTokenValidator,
   changePasswordValidator,
@@ -23,9 +23,10 @@ import {
   registerValidator,
   resetPasswordValidator,
   unFollowValidator
-} from '~/middlewares/users.middlewares'
+} from '~/validations/users.validations'
 import { UpdateMyProfileReqBody } from '~/models/requestType/User.requests'
-import { wrapRequestHandler } from '~/utils/handlers'
+import { requestHandler } from '~/utils/requestHandler'
+import { validateMiddleware } from '~/utils/validateMiddleware'
 
 const userRouter = Router()
 /**
@@ -34,7 +35,7 @@ const userRouter = Router()
  * Method: POST
  * Body: {email: string, password: string}
  */
-userRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
+userRouter.post('/login', validateMiddleware(loginValidator), requestHandler(loginController))
 
 /**
  * Description: Register
@@ -42,7 +43,7 @@ userRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
  * Method: POST
  * Body: {name: string, email: string, password: string, confirm_password: string, date_of_birth: string}
  */
-userRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
+userRouter.post('/register', validateMiddleware(registerValidator), requestHandler(registerController))
 
 /**
  * Description: Logout
@@ -50,7 +51,12 @@ userRouter.post('/register', registerValidator, wrapRequestHandler(registerContr
  * Method: POST
  * Body: {refresh_token: string}
  */
-userRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
+userRouter.post(
+  '/logout',
+  validateMiddleware(accessTokenValidator),
+  validateMiddleware(refreshTokenValidator),
+  requestHandler(logoutController)
+)
 
 /**
  * Description: Forgot password
@@ -58,7 +64,11 @@ userRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequ
  * Method: POST
  * Body: {email: string}
  */
-userRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(forgotPasswordController))
+userRouter.post(
+  '/forgot-password',
+  validateMiddleware(forgotPasswordValidator),
+  requestHandler(forgotPasswordController)
+)
 
 /**
  * Description: Reset password and update new password for user document
@@ -66,7 +76,7 @@ userRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(
  * Method: POST
  * Body: {password: string, confirm_password: string, forgot_password_token: string}
  */
-userRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(resetPasswordController))
+userRouter.post('/reset-password', validateMiddleware(resetPasswordValidator), requestHandler(resetPasswordController))
 
 /**
  * Description: Change password
@@ -77,9 +87,9 @@ userRouter.post('/reset-password', resetPasswordValidator, wrapRequestHandler(re
  */
 userRouter.put(
   '/change-password',
-  accessTokenValidator,
-  changePasswordValidator,
-  wrapRequestHandler(changePasswordController)
+  validateMiddleware(accessTokenValidator),
+  validateMiddleware(changePasswordValidator),
+  requestHandler(changePasswordController)
 )
 
 /**
@@ -88,7 +98,7 @@ userRouter.put(
  * Method: GET
  * Header: { Authorization: Bearer <access_token>}
  */
-userRouter.get('/me', accessTokenValidator, wrapRequestHandler(getMyProfileController))
+userRouter.get('/me', validateMiddleware(accessTokenValidator), requestHandler(getMyProfileController))
 
 /**
  * Description: Update my profile
@@ -99,7 +109,7 @@ userRouter.get('/me', accessTokenValidator, wrapRequestHandler(getMyProfileContr
  */
 userRouter.patch(
   '/me',
-  accessTokenValidator,
+  validateMiddleware(accessTokenValidator),
   filterMiddleware<UpdateMyProfileReqBody>([
     'name',
     'date_of_birth',
@@ -110,7 +120,7 @@ userRouter.patch(
     'avatar',
     'cover_photo'
   ]),
-  wrapRequestHandler(updateMyProfileController)
+  requestHandler(updateMyProfileController)
 )
 
 /**
@@ -118,7 +128,7 @@ userRouter.patch(
  * Path: /:username
  * Method: GET
  */
-userRouter.get('/:username', wrapRequestHandler(getUserProfileController))
+userRouter.get('/:username', requestHandler(getUserProfileController))
 
 /**
  * Description: Follow user
@@ -127,7 +137,12 @@ userRouter.get('/:username', wrapRequestHandler(getUserProfileController))
  * Header: { Authorization: Bearer <access_token>}
  * Body: { followed_user_id: string }
  */
-userRouter.post('/follow', accessTokenValidator, followValidator, wrapRequestHandler(followController))
+userRouter.post(
+  '/follow',
+  validateMiddleware(accessTokenValidator),
+  validateMiddleware(followValidator),
+  requestHandler(followController)
+)
 
 /**
  * Description: Unfollow user
@@ -135,6 +150,11 @@ userRouter.post('/follow', accessTokenValidator, followValidator, wrapRequestHan
  * Method: DELETE
  * Header: { Authorization: Bearer <access_token>}
  */
-userRouter.delete('/follow/:user_id', accessTokenValidator, unFollowValidator, wrapRequestHandler(unFollowController))
+userRouter.delete(
+  '/follow/:user_id',
+  validateMiddleware(accessTokenValidator),
+  validateMiddleware(unFollowValidator),
+  requestHandler(unFollowController)
+)
 
 export default userRouter

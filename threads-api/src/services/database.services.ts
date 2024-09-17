@@ -1,12 +1,12 @@
 import { Collection, Db, MongoClient } from 'mongodb'
 import { config } from 'dotenv'
-import RefreshToken from '~/models/schemas/RefreshToken.schema'
+import RefreshToken from '~/models/refreshToken.model'
 import { envConfig } from '~/utils/config'
-import User from '~/models/schemas/User.schema'
-import Follower from '~/models/schemas/Follow.schema'
-import Like from '~/models/schemas/Like.schema'
-import Post from '~/models/schemas/Post.schema'
-import Bookmark from '~/models/schemas/Bookmark.schema'
+import User from '~/models/user.model'
+import Follower from '~/models/follow.model'
+import Like from '~/models/like.model'
+import Post from '~/models/post.model'
+import Bookmark from '~/models/Bookmark.model'
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@threads-replica.ugxgau4.mongodb.net/?retryWrites=true&w=majority&appName=Threads-Replica`
 

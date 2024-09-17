@@ -1,7 +1,8 @@
 import { Router } from 'express'
 import { bookmarksController, unbookmarksController } from '~/controllers/bookmarks.controllers'
-import { accessTokenValidator } from '~/middlewares/users.middlewares'
-import { wrapRequestHandler } from '~/utils/handlers'
+import { accessTokenValidator } from '~/validations/users.validations'
+import { requestHandler } from '~/utils/requestHandler'
+import { validateMiddleware } from '~/utils/validateMiddleware'
 
 const bookmarkRouter = Router()
 
@@ -13,7 +14,7 @@ const bookmarkRouter = Router()
  * Header: { Authorization: Bearer <access_token>}
  */
 
-bookmarkRouter.post('/', accessTokenValidator, wrapRequestHandler(bookmarksController))
+bookmarkRouter.post('/', validateMiddleware(accessTokenValidator), requestHandler(bookmarksController))
 
 /**
  * Description: Unbookmark post
@@ -22,5 +23,9 @@ bookmarkRouter.post('/', accessTokenValidator, wrapRequestHandler(bookmarksContr
  * Header: { Authorization: Bearer <access_token>}
  */
 
-bookmarkRouter.delete('/posts/:post_id', accessTokenValidator, wrapRequestHandler(unbookmarksController))
+bookmarkRouter.delete(
+  '/posts/:post_id',
+  validateMiddleware(accessTokenValidator),
+  requestHandler(unbookmarksController)
+)
 export default bookmarkRouter

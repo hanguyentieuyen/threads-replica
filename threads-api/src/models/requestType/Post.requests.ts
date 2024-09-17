@@ -1,5 +1,5 @@
 import { PostAudience, PostType } from '~/constants/enum'
-import { Media } from '../schemas/Media.schema'
+import { Media } from '../media.model'
 
 export interface PostReqBody {
   type: PostType
