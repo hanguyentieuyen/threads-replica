@@ -11,5 +11,6 @@ declare module 'express' {
     decodedEmailVerifyToken?: TokenPayload
     decodedForgotPasswordToken?: TokenPayload
     post?: Post
+    validateData?: any
   }
 }

@@ -26,6 +26,7 @@ import {
 } from '~/validations/users.validations'
 import { UpdateMyProfileReqBody } from '~/models/requestType/User.requests'
 import { requestHandler } from '~/utils/requestHandler'
+import { validateMiddleware } from '~/utils/validateMiddleware'
 
 const userRouter = Router()
 /**
@@ -34,7 +35,7 @@ const userRouter = Router()
  * Method: POST
  * Body: {email: string, password: string}
  */
-userRouter.post('/login', loginValidator, requestHandler(loginController))
+userRouter.post('/login', validateMiddleware(loginValidator), requestHandler(loginController))
 
 /**
  * Description: Register
@@ -42,7 +43,7 @@ userRouter.post('/login', loginValidator, requestHandler(loginController))
  * Method: POST
  * Body: {name: string, email: string, password: string, confirm_password: string, date_of_birth: string}
  */
-userRouter.post('/register', registerValidator, requestHandler(registerController))
+userRouter.post('/register', validateMiddleware(registerValidator), requestHandler(registerController))
 
 /**
  * Description: Logout
@@ -50,7 +51,12 @@ userRouter.post('/register', registerValidator, requestHandler(registerControlle
  * Method: POST
  * Body: {refresh_token: string}
  */
-userRouter.post('/logout', accessTokenValidator, refreshTokenValidator, requestHandler(logoutController))
+userRouter.post(
+  '/logout',
+  validateMiddleware(accessTokenValidator),
+  validateMiddleware(refreshTokenValidator),
+  requestHandler(logoutController)
+)
 
 /**
  * Description: Forgot password
@@ -58,7 +64,11 @@ userRouter.post('/logout', accessTokenValidator, refreshTokenValidator, requestH
  * Method: POST
  * Body: {email: string}
  */
-userRouter.post('/forgot-password', forgotPasswordValidator, requestHandler(forgotPasswordController))
+userRouter.post(
+  '/forgot-password',
+  validateMiddleware(forgotPasswordValidator),
+  requestHandler(forgotPasswordController)
+)
 
 /**
  * Description: Reset password and update new password for user document
@@ -66,7 +76,7 @@ userRouter.post('/forgot-password', forgotPasswordValidator, requestHandler(forg
  * Method: POST
  * Body: {password: string, confirm_password: string, forgot_password_token: string}
  */
-userRouter.post('/reset-password', resetPasswordValidator, requestHandler(resetPasswordController))
+userRouter.post('/reset-password', validateMiddleware(resetPasswordValidator), requestHandler(resetPasswordController))
 
 /**
  * Description: Change password
@@ -77,8 +87,8 @@ userRouter.post('/reset-password', resetPasswordValidator, requestHandler(resetP
  */
 userRouter.put(
   '/change-password',
-  accessTokenValidator,
-  changePasswordValidator,
+  validateMiddleware(accessTokenValidator),
+  validateMiddleware(changePasswordValidator),
   requestHandler(changePasswordController)
 )
 
@@ -88,7 +98,7 @@ userRouter.put(
  * Method: GET
  * Header: { Authorization: Bearer <access_token>}
  */
-userRouter.get('/me', accessTokenValidator, requestHandler(getMyProfileController))
+userRouter.get('/me', validateMiddleware(accessTokenValidator), requestHandler(getMyProfileController))
 
 /**
  * Description: Update my profile
@@ -99,7 +109,7 @@ userRouter.get('/me', accessTokenValidator, requestHandler(getMyProfileControlle
  */
 userRouter.patch(
   '/me',
-  accessTokenValidator,
+  validateMiddleware(accessTokenValidator),
   filterMiddleware<UpdateMyProfileReqBody>([
     'name',
     'date_of_birth',
@@ -127,7 +137,12 @@ userRouter.get('/:username', requestHandler(getUserProfileController))
  * Header: { Authorization: Bearer <access_token>}
  * Body: { followed_user_id: string }
  */
-userRouter.post('/follow', accessTokenValidator, followValidator, requestHandler(followController))
+userRouter.post(
+  '/follow',
+  validateMiddleware(accessTokenValidator),
+  validateMiddleware(followValidator),
+  requestHandler(followController)
+)
 
 /**
  * Description: Unfollow user
@@ -135,6 +150,11 @@ userRouter.post('/follow', accessTokenValidator, followValidator, requestHandler
  * Method: DELETE
  * Header: { Authorization: Bearer <access_token>}
  */
-userRouter.delete('/follow/:user_id', accessTokenValidator, unFollowValidator, requestHandler(unFollowController))
+userRouter.delete(
+  '/follow/:user_id',
+  validateMiddleware(accessTokenValidator),
+  validateMiddleware(unFollowValidator),
+  requestHandler(unFollowController)
+)
 
 export default userRouter
