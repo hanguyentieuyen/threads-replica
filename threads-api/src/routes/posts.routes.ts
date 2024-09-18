@@ -16,8 +16,8 @@ const postsRouter = Router()
  */
 postsRouter.post(
   '/',
-  validateMiddleware(accessTokenValidator),
-  validateMiddleware(createPostValidator),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(createPostValidator, 'body'),
   requestHandler(createPostController)
 )
 

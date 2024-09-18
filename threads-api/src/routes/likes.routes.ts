@@ -17,8 +17,8 @@ const likeRouter = Router()
 
 likeRouter.post(
   '/',
-  validateMiddleware(accessTokenValidator),
-  validateMiddleware(likeValidator),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(likeValidator, 'body'),
   requestHandler(likesController)
 )
 
@@ -31,8 +31,8 @@ likeRouter.post(
 
 likeRouter.delete(
   '/posts/:post_id',
-  validateMiddleware(accessTokenValidator),
-  validateMiddleware(unlikeValidator),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(unlikeValidator, 'body'),
   requestHandler(unlikesController)
 )
 export default likeRouter

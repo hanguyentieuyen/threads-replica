@@ -3,10 +3,19 @@ import { ErrorWithStatus } from '~/models/error.model'
 import { NextFunction, Request, Response } from 'express'
 import Joi, { Schema } from 'joi'
 
-export const validateMiddleware = (schemas: Schema) => {
+export const validateMiddleware = (schemas: Schema, dataLocation: 'body' | 'headers') => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const value = await schemas.validateAsync(req.body, { abortEarly: false })
+      let data = null
+      if (dataLocation === 'headers') {
+        data = { authorization: req.headers.authorization }
+      } else {
+        data = req[dataLocation]
+      }
+
+      console.log('validation middleware data: ', data)
+      const value = await schemas.validateAsync(data, { abortEarly: false })
+      console.log('validation middleware value: ', value)
       req.validateData = value
       next() // Procced to the next middleware
     } catch (error) {
@@ -20,6 +29,7 @@ export const validateMiddleware = (schemas: Schema) => {
           })
         )
       } else {
+        console.log('here')
         next(error)
       }
     }

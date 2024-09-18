@@ -73,7 +73,7 @@ const userIdSchema = Joi.string()
   })
 
 export const accessTokenValidator = Joi.object({
-  Authorization: Joi.string()
+  authorization: Joi.string()
     .trim()
     .custom(async (value, helpers) => {
       // Extract the token after the 'Bearer' part
@@ -85,11 +85,13 @@ export const accessTokenValidator = Joi.object({
 
       try {
         // Validate the access token
-        await verifyAccessToken(accessToken, helpers.state.ancestors[0] as Request)
+        const result = await verifyAccessToken(accessToken)
+        const req = helpers.state.ancestors[0] as Request
+        console.log('result: ', helpers.state.ancestors[0])
+        req.decodedAuthorization = result
       } catch (error) {
         return helpers.error('any.invalid') // Return invalid if verification fails
       }
-
       return value // Return the value if it's valid
     })
     .messages({

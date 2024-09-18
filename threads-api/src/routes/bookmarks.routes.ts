@@ -14,7 +14,7 @@ const bookmarkRouter = Router()
  * Header: { Authorization: Bearer <access_token>}
  */
 
-bookmarkRouter.post('/', validateMiddleware(accessTokenValidator), requestHandler(bookmarksController))
+bookmarkRouter.post('/', validateMiddleware(accessTokenValidator, 'headers'), requestHandler(bookmarksController))
 
 /**
  * Description: Unbookmark post
@@ -25,7 +25,7 @@ bookmarkRouter.post('/', validateMiddleware(accessTokenValidator), requestHandle
 
 bookmarkRouter.delete(
   '/posts/:post_id',
-  validateMiddleware(accessTokenValidator),
+  validateMiddleware(accessTokenValidator, 'headers'),
   requestHandler(unbookmarksController)
 )
 export default bookmarkRouter

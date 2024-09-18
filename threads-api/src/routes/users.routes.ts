@@ -35,7 +35,7 @@ const userRouter = Router()
  * Method: POST
  * Body: {email: string, password: string}
  */
-userRouter.post('/login', validateMiddleware(loginValidator), requestHandler(loginController))
+userRouter.post('/login', validateMiddleware(loginValidator, 'body'), requestHandler(loginController))
 
 /**
  * Description: Register
@@ -43,7 +43,7 @@ userRouter.post('/login', validateMiddleware(loginValidator), requestHandler(log
  * Method: POST
  * Body: {name: string, email: string, password: string, confirm_password: string, date_of_birth: string}
  */
-userRouter.post('/register', validateMiddleware(registerValidator), requestHandler(registerController))
+userRouter.post('/register', validateMiddleware(registerValidator, 'body'), requestHandler(registerController))
 
 /**
  * Description: Logout
@@ -53,8 +53,8 @@ userRouter.post('/register', validateMiddleware(registerValidator), requestHandl
  */
 userRouter.post(
   '/logout',
-  validateMiddleware(accessTokenValidator),
-  validateMiddleware(refreshTokenValidator),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(refreshTokenValidator, 'body'),
   requestHandler(logoutController)
 )
 
@@ -66,7 +66,7 @@ userRouter.post(
  */
 userRouter.post(
   '/forgot-password',
-  validateMiddleware(forgotPasswordValidator),
+  validateMiddleware(forgotPasswordValidator, 'body'),
   requestHandler(forgotPasswordController)
 )
 
@@ -76,7 +76,11 @@ userRouter.post(
  * Method: POST
  * Body: {password: string, confirm_password: string, forgot_password_token: string}
  */
-userRouter.post('/reset-password', validateMiddleware(resetPasswordValidator), requestHandler(resetPasswordController))
+userRouter.post(
+  '/reset-password',
+  validateMiddleware(resetPasswordValidator, 'body'),
+  requestHandler(resetPasswordController)
+)
 
 /**
  * Description: Change password
@@ -87,8 +91,8 @@ userRouter.post('/reset-password', validateMiddleware(resetPasswordValidator), r
  */
 userRouter.put(
   '/change-password',
-  validateMiddleware(accessTokenValidator),
-  validateMiddleware(changePasswordValidator),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(changePasswordValidator, 'body'),
   requestHandler(changePasswordController)
 )
 
@@ -98,7 +102,7 @@ userRouter.put(
  * Method: GET
  * Header: { Authorization: Bearer <access_token>}
  */
-userRouter.get('/me', validateMiddleware(accessTokenValidator), requestHandler(getMyProfileController))
+userRouter.get('/me', validateMiddleware(accessTokenValidator, 'headers'), requestHandler(getMyProfileController))
 
 /**
  * Description: Update my profile
@@ -109,7 +113,7 @@ userRouter.get('/me', validateMiddleware(accessTokenValidator), requestHandler(g
  */
 userRouter.patch(
   '/me',
-  validateMiddleware(accessTokenValidator),
+  validateMiddleware(accessTokenValidator, 'headers'),
   filterMiddleware<UpdateMyProfileReqBody>([
     'name',
     'date_of_birth',
@@ -139,8 +143,8 @@ userRouter.get('/:username', requestHandler(getUserProfileController))
  */
 userRouter.post(
   '/follow',
-  validateMiddleware(accessTokenValidator),
-  validateMiddleware(followValidator),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(followValidator, 'body'),
   requestHandler(followController)
 )
 
@@ -152,8 +156,8 @@ userRouter.post(
  */
 userRouter.delete(
   '/follow/:user_id',
-  validateMiddleware(accessTokenValidator),
-  validateMiddleware(unFollowValidator),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(unFollowValidator, 'body'),
   requestHandler(unFollowController)
 )
 

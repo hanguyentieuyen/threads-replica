@@ -8,7 +8,7 @@ import { verifyToken } from '~/utils/jwt'
 import { capitalize } from 'lodash'
 import { pick } from 'lodash'
 
-export const verifyAccessToken = async (accessToken: string, req?: Request) => {
+export const verifyAccessToken = async (accessToken: string) => {
   if (!accessToken) {
     throw new ErrorWithStatus({
       message: USERS_MESSAGES.ACCESS_TOKEN_IS_INVALID,
@@ -20,10 +20,7 @@ export const verifyAccessToken = async (accessToken: string, req?: Request) => {
       token: accessToken,
       secretOrPublicKey: envConfig.jwtSecretAccessToken
     })
-    if (req) {
-      ;(req as Request).decodedAuthorization = decodedAuthorization
-    }
-    return true
+    return decodedAuthorization
   } catch (error) {
     if (error instanceof JsonWebTokenError) {
       throw new ErrorWithStatus({

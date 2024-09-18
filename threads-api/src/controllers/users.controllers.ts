@@ -154,7 +154,8 @@ export const changePasswordController = async (
 }
 
 export const getMyProfileController = async (req: Request, res: Response) => {
-  const { user_id } = req.decodedAuthorization
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  console.log('user_id: ', req.decodedAuthorization)
   const data = await usersService.getMyProfile(user_id)
   return res.json(data)
 }
@@ -174,6 +175,7 @@ export const updateMyProfileController = async (
 
 export const getUserProfileController = async (req: Request<GetUserProfileReqBody>, res: Response) => {
   const { username } = req.params
+  console.log('username: ', username)
   const data = await usersService.getUserProfile(username)
   return res.json(data)
 }
