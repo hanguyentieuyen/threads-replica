@@ -157,7 +157,7 @@ userRouter.post(
 userRouter.delete(
   '/follow/:user_id',
   validateMiddleware(accessTokenValidator, 'headers'),
-  validateMiddleware(unFollowValidator, 'body'),
+  validateMiddleware(unFollowValidator, 'params'),
   requestHandler(unFollowController)
 )
 

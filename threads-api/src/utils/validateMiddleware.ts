@@ -2,21 +2,22 @@ import { HTTP_STATUS } from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/models/error.model'
 import { NextFunction, Request, Response } from 'express'
 import Joi, { Schema } from 'joi'
+import { verifyAccessToken } from '~/validations/common.validations'
 
-export const validateMiddleware = (schemas: Schema, dataLocation: 'body' | 'headers') => {
+export const validateMiddleware = (schemas: Schema, dataLocation: 'body' | 'headers' | 'params') => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let data = null
-      if (dataLocation === 'headers') {
-        data = { authorization: req.headers.authorization }
-      } else {
-        data = req[dataLocation]
-      }
-
-      console.log('validation middleware data: ', data)
+      const data = dataLocation === 'headers' ? { authorization: req.headers.authorization } : req[dataLocation]
+      // validate data with joi
       const value = await schemas.validateAsync(data, { abortEarly: false })
-      console.log('validation middleware value: ', value)
       req.validateData = value
+
+      //  verify the access token
+      if (dataLocation === 'headers') {
+        const accessToken = value.authorization.split(' ')[1]
+        const decodedAuthorization = await verifyAccessToken(accessToken)
+        req.decodedAuthorization = decodedAuthorization
+      }
       next() // Procced to the next middleware
     } catch (error) {
       console.log('Validate: ', error)
@@ -29,7 +30,6 @@ export const validateMiddleware = (schemas: Schema, dataLocation: 'body' | 'head
           })
         )
       } else {
-        console.log('here')
         next(error)
       }
     }

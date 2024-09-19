@@ -138,13 +138,15 @@ export const changePasswordController = async (
   res: Response
 ) => {
   const { user_id } = req.decodedAuthorization
-  const { old_password, password } = req.validateData
+  const { old_password } = req.validateData
   // Check if user exists
   const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
   if (!user) {
     throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
   }
-  // Check new password is match with old password
+  // Check password on db is match with old password
+  const { password } = user
+  console.log(password)
   const isMatch = hashPassword(old_password) === password
   if (!isMatch) {
     throw new Error(USERS_MESSAGES.OLD_PASSWORD_NOT_MATCH)
@@ -155,7 +157,7 @@ export const changePasswordController = async (
 
 export const getMyProfileController = async (req: Request, res: Response) => {
   const { user_id } = req.decodedAuthorization as TokenPayload
-  console.log('user_id: ', req.decodedAuthorization)
+
   const data = await usersService.getMyProfile(user_id)
   return res.json(data)
 }
@@ -175,7 +177,6 @@ export const updateMyProfileController = async (
 
 export const getUserProfileController = async (req: Request<GetUserProfileReqBody>, res: Response) => {
   const { username } = req.params
-  console.log('username: ', username)
   const data = await usersService.getUserProfile(username)
   return res.json(data)
 }

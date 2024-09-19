@@ -221,12 +221,11 @@ class UsersService {
     const formatPayload = payload.date_of_birth
       ? { ...payload, date_of_birth: new Date(payload.date_of_birth) }
       : payload
-
     const user = await databaseService.users.findOneAndUpdate(
       { _id: new ObjectId(user_id) },
       {
         $set: {
-          formatPayload
+          ...(formatPayload as UpdateMyProfileReqBody & { date_of_birth?: Date })
         },
         $currentDate: {
           updated_at: true

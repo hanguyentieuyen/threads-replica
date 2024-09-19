@@ -75,27 +75,10 @@ const userIdSchema = Joi.string()
 export const accessTokenValidator = Joi.object({
   authorization: Joi.string()
     .trim()
-    .custom(async (value, helpers) => {
-      // Extract the token after the 'Bearer' part
-      const accessToken = value.split(' ')[1]
-
-      if (!accessToken) {
-        return helpers.error('any.invalid') // Invalid token format
-      }
-
-      try {
-        // Validate the access token
-        const result = await verifyAccessToken(accessToken)
-        const req = helpers.state.ancestors[0] as Request
-        console.log('result: ', helpers.state.ancestors[0])
-        req.decodedAuthorization = result
-      } catch (error) {
-        return helpers.error('any.invalid') // Return invalid if verification fails
-      }
-      return value // Return the value if it's valid
-    })
+    .pattern(/^Bearer\s.+$/) // the Bearer format
     .messages({
       'string.base': 'Authorization header must be a string',
+      'string.pattern.base': 'Authorization header must follow the Bearer token format',
       'any.invalid': 'Invalid or missing access token'
     })
 })
@@ -222,9 +205,7 @@ export const resetPasswordValidator = Joi.object({
 })
 
 export const changePasswordValidator = Joi.object({
-  old_password: Joi.string().required().messages({
-    'string.empty': USERS_MESSAGES.OLD_PASSWORD_NOT_MATCH
-  }),
+  old_password: passwordSchema,
   password: passwordSchema,
   confirm_password: confirmPasswordSchema
 })
