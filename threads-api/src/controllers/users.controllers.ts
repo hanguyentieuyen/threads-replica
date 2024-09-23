@@ -138,16 +138,15 @@ export const changePasswordController = async (
   res: Response
 ) => {
   const { user_id } = req.decodedAuthorization
-  const { old_password } = req.validateData
+  const { old_password, password } = req.validateData
   // Check if user exists
   const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
   if (!user) {
     throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
   }
   // Check password on db is match with old password
-  const { password } = user
-  console.log(password)
-  const isMatch = hashPassword(old_password) === password
+  const { password: currentPassword } = user
+  const isMatch = hashPassword(old_password) === currentPassword
   if (!isMatch) {
     throw new Error(USERS_MESSAGES.OLD_PASSWORD_NOT_MATCH)
   }

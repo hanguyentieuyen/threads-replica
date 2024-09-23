@@ -13,3 +13,7 @@ export const createPostController = async (req: Request<ParamsDictionary, any, P
     data: data
   })
 }
+
+export const getPostController = async () => {}
+
+export const getNewPostsController = async () => {}
