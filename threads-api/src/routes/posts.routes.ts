@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { createPostController, getNewPostsController, getPostController } from '~/controllers/posts.controllers'
-import { createPostValidator } from '~/validations/posts.validations'
+import { createPostValidator, postValidator } from '~/validations/posts.validations'
 import { accessTokenValidator } from '~/validations/users.validations'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
@@ -27,7 +27,12 @@ postsRouter.post(
  * Method: GET
  * Header: { Authorization: Bearer <access_token>}
  */
-postsRouter.get('/:post_id', validateMiddleware(accessTokenValidator, 'headers'), requestHandler(getPostController))
+postsRouter.get(
+  '/:post_id',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(postValidator, 'params'),
+  requestHandler(getPostController)
+)
 
 /**
  * Description: Get new posts

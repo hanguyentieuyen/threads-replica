@@ -14,6 +14,13 @@ export const createPostController = async (req: Request<ParamsDictionary, any, P
   })
 }
 
-export const getPostController = async () => {}
+export const getPostController = async (req: Request, res: Response) => {
+  const { post_id } = req.validateData
+  const post = await postsService.getPostDetail(post_id)
+  return res.json({
+    message: POSTS_MESSAGES.GET_POST_SUCCESS,
+    result: post
+  })
+}
 
 export const getNewPostsController = async () => {}

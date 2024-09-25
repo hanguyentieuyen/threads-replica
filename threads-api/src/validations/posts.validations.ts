@@ -41,6 +41,18 @@ export const unlikeValidator = Joi.object({
   liked_post_id: postIdSchema
 })
 
+export const postValidator = Joi.object({
+  post_id: Joi.string().custom((value) => {
+    if (!ObjectId.isValid(value)) {
+      throw new ErrorWithStatus({
+        status: HTTP_STATUS.BAD_REQUEST,
+        message: POSTS_MESSAGES.INVALID_POST_ID
+      })
+    }
+    return value
+  })
+})
+
 export const createPostValidator = Joi.object({
   type: Joi.string()
     .valid(...postTypes)
