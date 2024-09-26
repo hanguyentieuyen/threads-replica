@@ -5,6 +5,7 @@ import Post from '~/models/post.model'
 import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'
+import { PostType } from '~/constants/enum'
 
 class PostsService {
   async createPost({ user_id, body }: { user_id: string; body: PostReqBody }) {
@@ -112,6 +113,220 @@ class PostsService {
       })
     }
     return data
+  }
+
+  // query my posts and follower posts (filter public post)
+  async getPosts({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const userId = new ObjectId(user_id)
+    const followedUserIds = await databaseService.follows
+      .find(
+        { user_id: userId },
+        {
+          projection: {
+            followed_user_id: 1,
+            _id: 0
+          }
+        }
+      )
+      .toArray()
+    const ids = followedUserIds.map((item) => item.followed_user_id)
+    // push my user_id into ids (included my user_id and user_id of followers)
+    ids.push(userId)
+    console.log(ids)
+    const [posts, total] = await Promise.all([
+      databaseService.posts
+        .aggregate([
+          {
+            $match: {
+              user_id: {
+                $in: ids
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user'
+            }
+          },
+          {
+            $match: {
+              $or: [
+                {
+                  audience: 0
+                },
+                {
+                  $and: [
+                    {
+                      audience: 1
+                    },
+                    {
+                      'user.twitter_circle': {
+                        $in: [userId]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            $skip: limit * (page - 1)
+          },
+          {
+            $limit: limit
+          },
+          {
+            $lookup: {
+              from: 'hashtags',
+              localField: 'hashtags',
+              foreignField: '_id',
+              as: 'hashtags'
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'mentions',
+              foreignField: '_id',
+              as: 'mentions'
+            }
+          },
+          {
+            $addFields: {
+              mentions: {
+                $map: {
+                  input: '$mentions',
+                  as: 'mention',
+                  in: {
+                    _id: '$$mention._id',
+                    name: '$$mention.name',
+                    username: '$$mention.username'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'bookmarks',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'bookmarks'
+            }
+          },
+          {
+            $lookup: {
+              from: 'posts',
+              localField: '_id',
+              foreignField: 'parent_id',
+              as: 'post_children'
+            }
+          },
+          {
+            $addFields: {
+              bookmark_count: {
+                $size: '$bookmarks'
+              },
+              repost_count: {
+                $size: {
+                  $filter: {
+                    input: '$post_children',
+                    as: 'item',
+                    cond: {
+                      $eq: ['$$item.type', PostType.RePost]
+                    }
+                  }
+                }
+              },
+              post_count: {
+                $size: {
+                  $filter: {
+                    input: '$post_children',
+                    as: 'item',
+                    cond: {
+                      $eq: ['$$item.type', PostType.Post]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            $project: {
+              post_children: 0,
+              user: {
+                password: 0,
+                email_verify_token: 0,
+                forgot_password_token: 0,
+                twitter_circle: 0,
+                date_of_birth: 0
+              }
+            }
+          }
+        ])
+        .toArray(),
+      databaseService.posts
+        .aggregate([
+          {
+            $match: {
+              user_id: {
+                $in: ids
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user'
+            }
+          },
+          {
+            $match: {
+              $or: [
+                {
+                  audience: 0
+                },
+                {
+                  $and: [
+                    {
+                      audience: 1
+                    },
+                    {
+                      'user.twitter_circle': {
+                        $in: [userId]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+
+    return {
+      posts,
+      total: total[0]?.total || 0
+    }
   }
 }
 

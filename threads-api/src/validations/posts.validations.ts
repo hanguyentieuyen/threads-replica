@@ -41,6 +41,19 @@ export const unlikeValidator = Joi.object({
   liked_post_id: postIdSchema
 })
 
+export const paginationValidator = Joi.object({
+  limit: Joi.number().integer().min(1).max(100).messages({
+    'number.base': 'Limit phải là một số',
+    'number.min': 'Limit phải lớn hơn hoặc bằng 1',
+    'number.max': 'Limit phải nhỏ hơn hoặc bằng 100'
+  }),
+
+  page: Joi.number().integer().min(1).messages({
+    'number.base': 'Page phải là một số',
+    'number.min': 'Page phải lớn hơn hoặc bằng 1'
+  })
+})
+
 export const postValidator = Joi.object({
   post_id: Joi.string().custom((value) => {
     if (!ObjectId.isValid(value)) {

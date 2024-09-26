@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { createPostController, getNewPostsController, getPostController } from '~/controllers/posts.controllers'
-import { createPostValidator, postValidator } from '~/validations/posts.validations'
+import { createPostController, getPostController, getPostsController } from '~/controllers/posts.controllers'
+import { createPostValidator, paginationValidator, postValidator } from '~/validations/posts.validations'
 import { accessTokenValidator } from '~/validations/users.validations'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
@@ -41,5 +41,10 @@ postsRouter.get(
  * Header: { Authorization: Bearer <access_token>}
  * Query: {limit: number, page: number}
  */
-postsRouter.get('/', validateMiddleware(accessTokenValidator, 'headers'), requestHandler(getNewPostsController))
+postsRouter.get(
+  '/',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(paginationValidator, 'params'),
+  requestHandler(getPostsController)
+)
 export default postsRouter

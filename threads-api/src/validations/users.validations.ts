@@ -1,7 +1,6 @@
-import { Request, Response } from 'express'
+import { Request } from 'express'
 import { USERS_MESSAGES } from '~/constants/messages'
 import databaseService from '~/services/database.services'
-import { verifyAccessToken } from './common.validations'
 import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { capitalize } from 'lodash'

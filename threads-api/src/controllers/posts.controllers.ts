@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { POSTS_MESSAGES } from '~/constants/messages'
-import { PostReqBody } from '~/models/requestType/Post.requests'
+import { Pagination, PostReqBody } from '~/models/requestType/Post.requests'
 import { TokenPayload } from '~/models/requestType/User.requests'
 import postsService from '~/services/posts.services'
 
@@ -16,11 +16,29 @@ export const createPostController = async (req: Request<ParamsDictionary, any, P
 
 export const getPostController = async (req: Request, res: Response) => {
   const { post_id } = req.validateData
-  const post = await postsService.getPostDetail(post_id)
+  const data = await postsService.getPostDetail(post_id)
   return res.json({
     message: POSTS_MESSAGES.GET_POST_SUCCESS,
-    result: post
+    result: data
   })
 }
 
-export const getNewPostsController = async () => {}
+export const getPostsController = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
+  const user_id = req.decodedAuthorization.user_id
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const data = await postsService.getPosts({
+    user_id,
+    limit,
+    page
+  })
+  return res.json({
+    message: POSTS_MESSAGES.GET_POST_SUCCESS,
+    result: {
+      page,
+      limit,
+      totalPage: Math.ceil(data.total / limit),
+      posts: data.posts
+    }
+  })
+}
