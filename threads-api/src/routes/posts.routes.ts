@@ -1,6 +1,16 @@
 import { Router } from 'express'
-import { createPostController, getPostController, getPostsController } from '~/controllers/posts.controllers'
-import { createPostValidator, paginationValidator, postValidator } from '~/validations/posts.validations'
+import {
+  createPostController,
+  getPostChildrenController,
+  getPostController,
+  getPostsController
+} from '~/controllers/posts.controllers'
+import {
+  createPostValidator,
+  getPostChildrenValidator,
+  paginationValidator,
+  postValidator
+} from '~/validations/posts.validations'
 import { accessTokenValidator } from '~/validations/users.validations'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
@@ -22,7 +32,7 @@ postsRouter.post(
 )
 
 /**
- * Description: Get a  post
+ * Description: Get a detail post
  * Path: /:post_id
  * Method: GET
  * Header: { Authorization: Bearer <access_token>}
@@ -39,12 +49,28 @@ postsRouter.get(
  * Path: /
  * Method: GET
  * Header: { Authorization: Bearer <access_token>}
- * Query: {limit: number, page: number}
+ * Params: {limit: number, page: number}
  */
 postsRouter.get(
   '/',
   validateMiddleware(accessTokenValidator, 'headers'),
   validateMiddleware(paginationValidator, 'params'),
   requestHandler(getPostsController)
+)
+
+/**
+ * Description: get tweet children
+ * Path: /:post_id/children
+ * Method: GET
+ * Header: { Authorization: Bearer <access_token>}
+ * Query: {limit: number, page: number, tweet_type: TweetType}
+ */
+postsRouter.get(
+  '/:post_id/children',
+  validateMiddleware(postValidator, 'params'),
+  validateMiddleware(paginationValidator, 'params'),
+  validateMiddleware(getPostChildrenValidator, 'params'),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  requestHandler(getPostChildrenController)
 )
 export default postsRouter

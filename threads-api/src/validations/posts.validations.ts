@@ -150,3 +150,13 @@ export const createPostValidator = Joi.object({
       'any.custom': POSTS_MESSAGES.PARENT_ID_MUST_BE_A_VALID_POST_ID
     })
 })
+
+export const getPostChildrenValidator = Joi.object({
+  post_type: Joi.string()
+    .valid(...Object.values(PostType))
+    .required()
+    .messages({
+      'any.only': POSTS_MESSAGES.INVALID_TYPE,
+      'any.required': 'Tweet type is required'
+    })
+})
