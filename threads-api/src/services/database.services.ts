@@ -7,6 +7,7 @@ import Follower from '~/models/follow.model'
 import Like from '~/models/like.model'
 import Post from '~/models/post.model'
 import Bookmark from '~/models/Bookmark.model'
+
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@threads-replica.ugxgau4.mongodb.net/?retryWrites=true&w=majority&appName=Threads-Replica`
 
@@ -27,7 +28,12 @@ class DatabaseService {
       throw error
     }
   }
-
+  async indexPosts() {
+    const exists = await this.posts.indexExists(['content_text'])
+    if (!exists) {
+      this.posts.createIndex({ content: 'text' }, { default_language: 'none' })
+    }
+  }
   get refreshTokens(): Collection<RefreshToken> {
     return this.db.collection(envConfig.dbRefreshTokensCollection)
   }

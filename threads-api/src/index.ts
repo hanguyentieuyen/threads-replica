@@ -6,6 +6,7 @@ import cors, { CorsOptions } from 'cors'
 import postsRouter from './routes/posts.routes'
 import bookmarkRouter from './routes/bookmarks.routes'
 import likeRouter from './routes/likes.routes'
+import searchRouter from './routes/search.routes'
 const app = express()
 const port = 4000
 
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 const corsOption: CorsOptions = {
   origin: '*'
 }
+
 app.use(cors(corsOption))
 
 // route endpoint
@@ -24,10 +26,17 @@ app.use('/users', usersRouter)
 app.use('/posts', postsRouter)
 app.use('/bookmarks', bookmarkRouter)
 app.use('/likes', likeRouter)
+app.use('/search', searchRouter)
 
-databaseService.connect()
+// Database connection and indexing
+databaseService.connect().then(() => {
+  databaseService.indexPosts() // Make sure this function exists and is correct.
+})
 
+// Error handler middleware
 app.use(defaultErrorHandler)
+
+// Start the server
 app.listen(port, () => {
   console.log(`Server is running at port ${port}`)
 })
