@@ -7,6 +7,8 @@ import postsRouter from './routes/posts.routes'
 import bookmarkRouter from './routes/bookmarks.routes'
 import likeRouter from './routes/likes.routes'
 import searchRouter from './routes/search.routes'
+import mediaRouter from './routes/medias.routes'
+import { createUploadFolder } from './utils/fileparser'
 const app = express()
 const port = 4000
 
@@ -19,14 +21,17 @@ const corsOption: CorsOptions = {
   origin: '*'
 }
 
-app.use(cors(corsOption))
+// Create upload files folder
+createUploadFolder()
 
+app.use(cors(corsOption))
 // route endpoint
 app.use('/users', usersRouter)
 app.use('/posts', postsRouter)
 app.use('/bookmarks', bookmarkRouter)
 app.use('/likes', likeRouter)
 app.use('/search', searchRouter)
+app.use('/medias', mediaRouter)
 
 // Database connection and indexing
 databaseService.connect().then(() => {

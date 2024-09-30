@@ -17,6 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/formidable": "^3.4.5",
     "@types/lodash": "^4.17.7",
     "@types/node": "^22.0.0",
     "@types/swagger-jsdoc": "^6.0.4",
@@ -35,6 +36,8 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.658.1",
+    "@aws-sdk/lib-storage": "^3.658.1",
     "@faker-js/faker": "^8.4.1",
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.6",
@@ -42,10 +45,13 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
+    "formidable": "^3.5.1",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "mime": "^4.0.4",
     "mongodb": "^6.8.0",
+    "sharp": "^0.33.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }
