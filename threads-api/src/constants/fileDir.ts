@@ -6,3 +6,5 @@ export const toUnixPath = (folderPath: string) => folderPath.replace(/[\\/]+/g, 
 
 export const UPLOAD_IMAGE_TEMP_DIR = path.resolve('uploads/images/temps')
 export const UPLOAD_IMAGE_DIR = path.resolve('uploads/images')
+export const UPLOAD_VIDEO_TEMP_DIR = path.resolve('uploads/videos/temps')
+export const UPLOAD_VIDEO_DIR = path.resolve('uploads/videos')

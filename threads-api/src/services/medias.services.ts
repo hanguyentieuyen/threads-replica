@@ -2,7 +2,7 @@ import { Request } from 'express'
 import path from 'path'
 import { UPLOAD_IMAGE_DIR } from '~/constants/fileDir'
 import { uploadFileS3 } from '~/utils/aws-s3'
-import { fileImageParser, getNameFromFullname } from '~/utils/fileparser'
+import { fileImageParser, fileVideoParser, getNameFromFullname } from '~/utils/fileparser'
 import fsPromise from 'fs/promises'
 import { MediaType } from '~/constants/enum'
 import sharp from 'sharp'
@@ -25,6 +25,24 @@ class MediasService {
       return {
         url: fileUploadS3.Location,
         type: MediaType.Image
+      }
+    })
+    return result
+  }
+
+  async uploadVideo(req: Request) {
+    const mime = (await import('mime')).default
+    const files = await fileVideoParser(req)
+    const result = files.map(async (file) => {
+      const fileUploadS3 = await uploadFileS3({
+        fileName: `videos/${file.newFilename}`,
+        filePath: file.filepath,
+        contentType: mime.getType(file.filepath) as string
+      })
+      fsPromise.unlink(file.filepath)
+      return {
+        url: fileUploadS3.Location as string,
+        type: MediaType.Video
       }
     })
     return result
