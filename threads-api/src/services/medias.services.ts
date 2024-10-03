@@ -6,6 +6,7 @@ import { fileImageParser, fileVideoParser, getNameFromFullname } from '~/utils/f
 import fsPromise from 'fs/promises'
 import { MediaType } from '~/constants/enum'
 import sharp from 'sharp'
+import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
 
 class MediasService {
   async uploadImage(req: Request) {
@@ -15,16 +16,29 @@ class MediasService {
       const newName = getNameFromFullname(file.newFilename)
       const newFullFileName = `${newName}.jpg`
       const newPath = path.resolve(UPLOAD_IMAGE_DIR, newFullFileName)
+
+      // Process the image
       await sharp(file.filepath).jpeg().toFile(newPath)
-      const fileUploadS3 = await uploadFileS3({
-        fileName: `images/${newFullFileName}`,
-        filePath: newPath,
-        contentType: mime.getType(newPath) as string
-      })
-      await Promise.all([fsPromise.unlink(file.filepath), fsPromise.unlink(newPath)])
-      return {
-        url: fileUploadS3.Location,
-        type: MediaType.Image
+
+      try {
+        // Upload to S3
+        const fileUploadS3 = await uploadFileS3({
+          fileName: `images/${newFullFileName}`,
+          filePath: newPath,
+          contentType: mime.getType(newPath) as string
+        })
+
+        console.log('fileUploadS3: ', fileUploadS3)
+        // Delete the original file first
+        await fsPromise.unlink(file.filepath)
+        // After successful upload, delete the new file
+        await fsPromise.unlink(newPath)
+        return {
+          url: (fileUploadS3 as CompleteMultipartUploadCommandOutput).Location as string,
+          type: MediaType.Image
+        }
+      } catch (error) {
+        console.error('Error during file processing:', error)
       }
     })
     return result

@@ -9,6 +9,7 @@ import likeRouter from './routes/likes.routes'
 import searchRouter from './routes/search.routes'
 import mediaRouter from './routes/medias.routes'
 import { createUploadFolder } from './utils/fileparser'
+import staticRouter from './routes/static.routes'
 const app = express()
 const port = 4000
 
@@ -32,6 +33,7 @@ app.use('/bookmarks', bookmarkRouter)
 app.use('/likes', likeRouter)
 app.use('/search', searchRouter)
 app.use('/medias', mediaRouter)
+app.use('/static', staticRouter)
 
 // Database connection and indexing
 databaseService.connect().then(() => {
