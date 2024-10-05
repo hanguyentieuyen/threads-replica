@@ -59,11 +59,11 @@ postsRouter.get(
 )
 
 /**
- * Description: get tweet children
+ * Description: get post children
  * Path: /:post_id/children
  * Method: GET
  * Header: { Authorization: Bearer <access_token>}
- * Query: {limit: number, page: number, tweet_type: TweetType}
+ * Query: {limit: number, page: number, post_type: PostType}
  */
 postsRouter.get(
   '/:post_id/children',

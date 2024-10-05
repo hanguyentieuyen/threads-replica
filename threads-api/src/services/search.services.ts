@@ -10,6 +10,159 @@ type SearchType = {
   people_follow?: PeopleFollow
 }
 class SearchService {
+  private getPostsPipeline(filter: any, user_id: string, limit: number, page: number) {
+    return [
+      // Match posts based on filter
+      { $match: filter },
+
+      // Lookup user info by user_id
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user_id',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+      { $unwind: '$user' },
+
+      // Filter posts based on audience and user's post circle
+      {
+        $match: {
+          $or: [
+            { audience: 0 },
+            {
+              $and: [{ audience: 1 }, { 'user.post_circle': { $in: [new ObjectId(user_id)] } }]
+            }
+          ]
+        }
+      },
+
+      // Lookup hashtags and mentions
+      {
+        $lookup: {
+          from: 'hashtags',
+          localField: 'hashtags',
+          foreignField: '_id',
+          as: 'hashtags'
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'mentions',
+          foreignField: '_id',
+          as: 'mentions'
+        }
+      },
+
+      // Map mentions to include only specific fields
+      {
+        $addFields: {
+          mentions: {
+            $map: {
+              input: '$mentions',
+              as: 'mention',
+              in: {
+                _id: '$$mention._id',
+                name: '$$mention.name',
+                username: '$$mention.username'
+              }
+            }
+          }
+        }
+      },
+
+      // Lookup bookmarks and post children
+      {
+        $lookup: {
+          from: 'bookmarks',
+          localField: '_id',
+          foreignField: 'post_id',
+          as: 'bookmarks'
+        }
+      },
+      {
+        $lookup: {
+          from: 'posts',
+          localField: '_id',
+          foreignField: 'parent_id',
+          as: 'post_children'
+        }
+      },
+
+      // Add bookmark and repost counts
+      {
+        $addFields: {
+          bookmark_count: { $size: '$bookmarks' },
+          repost_count: {
+            $size: {
+              $filter: {
+                input: '$post_children',
+                as: 'item',
+                cond: { $eq: ['$$item.type', PostType.RePost] }
+              }
+            }
+          }
+        }
+      },
+
+      // Exclude sensitive user information and post_children from the output
+      {
+        $project: {
+          post_children: 0,
+          'user.password': 0,
+          'user.email_verify_token': 0,
+          'user.forgot_password_token': 0,
+          'user.post_circle': 0,
+          'user.date_of_birth': 0
+        }
+      },
+
+      // Pagination
+      { $skip: limit * (page - 1) },
+      { $limit: limit }
+    ]
+  }
+
+  private getPostCountPipeline = (filter: any, user_id: string) {
+    return [
+      // Match posts based on the provided filter
+      { $match: filter },
+  
+      // Lookup user info by user_id
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user_id',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+      
+      // Unwind to deconstruct the user array
+      { $unwind: '$user' },
+  
+      // Match posts based on audience settings and user post circle
+      {
+        $match: {
+          $or: [
+            { audience: 0 },
+            {
+              $and: [
+                { audience: 1 },
+                { 'user.post_circle': { $in: [new ObjectId(user_id)] } }
+              ]
+            }
+          ]
+        }
+      },
+  
+      // Count total number of matched posts
+      { $count: 'total' }
+    ];
+  };
+  
   async search({ limit, page, user_id, media_type, people_follow, content }: SearchType) {
     const filter: any = {
       $text: {
@@ -47,175 +200,8 @@ class SearchService {
     }
 
     const [posts, total] = await Promise.all([
-      databaseService.posts
-        .aggregate([
-          {
-            $match: filter
-          },
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'user_id',
-              foreignField: '_id',
-              as: 'user'
-            }
-          },
-          {
-            $unwind: {
-              path: '$user'
-            }
-          },
-          {
-            $match: {
-              $or: [
-                {
-                  audience: 0
-                },
-                {
-                  $and: [
-                    {
-                      audience: 1
-                    },
-                    {
-                      'user.post_circle': {
-                        $in: [new ObjectId(user_id)]
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          },
-          {
-            $lookup: {
-              from: 'hashtags',
-              localField: 'hashtags',
-              foreignField: '_id',
-              as: 'hashtags'
-            }
-          },
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'mentions',
-              foreignField: '_id',
-              as: 'mentions'
-            }
-          },
-          {
-            $addFields: {
-              mentions: {
-                $map: {
-                  input: '$mentions',
-                  as: 'mention',
-                  in: {
-                    _id: '$$mention._id',
-                    name: '$$mention.name',
-                    username: '$$mention.username'
-                  }
-                }
-              }
-            }
-          },
-          {
-            $lookup: {
-              from: 'bookmarks',
-              localField: '_id',
-              foreignField: 'post_id',
-              as: 'bookmarks'
-            }
-          },
-          {
-            $lookup: {
-              from: 'posts',
-              localField: '_id',
-              foreignField: 'parent_id',
-              as: 'post_children'
-            }
-          },
-          {
-            $addFields: {
-              bookmark_count: {
-                $size: '$bookmarks'
-              },
-              repost_count: {
-                $size: {
-                  $filter: {
-                    input: '$post_children',
-                    as: 'item',
-                    cond: {
-                      $eq: ['$$item.type', PostType.RePost]
-                    }
-                  }
-                }
-              }
-            }
-          },
-          {
-            $project: {
-              post_children: 0,
-              user: {
-                password: 0,
-                email_verify_token: 0,
-                forgot_password_token: 0,
-                post_circle: 0,
-                date_of_birth: 0
-              }
-            }
-          },
-          {
-            $skip: limit * (page - 1)
-          },
-          {
-            $limit: limit
-          }
-        ])
-        .toArray(),
-
-      databaseService.posts
-        .aggregate([
-          {
-            $match: filter
-          },
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'user_id',
-              foreignField: '_id',
-              as: 'user'
-            }
-          },
-          {
-            $unwind: {
-              path: '$user'
-            }
-          },
-          {
-            $match: {
-              $or: [
-                {
-                  audience: 0
-                },
-                {
-                  $and: [
-                    {
-                      audience: 1
-                    },
-                    {
-                      'user.post_circle': {
-                        $in: [new ObjectId(user_id)]
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          },
-          {
-            $count: 'total'
-          }
-        ])
-        .toArray()
+      databaseService.posts.aggregate(this.getPostsPipeline(filter, user_id, limit, page)).toArray(),
+      databaseService.posts.aggregate(this.getPostCountPipeline(filter, user_id)).toArray()
     ])
 
     return {
