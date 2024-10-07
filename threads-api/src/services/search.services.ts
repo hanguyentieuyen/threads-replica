@@ -125,11 +125,11 @@ class SearchService {
     ]
   }
 
-  private getPostCountPipeline = (filter: any, user_id: string) {
+  private getPostCountPipeline(filter: any, user_id: string) {
     return [
       // Match posts based on the provided filter
       { $match: filter },
-  
+
       // Lookup user info by user_id
       {
         $lookup: {
@@ -139,30 +139,27 @@ class SearchService {
           as: 'user'
         }
       },
-      
+
       // Unwind to deconstruct the user array
       { $unwind: '$user' },
-  
+
       // Match posts based on audience settings and user post circle
       {
         $match: {
           $or: [
             { audience: 0 },
             {
-              $and: [
-                { audience: 1 },
-                { 'user.post_circle': { $in: [new ObjectId(user_id)] } }
-              ]
+              $and: [{ audience: 1 }, { 'user.post_circle': { $in: [new ObjectId(user_id)] } }]
             }
           ]
         }
       },
-  
+
       // Count total number of matched posts
       { $count: 'total' }
-    ];
-  };
-  
+    ]
+  }
+
   async search({ limit, page, user_id, media_type, people_follow, content }: SearchType) {
     const filter: any = {
       $text: {

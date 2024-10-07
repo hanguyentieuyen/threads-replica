@@ -1,10 +1,10 @@
 import { Request } from 'express'
 import { File } from 'formidable'
-import { UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_TEMP_DIR } from '~/constants/fileDir'
+import { UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_DIR, UPLOAD_VIDEO_TEMP_DIR } from '~/constants/fileDir'
 import fs from 'fs'
 
 export const createUploadFolder = () => {
-  ;[UPLOAD_IMAGE_TEMP_DIR].forEach((dir) => {
+  ;[UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_TEMP_DIR].forEach((dir) => {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, {
         recursive: true // allow to create nested folder
@@ -54,8 +54,9 @@ export const fileImageParser = async (req: Request) => {
 
 export const fileVideoParser = async (req: Request) => {
   const formidable = (await import('formidable')).default
+
   const form = formidable({
-    uploadDir: UPLOAD_VIDEO_TEMP_DIR,
+    uploadDir: UPLOAD_VIDEO_DIR,
     maxFiles: 1,
     maxFileSize: 50 * 1024 * 1024, // 50Mb,
     filter: function ({ name, mimetype }) {
