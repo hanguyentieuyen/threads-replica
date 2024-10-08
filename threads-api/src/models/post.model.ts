@@ -9,7 +9,7 @@ interface PostConstructor {
   audience: PostAudience
   content: string
   parent_id: null | string //  chỉ null khi post gốc
-  hashtags: string[]
+  hashtags: ObjectId[]
   mentions: string[]
   medias: Media[]
   guest_views?: number
@@ -51,8 +51,7 @@ export default class Post {
     this._id = _id
     this.user_id = user_id
     ;(this.audience = audience), (this.content = content)
-    this.hashtags = hashtags.map((item) => new ObjectId(item))
-    this.medias = medias
+    ;(this.hashtags = hashtags), (this.medias = medias)
     this.mentions = mentions.map((item) => new ObjectId(item))
     this.parent_id = parent_id ? new ObjectId(parent_id) : null
     this.type = type

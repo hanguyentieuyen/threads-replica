@@ -6,7 +6,8 @@ import User from '~/models/user.model'
 import Follower from '~/models/follow.model'
 import Like from '~/models/like.model'
 import Post from '~/models/post.model'
-import Bookmark from '~/models/Bookmark.model'
+import Bookmark from '~/models/bookmark.model'
+import HashTag from '~/models/hashtags.model'
 
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@threads-replica.ugxgau4.mongodb.net/?retryWrites=true&w=majority&appName=Threads-Replica`
@@ -48,6 +49,10 @@ class DatabaseService {
 
   get likes(): Collection<Like> {
     return this.db.collection(envConfig.dbLikesCollection)
+  }
+
+  get hashtags(): Collection<HashTag> {
+    return this.db.collection(envConfig.dbHashTagsCollection)
   }
 
   get posts(): Collection<Post> {

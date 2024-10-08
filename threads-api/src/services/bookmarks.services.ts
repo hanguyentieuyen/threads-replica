@@ -1,6 +1,6 @@
 import databaseService from './database.services'
 import { ObjectId } from 'mongodb'
-import Bookmark from '~/models/Bookmark.model'
+import Bookmark from '~/models/bookmark.model'
 
 class BookmarksService {
   async bookmarks(user_id: string, post_id: string) {

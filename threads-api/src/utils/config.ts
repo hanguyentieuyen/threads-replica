@@ -8,7 +8,9 @@ export const envConfig = {
   dbLikesCollection: process.env.DB_LIKES_COLLECTION as string,
   dbBookmarksCollection: process.env.DB_BOOKMARKS_COLLECTION as string,
   dbPostsCollection: process.env.DB_POSTS_COLLECTION as string,
+  dbHashTagsCollection: process.env.DB_HASHTAGS_COLLECTION as string,
   dbRefreshTokensCollection: process.env.DB_REFRESHTOKEN_COLLECTION as string,
+
   jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,
   jwtSecretRefreshToken: process.env.JWT_SECRET_REFRESH_TOKEN as string,
   jwtSecretVerifyMailToken: process.env.JWT_SECRET_VERIFY_EMAIL_TOKEN as string,

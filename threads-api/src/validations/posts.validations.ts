@@ -67,7 +67,7 @@ export const postValidator = Joi.object({
 })
 
 export const createPostValidator = Joi.object({
-  type: Joi.string()
+  type: Joi.number()
     .valid(...postTypes)
     .required()
     .messages({
@@ -75,7 +75,7 @@ export const createPostValidator = Joi.object({
       'any.required': POSTS_MESSAGES.INVALID_POST
     }),
 
-  audience: Joi.string()
+  audience: Joi.number()
     .valid(...postAudience)
     .required()
     .messages({
@@ -123,16 +123,15 @@ export const createPostValidator = Joi.object({
         return helpers.error(POSTS_MESSAGES.CONTENT_MUST_BE_A_NON_EMPTY_STRING)
       }
 
-      if (type === PostType.Post && value !== '') {
-        return helpers.error(POSTS_MESSAGES.CONTENT_MUST_BE_EMPTY_STRING)
-      }
+      // if (type === PostType.RePost && value !== '') {
+      //   return helpers.error(POSTS_MESSAGES.CONTENT_MUST_BE_EMPTY_STRING)
+      // }
 
       return value
     })
     .messages({
       'any.custom': POSTS_MESSAGES.CONTENT_MUST_BE_A_NON_EMPTY_STRING
     }),
-
   parent_id: Joi.alternatives()
     .conditional('type', {
       is: PostType.RePost,

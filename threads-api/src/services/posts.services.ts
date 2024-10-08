@@ -1,20 +1,36 @@
 import { PostReqBody } from '~/models/requestType/Post.requests'
 import databaseService from './database.services'
-import { ObjectId } from 'mongodb'
+import { ObjectId, WithId } from 'mongodb'
 import Post from '~/models/post.model'
 import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'
 import { PostType } from '~/constants/enum'
+import HashTag from '~/models/hashtags.model'
 
 class PostsService {
+  // Handle hashtags
+  async handleHashTags(hashtags: string[]) {
+    const hashtagsDocuments = await Promise.all(
+      hashtags.map((hashtag) => {
+        // Tìm hashtag trong database nếu có thì lấy ra, nếu ko có thì tạo mới
+        return databaseService.hashtags.findOneAndUpdate(
+          { name: hashtag },
+          { $setOnInsert: new HashTag({ name: hashtag }) },
+          { upsert: true, returnDocument: 'after' }
+        )
+      })
+    )
+    return hashtagsDocuments.map((hashtag) => hashtag?._id)
+  }
   async createPost({ user_id, body }: { user_id: string; body: PostReqBody }) {
+    const hashTagsIds = (await this.handleHashTags(body.hashtags)) as ObjectId[]
     const data = await databaseService.posts.insertOne(
       new Post({
         user_id: new ObjectId(user_id),
         audience: body.audience,
         content: body.content,
-        hashtags: body.hashtags,
+        hashtags: hashTagsIds,
         mentions: body.mentions,
         medias: body.medias,
         parent_id: body.parent_id,
