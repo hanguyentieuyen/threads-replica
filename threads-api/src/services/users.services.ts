@@ -11,6 +11,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import Follow from '~/models/follow.model'
+import { sendForgotPasswordEmail } from '~/utils/mail'
 
 class UsersService {
   private createtAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
@@ -166,6 +167,7 @@ class UsersService {
     ])
     // Send mail included link to user mail: http://example.com/forgot-password?token=token
     console.log('forgotPasswordToken: ', forgotPasswordToken)
+    await sendForgotPasswordEmail(email, forgotPasswordToken)
     return {
       message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
     }
