@@ -112,7 +112,7 @@ class SearchService {
         $project: {
           post_children: 0,
           'user.password': 0,
-          'user.email_verify_token': 0,
+          'user.verify_email_token': 0,
           'user.forgot_password_token': 0,
           'user.post_circle': 0,
           'user.date_of_birth': 0

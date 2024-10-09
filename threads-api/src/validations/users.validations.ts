@@ -187,6 +187,11 @@ export const registerValidator = Joi.object({
   })
 })
 
+export const verifyEmailTokenValidator = Joi.object({
+  verify_email_token: Joi.string().required().trim().messages({
+    'string.verify_email_token': USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_REQUIRED
+  })
+})
 export const forgotPasswordValidator = Joi.object({
   email: Joi.string()
     .email({ tlds: { allow: false } })

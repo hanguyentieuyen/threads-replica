@@ -17,7 +17,8 @@ import {
   ResetPasswordReqBody,
   TokenPayload,
   UnFollowReqBody,
-  UpdateMyProfileReqBody
+  UpdateMyProfileReqBody,
+  VerifyEmailTokenReqBody
 } from '~/models/requestType/User.requests'
 import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
@@ -51,6 +52,49 @@ export const registerController = async (req: Request<ParamsDictionary, any, Reg
   return res.json({
     message: USERS_MESSAGES.REGISTER_SUCCESS,
     data
+  })
+}
+
+export const verifyEmailController = async (
+  req: Request<ParamsDictionary, any, VerifyEmailTokenReqBody>,
+  res: Response
+) => {
+  const { verify_email_token } = req.validateData
+  // decode verify_email_token
+  try {
+    const decodedVerifyEmailToken = await verifyToken({
+      token: verify_email_token,
+      secretOrPublicKey: envConfig.jwtSecretVerifyMailToken
+    })
+
+    ;(req as Request).decodedVerifyEmailToken = decodedVerifyEmailToken
+  } catch (error) {
+    throw new ErrorWithStatus({
+      message: capitalize((error as JsonWebTokenError).message),
+      status: HTTP_STATUS.UNAUTHORIZED
+    })
+  }
+  const { user_id } = req.decodedVerifyEmailToken as TokenPayload
+  const user = await databaseService.users.findOne({
+    _id: new ObjectId(user_id)
+  })
+  // Case 0: user not found
+  if (!user) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      message: USERS_MESSAGES.USER_NOT_FOUND
+    })
+  }
+  // Case 1: email is verified
+  if (user.verify_email_token === '') {
+    return res.json({
+      message: USERS_MESSAGES.EMAIL_ALREADY_VERIFIED_BEFORE
+    })
+  }
+  // Case 2: email is not verified
+  const result = usersService.verifyEmail(user_id)
+  return res.json({
+    message: USERS_MESSAGES.EMAIL_VERIFY_SUCCESS,
+    result
   })
 }
 

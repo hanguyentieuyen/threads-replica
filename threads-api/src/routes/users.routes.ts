@@ -10,7 +10,8 @@ import {
   registerController,
   resetPasswordController,
   unFollowController,
-  updateMyProfileController
+  updateMyProfileController,
+  verifyEmailController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/validations/common.validations'
 import {
@@ -22,7 +23,8 @@ import {
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator,
-  unFollowValidator
+  unFollowValidator,
+  verifyEmailTokenValidator
 } from '~/validations/users.validations'
 import { UpdateMyProfileReqBody } from '~/models/requestType/User.requests'
 import { requestHandler } from '~/utils/requestHandler'
@@ -44,7 +46,18 @@ userRouter.post('/login', validateMiddleware(loginValidator, 'body'), requestHan
  * Body: {name: string, email: string, password: string, confirm_password: string, date_of_birth: string}
  */
 userRouter.post('/register', validateMiddleware(registerValidator, 'body'), requestHandler(registerController))
-
+/**
+ * Description: Verify email when user client click on the link in email
+ * Path: /verify-email
+ * Method: POST
+ * Header: {Authorization: Bearer <access_token>}
+ * Body: { verify_email_token: string}
+ */
+userRouter.post(
+  '/verify-email',
+  validateMiddleware(verifyEmailTokenValidator, 'body'),
+  requestHandler(verifyEmailController)
+)
 /**
  * Description: Logout
  * Path: /logout

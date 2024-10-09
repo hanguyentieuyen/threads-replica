@@ -279,7 +279,7 @@ class PostsService {
         post_children: 0,
         user: {
           password: 0,
-          email_verify_token: 0,
+          verify_email_token: 0,
           forgot_password_token: 0,
           post_circle: 0,
           date_of_birth: 0

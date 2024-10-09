@@ -9,7 +9,7 @@ interface UserType {
   password: string
   created_at?: Date
   updated_at?: Date
-  email_verify_token?: string // jwt hoặc '' nếu đã xác thực email
+  verify_email_token?: string // jwt hoặc '' nếu đã xác thực email
   forgot_password_token?: string // jwt hoặc '' nếu đã xác thực email
   verify?: UserVerifyStatus
   post_circle?: ObjectId[]
@@ -29,7 +29,7 @@ export default class User {
   password: string
   created_at: Date
   updated_at: Date
-  email_verify_token: string // jwt hoặc '' nếu đã xác thực email
+  verify_email_token: string // jwt hoặc '' nếu đã xác thực email
   forgot_password_token: string // jwt hoặc '' nếu đã xác thực email
   verify: UserVerifyStatus
   post_circle: ObjectId[] // danh sách id của những người user này add vào circle
@@ -49,7 +49,7 @@ export default class User {
     this.password = user.password
     this.created_at = user.created_at || date
     this.updated_at = user.updated_at || date
-    this.email_verify_token = user.email_verify_token || ''
+    this.verify_email_token = user.verify_email_token || ''
     this.forgot_password_token = user.forgot_password_token || ''
     this.verify = user.verify || UserVerifyStatus.Unverified
     this.post_circle = user.post_circle || []

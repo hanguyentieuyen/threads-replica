@@ -11,7 +11,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import Follow from '~/models/follow.model'
-import { sendForgotPasswordEmail } from '~/utils/mail'
+import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/mail'
 
 class UsersService {
   private createtAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
@@ -89,6 +89,40 @@ class UsersService {
     return Boolean(user)
   }
 
+  async verifyEmail(user_id: string) {
+    const token = await this.createAccessAndRefreshToken({
+      user_id,
+      verify: UserVerifyStatus.Verified
+    })
+
+    // update verify and verify_email_token fields on document user
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      [
+        {
+          $set: {
+            verify_email_token: '',
+            verify: UserVerifyStatus.Verified
+          }
+        }
+      ]
+    )
+
+    // create new refresh token
+    const [access_token, refresh_token] = token
+    const { iat, exp } = await this.decodedRefreshToken(refresh_token)
+
+    await databaseService.refreshTokens.insertOne(
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
+    )
+    return {
+      access_token,
+      refresh_token
+    }
+  }
+
   async login({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     const [access_token, refresh_token] = await this.createAccessAndRefreshToken({
       user_id,
@@ -120,7 +154,7 @@ class UsersService {
         date_of_birth: new Date(payload.date_of_birth),
         username: `user${userId.toString()}`,
         password: hashPassword(payload.password),
-        email_verify_token: emailVerifyToken
+        verify_email_token: emailVerifyToken
       })
     )
 
@@ -137,6 +171,7 @@ class UsersService {
     )
 
     // Todo: Send mail to verify registration
+    await sendVerifyRegisterEmail(payload.email, emailVerifyToken)
     return {
       access_token,
       refresh_token
@@ -211,7 +246,7 @@ class UsersService {
       {
         projection: {
           password: 0,
-          email_verify_token: 0,
+          verify_email_token: 0,
           forgot_password_token: 0
         }
       }
@@ -237,7 +272,7 @@ class UsersService {
         returnDocument: 'after', // return new document after update
         projection: {
           password: 0,
-          email_verify_token: 0,
+          verify_email_token: 0,
           forgot_password_token: 0
         }
       }
@@ -251,7 +286,7 @@ class UsersService {
       {
         projection: {
           password: 0,
-          email_verify_token: 0,
+          verify_email_token: 0,
           forgot_password_token: 0,
           created_at: 0
         }

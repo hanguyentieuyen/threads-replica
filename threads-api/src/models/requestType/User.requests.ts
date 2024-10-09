@@ -23,6 +23,10 @@ export interface RegisterReqBody {
   date_of_birth: string
 }
 
+export interface VerifyEmailTokenReqBody {
+  verify_email_token: string
+}
+
 export interface LogoutReqBody {
   refresh_token: string
 }
