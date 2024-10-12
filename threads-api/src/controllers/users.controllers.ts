@@ -18,7 +18,8 @@ import {
   TokenPayload,
   UnFollowReqBody,
   UpdateMyProfileReqBody,
-  VerifyEmailTokenReqBody
+  VerifyEmailTokenReqBody,
+  VerifyForgotPasswordReqBody
 } from '~/models/requestType/User.requests'
 import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
@@ -118,6 +119,49 @@ export const forgotPasswordController = async (
     email: user.email
   })
   return res.json(data)
+}
+
+export const verifyForgotPasswordController = async (
+  req: Request<ParamsDictionary, any, VerifyForgotPasswordReqBody>,
+  res: Response
+) => {
+  const { forgot_password_token } = req.validateData
+  try {
+    // decode
+    const decodedForgotPasswordToken = await verifyToken({
+      token: forgot_password_token,
+      secretOrPublicKey: envConfig.jwtSecretForgotPasswordToken
+    })
+
+    const { user_id } = decodedForgotPasswordToken
+    const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+    // check user exist
+    if (user === null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_FOUND,
+        status: HTTP_STATUS.UNAUTHORIZED
+      })
+    }
+    // compare token value on db and token value from req.body
+    if (user.forgot_password_token !== req.body.forgot_password_token) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.INVALID_FORGOT_PASSWORD_TOKEN,
+        status: HTTP_STATUS.UNAUTHORIZED
+      })
+    }
+    // override decodedForgotPasswordToken of req
+    req.decodedForgotPasswordToken = decodedForgotPasswordToken
+    return res.json({
+      message: USERS_MESSAGES.VERIFY_FORGOT_PASSWORD_SUCCESS
+    })
+  } catch (error) {
+    if (error instanceof JsonWebTokenError) {
+      throw new ErrorWithStatus({
+        message: capitalize(error.message),
+        status: HTTP_STATUS.UNAUTHORIZED
+      })
+    }
+  }
 }
 
 export const resetPasswordController = async (

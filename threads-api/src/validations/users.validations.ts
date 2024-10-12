@@ -192,6 +192,7 @@ export const verifyEmailTokenValidator = Joi.object({
     'string.verify_email_token': USERS_MESSAGES.EMAIL_VERIFY_TOKEN_IS_REQUIRED
   })
 })
+
 export const forgotPasswordValidator = Joi.object({
   email: Joi.string()
     .email({ tlds: { allow: false } })
@@ -200,6 +201,12 @@ export const forgotPasswordValidator = Joi.object({
       'string.empty': USERS_MESSAGES.EMAIL_IS_REQUIRED,
       'string.email': USERS_MESSAGES.EMAIL_IS_INVALID
     })
+})
+
+export const verifyForgotPasswordValidator = Joi.object({
+  forgot_password_token: Joi.string().required().trim().messages({
+    'string.forgot_password_token': USERS_MESSAGES.FORGOT_PASSWORD_TOKEN_IS_REQUIRED
+  })
 })
 
 export const resetPasswordValidator = Joi.object({

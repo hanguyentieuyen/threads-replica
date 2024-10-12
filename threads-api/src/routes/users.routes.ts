@@ -11,7 +11,8 @@ import {
   resetPasswordController,
   unFollowController,
   updateMyProfileController,
-  verifyEmailController
+  verifyEmailController,
+  verifyForgotPasswordController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/validations/common.validations'
 import {
@@ -24,7 +25,8 @@ import {
   registerValidator,
   resetPasswordValidator,
   unFollowValidator,
-  verifyEmailTokenValidator
+  verifyEmailTokenValidator,
+  verifyForgotPasswordValidator
 } from '~/validations/users.validations'
 import { UpdateMyProfileReqBody } from '~/models/requestType/User.requests'
 import { requestHandler } from '~/utils/requestHandler'
@@ -83,6 +85,17 @@ userRouter.post(
   requestHandler(forgotPasswordController)
 )
 
+/**
+ * Description: Verify link on email to reset password
+ * Path: /verify-forgot-password
+ * Method: POST
+ * Body: { forgot_password_token: string }
+ */
+userRouter.post(
+  '/verify-forgot-password',
+  validateMiddleware(verifyForgotPasswordValidator, 'body'),
+  requestHandler(verifyForgotPasswordController)
+)
 /**
  * Description: Reset password and update new password for user document
  * Path: /reset-password
