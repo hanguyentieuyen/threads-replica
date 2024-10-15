@@ -3,8 +3,6 @@ import { UPLOAD_IMAGE_DIR, UPLOAD_VIDEO_DIR } from '~/constants/fileDir'
 import path from 'path'
 import fs from 'fs'
 import { HTTP_STATUS } from '~/constants/httpStatus'
-import mime from 'mime'
-
 export const serveImageController = async (req: Request, res: Response, nex: NextFunction) => {
   const { name } = req.params
   res.sendFile(path.resolve(UPLOAD_IMAGE_DIR, name), (err) => {
@@ -32,6 +30,9 @@ export const serveVideoController = async (req: Request, res: Response, next: Ne
   const end = Math.min(start + chunkSize, videoSize - 1)
 
   const contentLength = end - start + 1
+
+  const mime = (await import('mime')).default
+
   const contentType = mime.getType(videoPath) || 'video/*'
   const headers = {
     'Content-Range': `bytes ${start}-${end}/${videoSize}`,

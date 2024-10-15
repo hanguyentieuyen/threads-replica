@@ -185,6 +185,38 @@ class UsersService {
     }
   }
 
+  async refreshToken({
+    user_id,
+    verify,
+    refresh_token,
+    exp
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    refresh_token: string
+    exp: number
+  }) {
+    const [newAccessToken, newRefreshToken, _] = await Promise.all([
+      this.createtAccessToken({ user_id, verify }),
+      this.createRefreshToken({ user_id, verify, exp }),
+      databaseService.refreshTokens.deleteOne({ token: refresh_token })
+    ])
+
+    const decodeRefreshToken = await this.decodedRefreshToken(refresh_token)
+    await databaseService.refreshTokens.insertOne(
+      new RefreshToken({
+        user_id: new ObjectId(user_id),
+        token: newRefreshToken,
+        iat: decodeRefreshToken.iat,
+        exp: decodeRefreshToken.exp
+      })
+    )
+    return {
+      access_token: newAccessToken,
+      refresh_token: newRefreshToken
+    }
+  }
+
   async forgotPassword({ user_id, verify, email }: { user_id: string; verify: UserVerifyStatus; email: string }) {
     // Create new forgot password token
     const forgotPasswordToken = await this.createForgotPasswordToken({

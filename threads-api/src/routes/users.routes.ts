@@ -7,6 +7,7 @@ import {
   getUserProfileController,
   loginController,
   logoutController,
+  refreshTokenController,
   registerController,
   resetPasswordController,
   unFollowController,
@@ -71,6 +72,18 @@ userRouter.post(
   validateMiddleware(accessTokenValidator, 'headers'),
   validateMiddleware(refreshTokenValidator, 'body'),
   requestHandler(logoutController)
+)
+
+/**
+ * Description: Refresh token for user
+ * Path: /refresh-token
+ * Method: POST
+ * Body: { refresh_token: string}
+ */
+userRouter.post(
+  '/refresh-token',
+  validateMiddleware(refreshTokenValidator, 'body'),
+  requestHandler(refreshTokenController)
 )
 
 /**

@@ -13,6 +13,7 @@ import {
   GetUserProfileReqBody,
   LoginReqBody,
   LogoutReqBody,
+  RefreshTokenReqBody,
   RegisterReqBody,
   ResetPasswordReqBody,
   TokenPayload,
@@ -103,6 +104,44 @@ export const logoutController = async (req: Request<ParamsDictionary, any, Logou
   const { refresh_token } = req.body
   const data = await usersService.logout(refresh_token)
   return res.json(data)
+}
+
+export const refreshTokenController = async (
+  req: Request<ParamsDictionary, any, RefreshTokenReqBody>,
+  res: Response
+) => {
+  const { refresh_token } = req.validateData
+
+  try {
+    //verify token and check its existence in the database
+    const [decodedRefreshToken, existedRefreshToken] = await Promise.all([
+      verifyToken({ token: refresh_token, secretOrPublicKey: envConfig.jwtSecretRefreshToken }),
+      databaseService.refreshTokens.findOne({ token: refresh_token })
+    ])
+
+    if (!existedRefreshToken) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USED_REFRESH_TOKEN_OR_NOT_EXIST,
+        status: HTTP_STATUS.UNAUTHORIZED
+      })
+    }
+
+    const { user_id, verify, exp } = decodedRefreshToken
+
+    const data = await usersService.refreshToken({ user_id, refresh_token, verify, exp })
+    return res.json({
+      message: USERS_MESSAGES.REFRESH_TOKEN_SUCCESS,
+      data
+    })
+  } catch (error) {
+    if (error instanceof JsonWebTokenError) {
+      throw new ErrorWithStatus({
+        message: capitalize(error.message),
+        status: HTTP_STATUS.UNAUTHORIZED
+      })
+    }
+    throw error
+  }
 }
 
 export const forgotPasswordController = async (

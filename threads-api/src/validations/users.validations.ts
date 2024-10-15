@@ -86,39 +86,13 @@ export const refreshTokenValidator = Joi.object({
   refresh_token: Joi.string()
     .trim()
     .required()
-    .custom(async (value, helpers) => {
+    .custom((value) => {
       if (!value) {
         throw new ErrorWithStatus({
           message: USERS_MESSAGES.REFRESH_TOKEN_IS_REQUIRED,
           status: HTTP_STATUS.UNAUTHORIZED
         })
       }
-
-      try {
-        const [decodedRefreshToken, existedRefreshToken] = await Promise.all([
-          verifyToken({ token: value, secretOrPublicKey: envConfig.jwtSecretRefreshToken }),
-          databaseService.refreshTokens.findOne({ token: value })
-        ])
-
-        if (!existedRefreshToken) {
-          throw new ErrorWithStatus({
-            message: USERS_MESSAGES.USED_REFRESH_TOKEN_OR_NOT_EXIST,
-            status: HTTP_STATUS.UNAUTHORIZED
-          })
-        }
-
-        // Add the decoded refresh token to the request object
-        ;(helpers.state.ancestors[0] as Request).decodedAuthorization = decodedRefreshToken
-      } catch (error) {
-        if (error instanceof JsonWebTokenError) {
-          throw new ErrorWithStatus({
-            message: capitalize(error.message),
-            status: HTTP_STATUS.UNAUTHORIZED
-          })
-        }
-        throw error
-      }
-
       return value // Validation passes if everything is correct
     })
     .messages({
