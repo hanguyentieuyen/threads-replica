@@ -1,8 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { authApi } from '~/apis/auth.api'
+import path from '~/constant/path'
 import { ErrorResponse } from '~/types/utils.type'
 import { isAxiosUnprocessableEntityError } from '~/utils/auth'
 import { registerSchemaYup, RegisterSchemaYup } from '~/utils/yupSchema'
@@ -10,8 +12,9 @@ import { registerSchemaYup, RegisterSchemaYup } from '~/utils/yupSchema'
 export default function ForgotPassword() {
   type FormData = Pick<RegisterSchemaYup, 'email'>
   const forgotPasswordSchema = registerSchemaYup.pick(['email'])
+  const navigate = useNavigate()
   // form
-  const { register, handleSubmit, setError } = useForm<FormData>({
+  const { register, handleSubmit, setError, reset } = useForm<FormData>({
     resolver: yupResolver(forgotPasswordSchema)
   })
 
@@ -21,16 +24,18 @@ export default function ForgotPassword() {
   const onSubmit = handleSubmit((data) => {
     forgotPasswordMutation.mutate(data, {
       onSuccess: (data) => {
+        reset()
         toast.success(data.data.message)
+        navigate(path.home)
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
           const formError = error.response?.data.errors
           if (formError) {
+            console.log('formError: ', formError)
             Object.keys(formError).forEach((key) => {
-              console.log('key: ', formError[key].msg)
               setError(key as keyof FormData, {
-                message: formError[key].msg,
+                message: formError[key as keyof FormData],
                 type: 'Server'
               })
             })

@@ -13,12 +13,14 @@ import { registerSchemaYup, RegisterSchemaYup } from '~/utils/yupSchema'
 
 type FormData = Pick<RegisterSchemaYup, 'email' | 'password'>
 const loginSchema = registerSchemaYup.pick(['email', 'password'])
+
 export default function Login() {
   const navigate = useNavigate()
   const {
     register,
     setError,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(loginSchema)
@@ -30,8 +32,9 @@ export default function Login() {
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
+        reset()
         toast.success(data.data.message, { autoClose: 3000 })
-        navigate('/')
+        navigate(path.home)
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {

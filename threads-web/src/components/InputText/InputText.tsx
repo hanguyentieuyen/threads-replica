@@ -33,7 +33,7 @@ export default function InputText({
     return rest.type
   }
   return (
-    <div className={'relative' + className}>
+    <div className={'relative ' + className}>
       <input className={classNameInput} {...registerResult} {...rest} type={handleType()} />
       {rest.type === 'password' && isEye && (
         <svg
@@ -44,6 +44,7 @@ export default function InputText({
           stroke='currentColor'
           className={classNameEye}
           onClick={toggleEye}
+          style={{ marginRight: 8, marginTop: 8 }}
         >
           <path
             strokeLinecap='round'
@@ -62,6 +63,7 @@ export default function InputText({
           stroke='currentColor'
           className={classNameEye}
           onClick={toggleEye}
+          style={{ marginRight: 8, marginTop: 8 }}
         >
           <path
             strokeLinecap='round'
