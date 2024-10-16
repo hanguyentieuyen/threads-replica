@@ -1,40 +1,35 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { authApi } from '~/apis/auth.api'
 import InputText from '~/components/InputText'
-import path from '~/constant/path'
 import { ErrorResponse } from '~/types/utils.type'
 import { isAxiosUnprocessableEntityError } from '~/utils/auth'
-import { registerSchemaYup, RegisterSchemaYup } from '~/utils/yupSchema'
+import { resetPasswordSchemaYup, ResetPasswordSchemaYup } from '~/utils/yupSchema'
 
-type FormData = Pick<RegisterSchemaYup, 'email'>
-const forgotPasswordSchema = registerSchemaYup.pick(['email'])
+type FormData = ResetPasswordSchemaYup
 
-export default function ForgotPassword() {
-  const navigate = useNavigate()
-  // form
+export default function ResetPassword() {
   const {
     register,
-    handleSubmit,
     setError,
     reset,
+    handleSubmit,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(forgotPasswordSchema)
+    resolver: yupResolver(resetPasswordSchemaYup)
   })
 
-  const forgotPasswordMutation = useMutation({
-    mutationFn: (body: FormData) => authApi.forgotPassword(body)
+  const resetPasswordMutation = useMutation({
+    mutationFn: (body: FormData) => authApi.resetPassword(body)
   })
+
   const onSubmit = handleSubmit((data) => {
-    forgotPasswordMutation.mutate(data, {
+    resetPasswordMutation.mutate(data, {
       onSuccess: (data) => {
         reset()
-        toast.success(data.data.message)
-        navigate(path.home)
+        toast.success(data.data.message, { autoClose: 3000 })
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
@@ -55,19 +50,30 @@ export default function ForgotPassword() {
   return (
     <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
       <form onSubmit={onSubmit}>
-        <span className='text-md text-stone-950 font-bold'>Forgot Password</span>
+        <span className='text-md text-stone-950 font-bold'>Reset Password</span>
         <div className='mt-4 w-full'>
           <InputText
             register={register}
-            type='email'
-            name='email'
-            placeholder='Enter your email to reset password'
-            errorMessage={errors.email?.message}
+            type='password'
+            name='password'
+            placeholder='Enter password'
+            errorMessage={errors.password?.message}
+            autoComplete='on'
+          />
+        </div>
+        <div className='mt-2 w-full'>
+          <InputText
+            register={register}
+            type='password'
+            name='confirm_password'
+            placeholder='Enter confirm password'
+            errorMessage={errors.confirm_password?.message}
+            autoComplete='on'
           />
         </div>
         <div className='mt-2 w-full'>
           <button type='submit' className='bg-gray-950 text-white text-sm p-4 rounded-xl w-full'>
-            Send mail
+            Reset Password
           </button>
         </div>
       </form>

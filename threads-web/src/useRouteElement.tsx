@@ -4,6 +4,8 @@ import Register from './pages/Register'
 import path from './constant/path'
 import RegisterLayout from './layouts/RegisterLayout'
 import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+import VerifyForgotPassword from './pages/VerifyForgotPassword'
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
@@ -32,6 +34,18 @@ export default function useRouteElement() {
       element: (
         <RegisterLayout>
           <ForgotPassword />
+        </RegisterLayout>
+      )
+    },
+    {
+      path: path.verifyForgotPassword,
+      element: <VerifyForgotPassword />
+    },
+    {
+      path: path.resetPassword,
+      element: (
+        <RegisterLayout>
+          <ResetPassword />
         </RegisterLayout>
       )
     },

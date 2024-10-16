@@ -18,6 +18,16 @@ export const registerSchemaYup = yup.object({
   confirm_password: handleConfirmPasswordYup('password')
 })
 
+export const resetPasswordSchemaYup = yup.object({
+  forgot_password_token: yup.string().required('Thiếu forgot password token'),
+  password: yup
+    .string()
+    .required('Password là bắt buộc')
+    .min(6, 'Độ dài từ 6 - 160 ký tự')
+    .max(160, 'Độ dài từ 6 - 160 ký tự'),
+  confirm_password: handleConfirmPasswordYup('password')
+})
+
 export const userSchemaYup = yup.object({
   name: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),
   phone: yup.string().max(20, 'Độ dài tối đa là 20 ký tự'),
@@ -32,3 +42,4 @@ export const userSchemaYup = yup.object({
 // Convert yup schema to data type
 export type RegisterSchemaYup = yup.InferType<typeof registerSchemaYup>
 export type UserSchemaYup = yup.InferType<typeof userSchemaYup>
+export type ResetPasswordSchemaYup = yup.InferType<typeof resetPasswordSchemaYup>

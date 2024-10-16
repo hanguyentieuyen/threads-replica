@@ -56,7 +56,7 @@ export default function Login() {
     <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
       <form onSubmit={onSubmit}>
         <div className='p-6 flex flex-col justify-between items-center'>
-          <span className='text-md text-stone-950 font-bold'>Đăng nhập tài khoản</span>
+          <span className='text-md text-stone-950 font-bold'>Login Threads</span>
           <div className='mt-4 w-full'>
             <InputText
               register={register}
@@ -71,7 +71,7 @@ export default function Login() {
               register={register}
               type='password'
               name='password'
-              placeholder='Mật khẩu'
+              placeholder='Password'
               errorMessage={errors.password?.message}
               autoComplete='on'
             />
@@ -83,7 +83,7 @@ export default function Login() {
               disabled={loginMutation.isPending}
               className='w-[100%] flex justify-center bg-gray-950 text-white text-sm p-4 rounded-xl'
             >
-              Đăng nhập
+              Sign In
             </Button>
           </div>
           <div className='mt-5 w-full flex justify-between flex-shrink-0'>

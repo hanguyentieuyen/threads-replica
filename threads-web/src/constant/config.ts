@@ -5,6 +5,8 @@ const config = {
   logoutUrl: '/users/logout',
   registerUrl: '/users/register',
   forgotPassword: '/users/forgot-password',
+  verifyForgotPassword: '/users/verify-forgot-password',
+  resetPassword: '/users/reset-password',
   refreshTokenUrl: 'refresh-access-token'
 }
 

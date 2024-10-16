@@ -25,6 +25,7 @@ export default function Register() {
   const registerMutation = useMutation({
     mutationFn: (body: FormData) => authApi.register(body)
   })
+
   const onSubmit = handleSubmit((data) => {
     registerMutation.mutate(data, {
       onSuccess: (data) => {
@@ -51,7 +52,7 @@ export default function Register() {
     <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
       <form onSubmit={onSubmit}>
         <div className='p-6 flex flex-col justify-between items-center'>
-          <span className='text-md text-stone-950 font-bold'>Đăng ký tài khoản Threads</span>
+          <span className='text-md text-stone-950 font-bold'>Register Threads</span>
           <div className='mt-4 w-full'>
             <InputText
               register={register}
@@ -66,7 +67,7 @@ export default function Register() {
               register={register}
               type='password'
               name='password'
-              placeholder='Mật khẩu'
+              placeholder='Password'
               errorMessage={errors.password?.message}
               autoComplete='on'
             />
@@ -75,15 +76,15 @@ export default function Register() {
             <InputText
               register={register}
               type='password'
-              name='password'
-              placeholder='Nhập lại mật khẩu'
-              errorMessage={errors.password?.message}
+              name='confirm_password'
+              placeholder='Cofirm password'
+              errorMessage={errors.confirm_password?.message}
               autoComplete='on'
             />
           </div>
           <div className='mt-2 w-full'>
             <button type='submit' className='bg-gray-950 text-white text-sm p-4 rounded-xl w-full'>
-              Đăng ký
+              Sign Up
             </button>
           </div>
           <hr className='w-full mt-8'></hr>
