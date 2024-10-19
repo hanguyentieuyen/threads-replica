@@ -6,6 +6,7 @@ import RegisterLayout from './layouts/RegisterLayout'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import VerifyForgotPassword from './pages/VerifyForgotPassword'
+import VerifyEmail from './pages/VerifyEmail'
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
@@ -28,6 +29,10 @@ export default function useRouteElement() {
           <Register />
         </RegisterLayout>
       )
+    },
+    {
+      path: path.verifyEmail,
+      element: <VerifyEmail />
     },
     {
       path: path.forgotPassword,

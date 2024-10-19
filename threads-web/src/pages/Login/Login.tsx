@@ -66,7 +66,7 @@ export default function Login() {
               errorMessage={errors.email?.message}
             />
           </div>
-          <div className='mt-2 w-full'>
+          <div className='w-full'>
             <InputText
               register={register}
               type='password'
@@ -76,7 +76,7 @@ export default function Login() {
               autoComplete='on'
             />
           </div>
-          <div className='mt-2 w-full'>
+          <div className='w-full'>
             <Button
               type='submit'
               isLoading={loginMutation.isPending}
@@ -88,10 +88,10 @@ export default function Login() {
           </div>
           <div className='mt-5 w-full flex justify-between flex-shrink-0'>
             <span className='text-sm text-gray-400'>
-              <Link to={path.forgotPassword}>Quên mật khẩu?</Link>
+              <Link to={path.forgotPassword}>Forgot password?</Link>
             </span>
             <span className='text-sm text-gray-400'>
-              <Link to={path.register}>Tạo tài khoản</Link>
+              <Link to={path.register}>Register</Link>
             </span>
           </div>
           <hr className='w-full mt-8'></hr>

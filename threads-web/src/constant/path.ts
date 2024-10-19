@@ -4,7 +4,8 @@ const path = {
   login: '/login',
   forgotPassword: '/forgot-password',
   verifyForgotPassword: '/verify-forgot-password',
-  resetPassword: '/reset-password'
+  resetPassword: '/reset-password',
+  verifyEmail: '/verify-email'
 }
 
 export default path

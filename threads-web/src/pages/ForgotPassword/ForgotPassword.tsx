@@ -65,7 +65,7 @@ export default function ForgotPassword() {
             errorMessage={errors.email?.message}
           />
         </div>
-        <div className='mt-2 w-full'>
+        <div className='w-full'>
           <button type='submit' className='bg-gray-950 text-white text-sm p-4 rounded-xl w-full'>
             Send mail
           </button>

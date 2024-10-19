@@ -19,7 +19,7 @@ export const registerSchemaYup = yup.object({
 })
 
 export const resetPasswordSchemaYup = yup.object({
-  forgot_password_token: yup.string().required('Thiếu forgot password token'),
+  forgot_password_token: yup.string().required('Thiếu forgot password token').nullable(),
   password: yup
     .string()
     .required('Password là bắt buộc')
