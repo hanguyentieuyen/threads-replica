@@ -7,12 +7,18 @@ import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import VerifyForgotPassword from './pages/VerifyForgotPassword'
 import VerifyEmail from './pages/VerifyEmail'
+import MainLayout from './layouts/MainLayout'
+import Home from './pages/Home'
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
     {
       path: '',
-      element: <>Posts</>
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      )
     },
     {
       path: path.login,
