@@ -1,17 +1,16 @@
 import React from 'react'
 import { Home, Search, PlusCircle, Heart, User, Bookmark, Menu } from 'lucide-react'
 
-interface SidebarProps {
+type SidebarProps = {
   className?: string
 }
 
-interface SidebarItemProps {
+type SidebarItemProps = {
   icon: React.ReactNode
-  label: string
   isActive?: boolean
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, isActive = false }) => (
+const SidebarItem: React.FC<SidebarItemProps> = ({ icon, isActive = false }) => (
   <li>
     <a
       href='#'
@@ -20,23 +19,22 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, isActive = false
       }`}
     >
       {icon}
-      <span className='ml-3'>{label}</span>
     </a>
   </li>
 )
 
 export default function Sidebar({ className = '' }: SidebarProps) {
   return (
-    <aside className={`w-64 h-screen transition-transform ${className}`} aria-label='Sidebar'>
+    <aside className={`w-20 h-screen transition-transform ${className}`} aria-label='Sidebar'>
       <div className='h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800'>
         <ul className='space-y-2'>
-          <SidebarItem icon={<Home className='w-6 h-6' />} label='Home' isActive />
-          <SidebarItem icon={<Search className='w-6 h-6' />} label='Search' />
-          <SidebarItem icon={<PlusCircle className='w-6 h-6' />} label='Create' />
-          <SidebarItem icon={<Heart className='w-6 h-6' />} label='Favorites' />
-          <SidebarItem icon={<User className='w-6 h-6' />} label='Profile' />
-          <SidebarItem icon={<Bookmark className='w-6 h-6' />} label='Bookmarks' />
-          <SidebarItem icon={<Menu className='w-6 h-6' />} label='More' />
+          <SidebarItem icon={<Home className='w-8 h-8' />} isActive />
+          <SidebarItem icon={<Search className='w-8 h-8' />} />
+          <SidebarItem icon={<PlusCircle className='w-8 h-8' />} />
+          <SidebarItem icon={<Heart className='w-8 h-8' />} />
+          <SidebarItem icon={<User className='w-8 h-8' />} />
+          <SidebarItem icon={<Bookmark className='w-8 h-8' />} />
+          <SidebarItem icon={<Menu className='w-8 h-8' />} />
         </ul>
       </div>
     </aside>

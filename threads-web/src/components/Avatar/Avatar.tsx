@@ -12,9 +12,9 @@ export default function Avatar({ name, image, postedTime }: AvatarProps) {
           <span className='text-xs font-bold'>+</span>
         </div>
       </div>
-      <div>
-        <p className='text-sm font-semibold'>{name}</p>
-        <p className='text-xs text-gray-500'>{postedTime}</p>
+      <div className='flex items-center'>
+        <span className='text-sm font-semibold mr-2'>{name}</span>
+        <span className='text-sm text-gray-500'>{postedTime}</span>
       </div>
     </div>
   )
