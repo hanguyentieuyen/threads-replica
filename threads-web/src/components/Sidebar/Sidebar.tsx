@@ -27,7 +27,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, path }) => {
       <a
         onClick={handleClick}
         href='#'
-        className={`flex items-center p-4 text-base font-normal rounded-lg ${
+        className={`flex items-center p-2 text-base font-normal rounded-lg ${
           isActive ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
         }`}
       >
@@ -40,7 +40,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, path }) => {
 export default function Sidebar({ className = '' }: SidebarProps) {
   return (
     <aside className={`w-full h-screen transition-transform ${className}`} aria-label='Sidebar'>
-      <div className='w-full h-full py-4 overflow-hidden'>
+      <div className='h-full py-4 overflow-hidden'>
         <ul className='flex-col flex h-full items-center'>
           <div className='space-y-2 h-full'>
             <img src='../src/assets/threads-app-icon.png' width={40} height={40} />

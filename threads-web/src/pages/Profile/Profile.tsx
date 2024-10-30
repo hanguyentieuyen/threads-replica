@@ -1,8 +1,8 @@
-import React from 'react'
+import Container from '~/components/Container'
 
 const Profile = () => {
   return (
-    <div className='max-w-lg mx-auto bg-white rounded-lg shadow-md p-6'>
+    <Container>
       {/* Profile Header */}
       <div className='flex items-center justify-between'>
         <div>
@@ -72,7 +72,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   )
 }
 
