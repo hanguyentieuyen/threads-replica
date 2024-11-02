@@ -1,2 +1,2 @@
-import Avatar from './Avatar'
-export default Avatar
+import PostAvatar from './PostAvatar'
+export default PostAvatar
