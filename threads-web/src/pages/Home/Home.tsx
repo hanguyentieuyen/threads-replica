@@ -1,9 +1,9 @@
 import React from 'react'
-import Avatar from '~/components/PostAvatar'
-import { DialogExample } from '~/components/Dialog/Dialog'
+// import Avatar from '~/components/PostAvatar'
+// import { DialogExample } from '~/components/Dialog/Dialog'
 import PostCard from '~/components/PostCard/PostCard'
-import Sidebar from '~/components/Sidebar/Sidebar'
-import UserProfileCard from '~/components/UserProfileCard'
+// import Sidebar from '~/components/Sidebar/Sidebar'
+// import FollowerCard from '~/components/FollowerCard'
 import ContentContainer from '~/components/ContentContainer'
 import HeaderContainer from '~/components/HeaderContainer'
 
@@ -17,7 +17,7 @@ export default function Home() {
         <PostCard />
         {/* <DialogExample /> */}
         {/* <Sidebar /> */}
-        {/* <UserProfileCard
+        {/* <FollowerCard
         username='hn13.mew'
         fullName='hayen'
         profileImage={myAvatarUrl}

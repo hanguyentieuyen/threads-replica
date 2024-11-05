@@ -1,5 +1,8 @@
 import ContentContainer from '~/components/ContentContainer'
 import { Helmet } from 'react-helmet-async'
+import Button from '~/components/Button'
+import ProfileCard from '~/components/ProfileCard'
+import { Check, Pen, SquarePen } from 'lucide-react'
 const Profile = () => {
   return (
     <>
@@ -26,9 +29,9 @@ const Profile = () => {
         </div>
 
         {/* Edit Profile Button */}
-        <button className='w-full mt-4 bg-gray-100 text-gray-700 rounded-md py-2 font-semibold'>
+        <Button className='text-gray-800 font-semibold text-sm p-1.5 w-full rounded-lg border mt-10'>
           Chỉnh sửa trang cá nhân
-        </button>
+        </Button>
 
         {/* Tabs */}
         <div className='flex mt-4 space-x-4 border-b-2'>
@@ -47,34 +50,35 @@ const Profile = () => {
         {/* Profile Completion Section */}
         <div className='mt-6'>
           <h2 className='text-gray-600 font-semibold'>Hoàn tất trang cá nhân</h2>
-          <div className='flex mt-4 space-x-2'>
-            {/* Card 1 */}
-            <div className='flex flex-col items-center p-4 bg-gray-100 rounded-lg flex-1'>
-              <div className='text-2xl'>📝</div>
-              <h3 className='font-semibold mt-2'>Tạo thread</h3>
-              <p className='text-gray-500 text-sm text-center'>
-                Cho mọi người biết bạn đang nghĩ gì hoặc chia sẻ về một hoạt động nổi bật mới đây.
-              </p>
-              <button className='mt-2 bg-black text-white px-4 py-1 rounded-md'>Tạo</button>
-            </div>
-
-            {/* Card 2 */}
-            <div className='flex flex-col items-center p-4 bg-gray-100 rounded-lg flex-1'>
-              <div className='text-2xl'>✏️</div>
-              <h3 className='font-semibold mt-2'>Thêm tiểu sử</h3>
-              <p className='text-gray-500 text-sm text-center'>
-                Hãy giới thiệu về bản thân và cho mọi người biết bạn thích gì.
-              </p>
-              <button className='mt-2 bg-black text-white px-4 py-1 rounded-md'>Thêm</button>
-            </div>
-
-            {/* Card 3 */}
-            <div className='flex flex-col items-center p-4 bg-gray-100 rounded-lg flex-1'>
-              <div className='text-2xl'>✅</div>
-              <h3 className='font-semibold mt-2'>Thêm ảnh đại diện</h3>
-              <p className='text-gray-500 text-sm text-center'>Giúp mọi người dễ dàng nhận ra bạn hơn.</p>
-              <button className='mt-2 bg-gray-400 text-white px-4 py-1 rounded-md'>Xong</button>
-            </div>
+          <div className='flex mt-4 space-x-4'>
+            <ProfileCard
+              image='https://images.unsplash.com/photo-1719937051058-63705ed35502?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8'
+              name='Tiffany Janzen'
+              username='tiffintech'
+              buttonText='Theo dõi'
+              onButtonClick={() => alert('Followed')}
+            />
+            {/* <ProfileCard
+              icon={<SquarePen width={20} height={20} />}
+              name='Tạo thread'
+              bio='Cho mọi người biết bạn đang nghĩ gì hoặc chia sẻ về một hoạt động nổi bật mới đây.'
+              buttonText='Thêm'
+              onButtonClick={() => alert('Add Bio clicked')}
+            /> */}
+            <ProfileCard
+              icon={<Pen width={20} height={20} />}
+              name='Thêm tiểu sử'
+              bio='Hãy giới thiệu về bản thân và cho mọi người biết bạn thích gì.'
+              buttonText='Thêm'
+              onButtonClick={() => alert('Add Bio clicked')}
+            />
+            <ProfileCard
+              icon={<Check width={20} height={20} />}
+              name='Thêm ảnh đại diện'
+              bio='Giúp mọi người dễ dàng nhận ra bạn hơn.'
+              buttonText='Thêm'
+              onButtonClick={() => alert('Add Bio clicked')}
+            />
           </div>
         </div>
       </ContentContainer>

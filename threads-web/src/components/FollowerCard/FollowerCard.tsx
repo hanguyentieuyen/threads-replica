@@ -8,7 +8,7 @@ type UserProfileCardProps = {
   isVerified?: boolean
 }
 
-export default function UserProfileCard({
+export default function FollowerCard({
   username,
   fullName,
   followersCount,

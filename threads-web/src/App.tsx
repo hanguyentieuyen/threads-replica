@@ -1,6 +1,5 @@
-import React from 'react'
 import './App.css'
-import useRouteElement from './useRouteElement'
+import useRouteElement from './router'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
