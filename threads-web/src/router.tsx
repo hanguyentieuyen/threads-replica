@@ -9,12 +9,17 @@ import VerifyForgotPassword from './pages/VerifyForgotPassword'
 import VerifyEmail from './pages/VerifyEmail'
 import MainLayout from './layouts/MainLayout'
 import Profile from './pages/Profile'
+import Home from './pages/Home'
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
     {
       path: '',
-      element: <>Posts</>
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      )
     },
     {
       path: path.login,

@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet-async'
 import Button from '~/components/Button'
 import ProfileCard from '~/components/ProfileCard'
 import { Check, Pen, SquarePen } from 'lucide-react'
+import HeaderContainer from '~/components/HeaderContainer'
+import DatePicker from '~/components/DatePicker/DatePicker'
 const Profile = () => {
   return (
     <>
@@ -10,6 +12,8 @@ const Profile = () => {
         <title>hayen (@hn13.mew) on Threads</title>
         <meta name='description' content='Profile - Threads Replica' />
       </Helmet>
+      <HeaderContainer />
+      <DatePicker />
       <ContentContainer>
         {/* Profile Header */}
         <div className='flex items-center justify-between'>

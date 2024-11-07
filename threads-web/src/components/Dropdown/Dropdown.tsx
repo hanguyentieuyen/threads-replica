@@ -1,75 +1,107 @@
-import { useState } from 'react'
+import React, { useState, createContext, useContext, ReactNode, forwardRef, HTMLProps } from "react"
 
-type Item = {
-  label: string
-  href: string
-  active: boolean
+type DropdownMenuContextType = { isOpen: boolean; toggleOpen: () => void }
+const DropdownMenuContext = createContext<DropdownMenuContextType | undefined>(undefined)
+
+const useDropdownMenuContext = () => {
+  const context = useContext(DropdownMenuContext)
+  if (!context) {
+    throw new Error("Dropdown subcomponents must be used within Dropdown")
+  }
+  return context
 }
 
-type DropdownProps = {
-  title: string
-  items: Item[]
-  icon: string
-}
-
-const Dropdown = ({ title, items, icon }: DropdownProps) => {
+export function DropdownMenu({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
-
-  const toggleDropdown = () => setIsOpen(!isOpen)
+  const toggleOpen = () => setIsOpen((prev) => !prev)
 
   return (
-    <div className='relative inline-block text-left'>
-      {/* Dropdown Button */}
-      <button
-        onClick={toggleDropdown}
-        className='flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-700 focus:outline-none'
-      >
-        {title}
-        <svg
-          className='ml-2 h-5 w-5 text-gray-400'
-          xmlns='http://www.w3.org/2000/svg'
-          viewBox='0 0 20 20'
-          fill='currentColor'
-          aria-hidden='true'
-        >
-          <path
-            fillRule='evenodd'
-            d='M5.23 7.21a.75.75 0 011.06-.02L10 10.58l3.71-3.4a.75.75 0 011.06.02.75.75 0 01-.02 1.06l-4 3.75a.75.75 0 01-1.06 0l-4-3.75a.75.75 0 01-.02-1.06z'
-            clipRule='evenodd'
-          />
-        </svg>
-      </button>
-
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <div className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5'>
-          <div className='py-1' role='menu' aria-orientation='vertical' aria-labelledby='menu-button'>
-            {items.map((item, index) => (
-              <a
-                key={index}
-                href={item.href}
-                className={`px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex justify-between items-center ${
-                  item.active ? 'font-semibold' : ''
-                }`}
-                role='menuitem'
-              >
-                {item.label}
-                {item.active && <span className='text-green-500'>✔</span>}
-              </a>
-            ))}
-            <div className='border-t border-gray-200'></div>
-            <a
-              href='#'
-              className='flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 justify-between items-center'
-              role='menuitem'
-            >
-              {icon ? icon : 'Default Icon'}
-            </a>
-          </div>
-        </div>
-      )}
-    </div>
+    <DropdownMenuContext.Provider value={{ isOpen, toggleOpen }}>
+      <div className='relative'>{children}</div>
+    </DropdownMenuContext.Provider>
   )
 }
 
-export default Dropdown
+export const DropdownMenuTrigger = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
+  ({ children, ...props }, ref) => {
+    const { toggleOpen } = useDropdownMenuContext()
+    return (
+      <div
+        ref={ref}
+        onClick={toggleOpen}
+        className='inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 rounded-md focus:outline-none focus:ring'
+        {...props}
+      >
+        {children}
+      </div>
+    )
+  }
+)
+DropdownMenuTrigger.displayName = "DropdownMenuTrigger"
+
+export const DropdownMenuContent = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
+  ({ children, ...props }, ref) => {
+    const { isOpen } = useDropdownMenuContext()
+    if (!isOpen) return null
+
+    return (
+      <div ref={ref} className='absolute mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg' {...props}>
+        {children}
+      </div>
+    )
+  }
+)
+DropdownMenuContent.displayName = "DropdownMenuContent"
+
+export const DropdownMenuLabel = ({ children }: { children: ReactNode }) => (
+  <div className='px-4 py-2 text-xs font-semibold text-gray-500 uppercase'>{children}</div>
+)
+
+export const DropdownMenuSeparator = () => <div className='border-t border-gray-200 my-2' />
+
+export const DropdownMenuItem = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ children, ...props }, ref) => (
+  <div
+    ref={ref}
+    className='flex items-center px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100'
+    {...props}
+  >
+    {children}
+  </div>
+))
+DropdownMenuItem.displayName = "DropdownMenuItem"
+
+interface DropdownMenuCheckboxItemProps extends HTMLProps<HTMLDivElement> {
+  checked?: boolean
+  onCheckedChange?: (checked: boolean) => void
+}
+export const DropdownMenuCheckboxItem = ({
+  children,
+  checked,
+  onCheckedChange,
+  ...props
+}: DropdownMenuCheckboxItemProps) => (
+  <div
+    className={`flex items-center px-4 py-2 text-sm cursor-pointer ${
+      checked ? "text-blue-600" : "text-gray-700"
+    } hover:bg-gray-100`}
+    onClick={() => onCheckedChange && onCheckedChange(!checked)}
+    {...props}
+  >
+    <input type='checkbox' checked={checked} readOnly className='mr-2 rounded' />
+    {children}
+  </div>
+)
+
+export const DropdownMenuSubTrigger = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
+  ({ children, ...props }, ref) => (
+    <div
+      ref={ref}
+      className='flex items-center px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100'
+      {...props}
+    >
+      {children}
+      <span className='ml-auto'>&gt;</span>
+    </div>
+  )
+)
+DropdownMenuSubTrigger.displayName = "DropdownMenuSubTrigger"
