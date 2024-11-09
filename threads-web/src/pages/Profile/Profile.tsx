@@ -1,10 +1,10 @@
-import ContentContainer from '~/components/ContentContainer'
-import { Helmet } from 'react-helmet-async'
-import Button from '~/components/Button'
-import ProfileCard from '~/components/ProfileCard'
-import { Check, Pen, SquarePen } from 'lucide-react'
-import HeaderContainer from '~/components/HeaderContainer'
-import DatePicker from '~/components/DatePicker/DatePicker'
+import ContentContainer from "~/components/ContentContainer"
+import { Helmet } from "react-helmet-async"
+import Button from "~/components/Button"
+import ProfileCard from "~/components/ProfileCard"
+import { Check, Pen } from "lucide-react"
+import HeaderContainer from "~/components/HeaderContainer"
+
 const Profile = () => {
   return (
     <>
@@ -13,7 +13,6 @@ const Profile = () => {
         <meta name='description' content='Profile - Threads Replica' />
       </Helmet>
       <HeaderContainer />
-      <DatePicker />
       <ContentContainer>
         {/* Profile Header */}
         <div className='flex items-center justify-between'>
@@ -60,7 +59,7 @@ const Profile = () => {
               name='Tiffany Janzen'
               username='tiffintech'
               buttonText='Theo dõi'
-              onButtonClick={() => alert('Followed')}
+              onButtonClick={() => alert("Followed")}
             />
             {/* <ProfileCard
               icon={<SquarePen width={20} height={20} />}
@@ -74,14 +73,14 @@ const Profile = () => {
               name='Thêm tiểu sử'
               bio='Hãy giới thiệu về bản thân và cho mọi người biết bạn thích gì.'
               buttonText='Thêm'
-              onButtonClick={() => alert('Add Bio clicked')}
+              onButtonClick={() => alert("Add Bio clicked")}
             />
             <ProfileCard
               icon={<Check width={20} height={20} />}
               name='Thêm ảnh đại diện'
               bio='Giúp mọi người dễ dàng nhận ra bạn hơn.'
               buttonText='Thêm'
-              onButtonClick={() => alert('Add Bio clicked')}
+              onButtonClick={() => alert("Add Bio clicked")}
             />
           </div>
         </div>

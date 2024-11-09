@@ -1,18 +1,18 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { authApi } from '~/apis/auth.api'
-import Button from '~/components/Button'
-import InputText from '~/components/InputText'
-import path from '~/constant/path'
-import { ErrorResponse } from '~/types/utils.type'
-import { isAxiosUnprocessableEntityError } from '~/utils/auth'
-import { registerSchemaYup, RegisterSchemaYup } from '~/utils/yupSchema'
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useMutation } from "@tanstack/react-query"
+import { useForm } from "react-hook-form"
+import { Link, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
+import { authApi } from "~/apis/auth.api"
+import Button from "~/components/Button"
+import InputText from "~/components/InputText"
+import path from "~/constant/path"
+import { ErrorResponse } from "~/types/utils.type"
+import { isAxiosUnprocessableEntityError } from "~/utils/auth"
+import { registerSchemaYup, RegisterSchemaYup } from "~/utils/yupSchema"
 
-type FormData = Pick<RegisterSchemaYup, 'email' | 'password'>
-const loginSchema = registerSchemaYup.pick(['email', 'password'])
+type FormData = Pick<RegisterSchemaYup, "email" | "password">
+const loginSchema = registerSchemaYup.pick(["email", "password"])
 
 export default function Login() {
   const navigate = useNavigate()
@@ -40,11 +40,11 @@ export default function Login() {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
           const formError = error.response?.data.errors
           if (formError) {
-            console.log('formError: ', formError)
+            console.log("formError: ", formError)
             Object.keys(formError).forEach((key) => {
               setError(key as keyof FormData, {
-                message: formError[key as keyof Omit<FormData, 'confirm_password'>],
-                type: 'Server'
+                message: formError[key as keyof Omit<FormData, "confirm_password">],
+                type: "Server"
               })
             })
           }
@@ -66,7 +66,7 @@ export default function Login() {
               errorMessage={errors.email?.message}
             />
           </div>
-          <div className='w-full'>
+          <div className='w-full mt-4'>
             <InputText
               register={register}
               type='password'
@@ -76,7 +76,7 @@ export default function Login() {
               autoComplete='on'
             />
           </div>
-          <div className='w-full'>
+          <div className='w-full mt-4'>
             <Button
               type='submit'
               isLoading={loginMutation.isPending}

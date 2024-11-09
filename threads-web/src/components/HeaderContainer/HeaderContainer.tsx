@@ -4,8 +4,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from "../Dropdown/Dropdown"
@@ -20,10 +18,10 @@ export default function HeaderContainer() {
   }
   return (
     <div className='max-w-2xl mx-auto flex items-center justify-center h-[60px] bg-slate-50'>
-      <Button className='min-w-20 font-semibold text-gray-700 text-sm'>{labelBtn}</Button>
+      <Button className='min-w-28 font-semibold text-gray-700 text-sm'>{labelBtn}</Button>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <div className='w-6 h-6 bg-white rounded-full flex justify-center items-center border shadow-sm'>
+          <div className='w-6 h-6 bg-white rounded-full flex justify-center items-center border shadow-sm cursor-pointer'>
             <ChevronDown size={18} />
           </div>
         </DropdownMenuTrigger>

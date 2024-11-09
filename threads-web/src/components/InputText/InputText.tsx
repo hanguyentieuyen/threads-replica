@@ -1,5 +1,5 @@
-import { InputHTMLAttributes, useState } from 'react'
-import { RegisterOptions, UseFormRegister } from 'react-hook-form'
+import { InputHTMLAttributes, useState } from "react"
+import { RegisterOptions, UseFormRegister } from "react-hook-form"
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string
@@ -16,9 +16,9 @@ export default function InputText({
   register,
   rules,
   errorMessage,
-  classNameInput = 'bg-[#f5f5f5] w-full p-4 rounded-xl outline-none',
-  classNameError = 'text-sm text-red-600 mt-1 min-h-[1.25rem]',
-  classNameEye = 'absolute right-[5px] top-[10px] h-4 w-4 cursor-pointer',
+  classNameInput = "bg-[#f5f5f5] w-full p-4 rounded-xl outline-none",
+  classNameError = "text-sm text-red-600 mt-1 min-h-[1.25rem]",
+  classNameEye = "absolute right-[5px] top-[10px] h-4 w-4 cursor-pointer",
   ...rest
 }: Props) {
   const [isEye, setIsEye] = useState(false)
@@ -27,15 +27,15 @@ export default function InputText({
   }
   const registerResult = register && name ? register(name, rules) : null
   const handleType = () => {
-    if (rest.type === 'password') {
-      return isEye ? 'text' : 'password'
+    if (rest.type === "password") {
+      return isEye ? "text" : "password"
     }
     return rest.type
   }
   return (
-    <div className={'relative ' + className}>
+    <div className={"relative " + className}>
       <input className={classNameInput} {...registerResult} {...rest} type={handleType()} />
-      {rest.type === 'password' && isEye && (
+      {rest.type === "password" && isEye && (
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
@@ -54,7 +54,7 @@ export default function InputText({
           <path strokeLinecap='round' strokeLinejoin='round' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z' />
         </svg>
       )}
-      {rest.type === 'password' && !isEye && (
+      {rest.type === "password" && !isEye && (
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
@@ -72,7 +72,7 @@ export default function InputText({
           />
         </svg>
       )}
-      <div className={classNameError}>{errorMessage}</div>
+      {errorMessage && <div className={classNameError}>{errorMessage}</div>}
     </div>
   )
 }
