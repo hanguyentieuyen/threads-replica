@@ -1,31 +1,39 @@
-import React from 'react'
-// import Avatar from '~/components/PostAvatar'
-// import { DialogExample } from '~/components/Dialog/Dialog'
-import PostCard from '~/components/PostCard/PostCard'
-// import Sidebar from '~/components/Sidebar/Sidebar'
-// import FollowerCard from '~/components/FollowerCard'
-import ContentContainer from '~/components/ContentContainer'
-import HeaderContainer from '~/components/HeaderContainer'
+import React, { useState, useCallback } from "react"
+import InfiniteScroll from "~/components/InfiniteScroll"
 
-const myAvatarUrl =
-  'https://scontent-atl3-2.cdninstagram.com/v/t51.2885-19/464668100_569595762081485_4171869328580498312_n.jpg?stp=dst-jpg_s640x640&_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_cat=105&_nc_ohc=v8KsJuW525sQ7kNvgFPWhjT&_nc_gid=b8fd02779da04da697e63da7a0051603&edm=APs17CUBAAAA&ccb=7-5&oh=00_AYD--Gq5K-TSLgaiNUybOEXGrzhJCn-dSFaCVsYh12ZzRg&oe=672422AF&_nc_sid=10d13b'
-export default function Home() {
+export const Home: React.FC = () => {
+  const [items, setItems] = useState<number[]>(Array.from({ length: 20 }, (_, i) => i + 1))
+  const [isLoading, setIsLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+
+  const loadMore = useCallback(() => {
+    setIsLoading(true)
+    // Simulating an API call
+    setTimeout(() => {
+      const newItems = Array.from({ length: 20 }, (_, i) => items.length + i + 1)
+      setItems((prevItems) => [...prevItems, ...newItems])
+      setIsLoading(false)
+      if (items.length + newItems.length >= 100) {
+        setHasMore(false)
+      }
+    }, 1000)
+  }, [items])
+
   return (
-    <>
-      <HeaderContainer />
-      <ContentContainer>
-        <PostCard />
-        {/* <DialogExample /> */}
-        {/* <Sidebar /> */}
-        {/* <FollowerCard
-        username='hn13.mew'
-        fullName='hayen'
-        profileImage={myAvatarUrl}
-        followersCount={26000}
-        isVerified={false}
-      /> */}
-        {/* <Avatar name={'hayen'} image='#' postedTime='22 giờ' /> */}
-      </ContentContainer>
-    </>
+    <div className='h-screen p-4 bg-gray-100'>
+      <h1 className='text-2xl font-bold mb-4'>Infinite Scroll Example</h1>
+      <InfiniteScroll
+        loadMore={loadMore}
+        hasMore={hasMore}
+        isLoading={isLoading}
+        className='h-[calc(100vh-100px)] bg-white rounded-lg shadow-md'
+      >
+        {items.map((item) => (
+          <div key={item} className='p-4 border-b last:border-b-0'>
+            Item {item}
+          </div>
+        ))}
+      </InfiniteScroll>
+    </div>
   )
 }
