@@ -4,8 +4,14 @@ import Button from "~/components/Button"
 import ProfileCard from "~/components/ProfileCard"
 import { Check, Pen } from "lucide-react"
 import HeaderContainer from "~/components/HeaderContainer"
+import Tabs from "~/components/Tab/Tabs"
 
 const Profile = () => {
+  const tabData = [
+    { value: "tab1", label: "Thread", content: <div>Content for Tab 1</div> },
+    { value: "tab2", label: "Thread trả lời", content: <div>Content for Tab 2</div> },
+    { value: "tab3", label: "Bài đăng lại", content: <div>Content for Tab 3</div> }
+  ]
   return (
     <>
       <Helmet>
@@ -38,9 +44,7 @@ const Profile = () => {
 
         {/* Tabs */}
         <div className='flex mt-4 space-x-4 border-b-2'>
-          <button className='text-black font-semibold pb-2 border-b-2 border-black'>Thread</button>
-          <button className='text-gray-500'>Thread trả lời</button>
-          <button className='text-gray-500'>Bài đăng lại</button>
+          <Tabs defaultValue='tab1' tabs={tabData} />
         </div>
 
         {/* New Post Input */}
