@@ -11,8 +11,8 @@ export default function Tab({ value, children }: TabProps) {
     <TabsTrigger
       value={value}
       className={cn(
-        "px-4 py-2 font-medium text-gray-700 hover:text-blue-600",
-        "data-[state=active]:border-b-2 data-[state=active]:border-blue-600"
+        "px-[-40] py-2 text-gray-400 font-semibold text-sm w-full border-b",
+        "data-[state=active]:border-b-black data-[state=active]:text-gray-800 "
       )}
     >
       {children}

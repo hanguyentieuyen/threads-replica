@@ -43,7 +43,7 @@ const Profile = () => {
         </Button>
 
         {/* Tabs */}
-        <div className='flex mt-4 space-x-4 border-b-2'>
+        <div className='flex mt-4 space-x-4'>
           <Tabs defaultValue='tab1' tabs={tabData} />
         </div>
 

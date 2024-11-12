@@ -1,5 +1,8 @@
 import React, { useState, useCallback } from "react"
+import Button from "~/components/Button"
+import HeaderContainer from "~/components/HeaderContainer"
 import InfiniteScroll from "~/components/InfiniteScroll"
+import PostCard from "~/components/PostCard"
 
 export const Home: React.FC = () => {
   const [items, setItems] = useState<number[]>(Array.from({ length: 20 }, (_, i) => i + 1))
@@ -20,20 +23,22 @@ export const Home: React.FC = () => {
   }, [items])
 
   return (
-    <div className='h-screen p-4 bg-gray-100'>
-      <h1 className='text-2xl font-bold mb-4'>Infinite Scroll Example</h1>
-      <InfiniteScroll
-        loadMore={loadMore}
-        hasMore={hasMore}
-        isLoading={isLoading}
-        className='h-[calc(100vh-100px)] bg-white rounded-lg shadow-md'
-      >
+    <InfiniteScroll loadMore={loadMore} hasMore={hasMore} isLoading={isLoading} className='max-w-2xl mx-auto '>
+      <div className='sticky top-0 z-10'>
+        <HeaderContainer />
+      </div>
+      <div className='border border-gray-300 bg-white rounded-t-2xl shadow-md'>
+        <div className='w-full border-b flex items-center justify-between p-5'>
+          <img alt='avatar' src='https://via.placeholder.com/40' className='rounded-full w-10 h-10' />
+          <span className='text-left text-sm text-slate-400 w-full mx-2'>Có gì mới ?</span>
+          <Button className='border font-semibold text-gray-700 text-base py-2 px-5 rounded-lg'>Đăng</Button>
+        </div>
         {items.map((item) => (
           <div key={item} className='p-4 border-b last:border-b-0'>
-            Item {item}
+            <PostCard />
           </div>
         ))}
-      </InfiniteScroll>
-    </div>
+      </div>
+    </InfiniteScroll>
   )
 }

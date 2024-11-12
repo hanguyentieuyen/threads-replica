@@ -1,20 +1,20 @@
-import { useRoutes } from 'react-router-dom'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import path from './constant/path'
-import RegisterLayout from './layouts/RegisterLayout'
-import ForgotPassword from './pages/ForgotPassword'
-import ResetPassword from './pages/ResetPassword'
-import VerifyForgotPassword from './pages/VerifyForgotPassword'
-import VerifyEmail from './pages/VerifyEmail'
-import MainLayout from './layouts/MainLayout'
-import Profile from './pages/Profile'
-import Home from './pages/Home'
+import { useRoutes } from "react-router-dom"
+import Login from "./pages/Login"
+import Register from "./pages/Register"
+import path from "./constant/path"
+import RegisterLayout from "./layouts/RegisterLayout"
+import ForgotPassword from "./pages/ForgotPassword"
+import ResetPassword from "./pages/ResetPassword"
+import VerifyForgotPassword from "./pages/VerifyForgotPassword"
+import VerifyEmail from "./pages/VerifyEmail"
+import MainLayout from "./layouts/MainLayout"
+import Profile from "./pages/Profile"
+import Home from "./pages/Home"
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
     {
-      path: '',
+      path: "",
       element: (
         <MainLayout>
           <Home />
@@ -70,7 +70,7 @@ export default function useRouteElement() {
       )
     },
     {
-      path: '*',
+      path: "*",
       element: <>Not found page</>
     }
   ])

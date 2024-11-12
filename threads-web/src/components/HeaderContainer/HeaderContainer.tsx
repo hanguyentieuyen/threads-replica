@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -10,6 +10,7 @@ import {
 import { ChevronDown } from "lucide-react"
 import Button from "../Button"
 const dropdownItems = ["Dành cho bạn", "option 2", "option 3", "option 4", "option 5"]
+
 export default function HeaderContainer() {
   const [isChecked, setIsChecked] = useState(false)
   const [labelBtn, setLabelBtn] = useState<string>(dropdownItems[0])
@@ -17,7 +18,7 @@ export default function HeaderContainer() {
     setLabelBtn(item)
   }
   return (
-    <div className='max-w-2xl mx-auto flex items-center justify-center h-[60px] bg-slate-50'>
+    <div className=' flex items-center justify-center h-16'>
       <Button className='min-w-28 font-semibold text-gray-700 text-sm'>{labelBtn}</Button>
       <DropdownMenu>
         <DropdownMenuTrigger>

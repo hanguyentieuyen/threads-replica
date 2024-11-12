@@ -1,7 +1,7 @@
-import React from 'react'
-import { Home, Search, PlusCircle, Heart, User, Bookmark, Menu } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import path from '~/constant/path'
+import React from "react"
+import { Home, Search, PlusCircle, Heart, User, Bookmark, Menu } from "lucide-react"
+import { useLocation, useNavigate } from "react-router-dom"
+import path from "~/constant/path"
 
 type SidebarProps = {
   className?: string
@@ -19,7 +19,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, path }) => {
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault()
-    navigate(path || '/')
+    navigate(path || "/")
   }
 
   return (
@@ -28,7 +28,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, path }) => {
         onClick={handleClick}
         href='#'
         className={`flex items-center p-2 text-base font-normal rounded-lg ${
-          isActive ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+          isActive ? "bg-gray-100 text-gray-900" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
         }`}
       >
         {icon}
@@ -37,7 +37,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, path }) => {
   )
 }
 
-export default function Sidebar({ className = '' }: SidebarProps) {
+export default function Sidebar({ className = "" }: SidebarProps) {
   return (
     <aside className={`w-full h-screen transition-transform ${className}`} aria-label='Sidebar'>
       <div className='h-full py-4 overflow-hidden'>

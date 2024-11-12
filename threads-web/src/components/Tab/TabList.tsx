@@ -6,5 +6,5 @@ type TabListProps = {
 }
 
 export default function TabList({ children }: TabListProps) {
-  return <TabsList className='flex border-b border-gray-200'>{children}</TabsList>
+  return <TabsList className='flex justify-between mx-[-24px]'>{children}</TabsList>
 }
