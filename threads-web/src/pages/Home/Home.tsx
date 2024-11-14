@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react"
 import Button from "~/components/Button"
 import HeaderContainer from "~/components/HeaderContainer"
 import InfiniteScroll from "~/components/InfiniteScroll"
+import ModalExample from "~/components/Modal/Modal"
 import PostCard from "~/components/PostCard"
 
 export const Home: React.FC = () => {
@@ -26,6 +27,7 @@ export const Home: React.FC = () => {
     <InfiniteScroll loadMore={loadMore} hasMore={hasMore} isLoading={isLoading} className='max-w-2xl mx-auto '>
       <div className='sticky top-0 z-10'>
         <HeaderContainer />
+        <ModalExample />
       </div>
       <div className='border border-gray-300 bg-white rounded-t-2xl shadow-md'>
         <div className='w-full border-b flex items-center justify-between p-5'>

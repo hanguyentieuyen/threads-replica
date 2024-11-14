@@ -1,5 +1,5 @@
-import React from 'react'
-import { X } from 'lucide-react'
+import React from "react"
+import { X } from "lucide-react"
 
 interface DialogProps {
   isOpen: boolean
@@ -11,7 +11,7 @@ interface DialogProps {
   profileImage: string
 }
 
-export default function Dialog({
+export default function ConfirmDialog({
   isOpen,
   onClose,
   onConfirm,
@@ -48,7 +48,7 @@ export function DialogExample() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
 
   const handleConfirm = () => {
-    console.log('Confirmed')
+    console.log("Confirmed")
     setIsDialogOpen(false)
   }
 
