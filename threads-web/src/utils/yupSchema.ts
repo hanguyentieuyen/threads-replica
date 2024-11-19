@@ -1,48 +1,65 @@
 import * as yup from "yup"
+import { useTranslation } from "react-i18next"
+
 const today = new Date()
 
-const handleConfirmPasswordYup = (refString: string) => {
+const handleConfirmPasswordYup = (refString: string, t: (key: string) => string) => {
   return yup
     .string()
-    .required("Nhập lại password là bắt buộc")
-    .min(6, "Độ dài từ 6 - 160 ký tự")
-    .max(160, "Độ dài từ 6 - 160 ký tự")
-    .oneOf([yup.ref(refString)], "Nhập lại password không khớp")
+    .required(t("validation.confirmPasswordRequired"))
+    .min(6, t("validation.passwordLength"))
+    .max(160, t("validation.passwordLength"))
+    .oneOf([yup.ref(refString)], t("validation.passwordMismatch"))
 }
-export const registerSchemaYup = yup.object({
-  name: yup.string().required("Name là bắt buộc"),
-  email: yup.string().required("Email là bắt buộc").min(5, "Độ dài từ 8 - 80 ký tự").max(80, "Độ dài từ 8 - 80 ký tự"),
-  password: yup
-    .string()
-    .required("Password là bắt buộc")
-    .min(6, "Độ dài từ 6 - 160 ký tự")
-    .max(160, "Độ dài từ 6 - 160 ký tự"),
-  confirm_password: handleConfirmPasswordYup("password"),
-  date_of_birth: yup.date().required("Ngày sinh là bắt buộc").max(today, "Ngày sinh là ngày quá khứ")
-})
 
-export const resetPasswordSchemaYup = yup.object({
-  forgot_password_token: yup.string().required("Thiếu forgot password token").nullable(),
-  password: yup
-    .string()
-    .required("Password là bắt buộc")
-    .min(6, "Độ dài từ 6 - 160 ký tự")
-    .max(160, "Độ dài từ 6 - 160 ký tự"),
-  confirm_password: handleConfirmPasswordYup("password")
-})
+export const useValidationSchemas = () => {
+  const { t } = useTranslation()
 
-export const userSchemaYup = yup.object({
-  name: yup.string().max(160, "Độ dài tối đa là 160 ký tự"),
-  phone: yup.string().max(20, "Độ dài tối đa là 20 ký tự"),
-  address: yup.string().max(160, "Độ dài tối đa là 160 ký tự"),
-  avatar: yup.string().max(1000, "Độ dài tối đa là 1000 ký tự"),
-  date_of_birth: yup.date().max(new Date(), "Hãy chọn một ngày trong quá khứ"),
-  password: registerSchemaYup.fields["password"],
-  new_password: registerSchemaYup.fields["password"],
-  confirm_password: handleConfirmPasswordYup("new_password")
-})
+  const registerSchemaYup = yup.object({
+    name: yup.string().required(t("validation.nameRequired")),
+    email: yup
+      .string()
+      .required(t("validation.emailRequired"))
+      .min(5, t("validation.emailLength"))
+      .max(80, t("validation.emailLength")),
+    password: yup
+      .string()
+      .required(t("validation.passwordRequired"))
+      .min(6, t("validation.passwordLength"))
+      .max(160, t("validation.passwordLength")),
+    confirm_password: handleConfirmPasswordYup("password", t),
+    date_of_birth: yup.date().required(t("validation.dateOfBirthRequired")).max(today, t("validation.dateOfBirthPast"))
+  })
+
+  const resetPasswordSchemaYup = yup.object({
+    forgot_password_token: yup.string().required(t("validation.forgotPasswordTokenRequired")).nullable(),
+    password: yup
+      .string()
+      .required(t("validation.passwordRequired"))
+      .min(6, t("validation.passwordLength"))
+      .max(160, t("validation.passwordLength")),
+    confirm_password: handleConfirmPasswordYup("password", t)
+  })
+
+  const userSchemaYup = yup.object({
+    name: yup.string().max(160, t("validation.nameMaxLength")),
+    phone: yup.string().max(20, t("validation.phoneMaxLength")),
+    address: yup.string().max(160, t("validation.addressMaxLength")),
+    avatar: yup.string().max(1000, t("validation.avatarMaxLength")),
+    date_of_birth: yup.date().max(today, t("validation.dateOfBirthPast")),
+    password: registerSchemaYup.fields["password"],
+    new_password: registerSchemaYup.fields["password"],
+    confirm_password: handleConfirmPasswordYup("new_password", t)
+  })
+
+  return {
+    registerSchemaYup,
+    resetPasswordSchemaYup,
+    userSchemaYup
+  }
+}
 
 // Convert yup schema to data type
-export type RegisterSchemaYup = yup.InferType<typeof registerSchemaYup>
-export type UserSchemaYup = yup.InferType<typeof userSchemaYup>
-export type ResetPasswordSchemaYup = yup.InferType<typeof resetPasswordSchemaYup>
+export type RegisterSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["registerSchemaYup"]>
+export type UserSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["userSchemaYup"]>
+export type ResetPasswordSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["resetPasswordSchemaYup"]>

@@ -1,3 +1,27 @@
 {
-  "hello": "Hello"
+  "validation": {
+    "nameRequired": "Name is required",
+    "emailRequired": "Email is required",
+    "emailLength": "Length must be between 5 and 80 characters",
+    "passwordRequired": "Password is required",
+    "passwordLength": "Length must be between 6 and 160 characters",
+    "passwordMismatch": "Passwords do not match",
+    "dateOfBirthRequired": "Date of birth is required",
+    "dateOfBirthPast": "Date of birth must be in the past"
+  },
+  "loginThreads": "Login Threads",
+  "registerThreads": "Register Threads",
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "name": "Name",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "dateOfBirth": "Date of Birth",
+  "forgotPassword": "Forgot Password",
+  "sendMail": "Send Mail",
+  "enterEmailToResetPassword": "Enter your email to reset password",
+  "resetPassword": "Reset Password",
+  "enterPassword": "Enter password",
+  "enterConfirmPassword": "Enter confirm password"
 }

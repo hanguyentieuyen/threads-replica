@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useMutation } from "@tanstack/react-query"
+import { t } from "i18next"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -9,12 +10,13 @@ import InputText from "~/components/InputText"
 import path from "~/constant/path"
 import { ErrorResponse } from "~/types/utils.type"
 import { isAxiosUnprocessableEntityError } from "~/utils/auth"
-import { registerSchemaYup, RegisterSchemaYup } from "~/utils/yupSchema"
+import { RegisterSchemaYup, useValidationSchemas } from "~/utils/yupSchema"
 
 type FormData = Pick<RegisterSchemaYup, "email" | "password">
-const loginSchema = registerSchemaYup.pick(["email", "password"])
 
 export default function Login() {
+  const { registerSchemaYup } = useValidationSchemas()
+  const loginSchema = registerSchemaYup.pick(["email", "password"])
   const navigate = useNavigate()
   const {
     register,
@@ -29,6 +31,7 @@ export default function Login() {
   const loginMutation = useMutation({
     mutationFn: (body: FormData) => authApi.login(body)
   })
+
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
@@ -56,13 +59,13 @@ export default function Login() {
     <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
       <form onSubmit={onSubmit}>
         <div className='p-6 flex flex-col justify-between items-center'>
-          <span className='text-md text-stone-950 font-bold'>Login Threads</span>
+          <span className='text-md text-stone-950 font-bold'>{t("loginThreads")}</span>
           <div className='mt-4 w-full'>
             <InputText
               register={register}
               type='email'
               name='email'
-              placeholder='Email'
+              placeholder={t("email")}
               errorMessage={errors.email?.message}
             />
           </div>
@@ -71,7 +74,7 @@ export default function Login() {
               register={register}
               type='password'
               name='password'
-              placeholder='Password'
+              placeholder={t("password")}
               errorMessage={errors.password?.message}
               autoComplete='on'
             />
@@ -83,15 +86,15 @@ export default function Login() {
               disabled={loginMutation.isPending}
               className='w-[100%] flex justify-center bg-gray-950 text-white text-sm p-4 rounded-xl'
             >
-              Sign In
+              {t("signIn")}
             </Button>
           </div>
           <div className='mt-5 w-full flex justify-between flex-shrink-0'>
             <span className='text-sm text-gray-400'>
-              <Link to={path.forgotPassword}>Forgot password?</Link>
+              <Link to={path.forgotPassword}>{t("forgotPassword")}?</Link>
             </span>
             <span className='text-sm text-gray-400'>
-              <Link to={path.register}>Register</Link>
+              <Link to={path.register}>{t("signUp")}</Link>
             </span>
           </div>
           <hr className='w-full mt-8'></hr>

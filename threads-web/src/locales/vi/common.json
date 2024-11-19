@@ -1,3 +1,28 @@
 {
-  "hello": "Xin chao"
+  "validation": {
+    "nameRequired": "Name là bắt buộc",
+    "emailRequired": "Email là bắt buộc",
+    "emailLength": "Độ dài từ 8 - 80 ký tự",
+    "passwordRequired": "Mật khẩu là bắt buộc",
+    "passwordLength": "Độ dài từ 6 - 160 ký tự",
+    "passwordMismatch": "Mật khẩu không khớp",
+    "dateOfBirthRequired": "Ngày sinh là bắt buộc",
+    "dateOfBirthPast": "Ngày sinh là ngày quá khứ",
+    "missForgotPassword": "Thiếu forgot password token"
+  },
+  "loginThreads": "Đăng nhập Threads",
+  "registerThreads": "Đăng ký Threads",
+  "signIn": "Đăng nhập",
+  "signUp": "Đăng ký",
+  "name": "Tên",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "confirmPassword": "Xác nhận mật khẩu",
+  "dateOfBirth": "Ngày sinh",
+  "forgotPassword": "Quên mật khẩu",
+  "sendMail": "Gửi mail",
+  "enterEmailToResetPassword": "Nhập email của bạn để đặt lại mật khẩu",
+  "resetPassword": "Đặt lại mật khẩu",
+  "enterPassword": "Nhập mật khẩu",
+  "enterConfirmPassword": "Nhập lại mật khẩu"
 }

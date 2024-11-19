@@ -9,7 +9,7 @@ i18n.use(initReactI18next).init({
     en: { translation: enTranslations },
     vi: { translation: viTranslations }
   },
-  lng: "en",
+  lng: "vi",
   fallbackLng: "en", // Use English if selected language is not available
   interpolation: {
     escapeValue: false // React already safes from xss
