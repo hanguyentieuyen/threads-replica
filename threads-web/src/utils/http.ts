@@ -1,6 +1,6 @@
-import axios, { AxiosError, type AxiosInstance } from 'axios'
-import config from '~/constant/config'
-import { toast } from 'react-toastify'
+import axios, { AxiosError, type AxiosInstance } from "axios"
+import config from "~/constant/config"
+import { toast } from "react-toastify"
 import {
   clearLocalStorage,
   getAccessTokenFromLocalStorage,
@@ -9,10 +9,10 @@ import {
   isAxiosUnauthorizedError,
   setAccessTokenToLocalStorage,
   setRefreshTokenToLocalStorage
-} from './auth'
-import { AuthResponse } from '~/types/auth.type'
-import HttpStatusCode from '~/constant/httpStatusCode.enum'
-import { ErrorResponse } from '~/types/utils.type'
+} from "./auth"
+import { AuthResponse } from "~/types/auth.type"
+import HttpStatusCode from "~/constant/httpStatusCode.enum"
+import { ErrorResponse } from "~/types/utils.type"
 
 export class Http {
   instance: AxiosInstance
@@ -28,17 +28,20 @@ export class Http {
       baseURL: config.baseUrl,
       timeout: 10000,
       headers: {
-        'Content-Type': 'application/json',
-        'expire-access-token': 60 * 60 * 24, // 1 ngày
-        'expire-refresh-token': 60 * 60 * 24 * 160 // 160 ngày
+        "Content-Type": "application/json",
+        "expire-access-token": 60 * 60 * 24, // 1 ngày
+        "expire-refresh-token": 60 * 60 * 24 * 160 // 160 ngày
       }
     })
     // interceptor request or response before handling resquest or response
     this.instance.interceptors.request.use(
       (configInterceptors) => {
+        console.log("configInterceptors: ", configInterceptors.headers)
+        console.log("accessToken: ", this.accessToken)
         // Do something before request is sent
         if (configInterceptors.headers && this.accessToken) {
           configInterceptors.headers.authorization = this.accessToken
+          return configInterceptors
         }
         return configInterceptors
       },
@@ -54,14 +57,14 @@ export class Http {
         const { url } = response.config
         if (url === config.loginUrl || url === config.registerUrl) {
           const data = response.data as AuthResponse
-          this.accessToken = data.data.access_token
-          this.refreshToken = data.data.refresh_token
+          this.accessToken = data.result.access_token
+          this.refreshToken = data.result.refresh_token
           // Store token in local storage
           setAccessTokenToLocalStorage(this.accessToken)
           setRefreshTokenToLocalStorage(this.refreshToken)
         } else if (url === config.logoutUrl) {
-          this.accessToken = ''
-          this.refreshToken = ''
+          this.accessToken = ""
+          this.refreshToken = ""
           clearLocalStorage()
         }
         return response
@@ -82,7 +85,7 @@ export class Http {
 
         // Case error code: 401 (wrong token, expired token, no token)
         if (isAxiosUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(error)) {
-          const configError = error.response?.config || { headers: {}, url: '' }
+          const configError = error.response?.config || { headers: {}, url: "" }
           const { url } = configError
 
           // Case error: token expired and current request is not refresh token request , then request refresh token
@@ -110,8 +113,8 @@ export class Http {
 
           // Other error cases: wrong token, miss token, refresh token fail. Show toast
           clearLocalStorage()
-          this.accessToken = ''
-          this.refreshToken = ''
+          this.accessToken = ""
+          this.refreshToken = ""
           toast.error(error.response?.data.errors?.message || error.response?.data.message)
         }
         return Promise.reject(error)
@@ -132,8 +135,8 @@ export class Http {
       })
       .catch((error) => {
         clearLocalStorage()
-        this.accessToken = ''
-        this.refreshToken = ''
+        this.accessToken = ""
+        this.refreshToken = ""
         throw error
       })
   }

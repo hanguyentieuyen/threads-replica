@@ -10,17 +10,18 @@ import VerifyEmail from "./pages/VerifyEmail"
 import MainLayout from "./layouts/MainLayout"
 import Profile from "./pages/Profile"
 import Home from "./pages/Home"
+import PostDetail from "./pages/PostDetail"
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
-    {
-      path: "",
-      element: (
-        <MainLayout>
-          <Home />
-        </MainLayout>
-      )
-    },
+    // {
+    //   path: "",
+    //   element: (
+    //     <MainLayout>
+    //       <Home />
+    //     </MainLayout>
+    //   )
+    // },
     {
       path: path.login,
       element: (
@@ -59,6 +60,22 @@ export default function useRouteElement() {
         <RegisterLayout>
           <ResetPassword />
         </RegisterLayout>
+      )
+    },
+    {
+      path: path.posts,
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.postDetail,
+      element: (
+        <MainLayout>
+          <PostDetail />
+        </MainLayout>
       )
     },
     {
