@@ -15,6 +15,7 @@ export const validateMiddleware = (schemas: Schema, dataLocation: 'body' | 'head
       //  verify the access token
       if (dataLocation === 'headers') {
         const accessToken = value.authorization.split(' ')[1]
+
         const decodedAuthorization = await verifyAccessToken(accessToken)
         req.decodedAuthorization = decodedAuthorization
       }

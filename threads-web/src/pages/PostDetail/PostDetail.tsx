@@ -16,7 +16,7 @@ export const PostDetail: React.FC = () => {
   })
 
   const post = postDetailsData?.data.result
-  //console.log(post)
+  console.log(post)
   return (
     <>
       <div className='sticky top-0 z-10'>

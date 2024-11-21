@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-interface LikerContructor {
+interface LikeContructor {
   _id?: ObjectId
   user_id: ObjectId
   post_id: ObjectId
@@ -11,7 +11,7 @@ export default class Like {
   post_id: ObjectId
   created_at?: Date
 
-  constructor({ _id, user_id, created_at, post_id }: LikerContructor) {
+  constructor({ _id, user_id, created_at, post_id }: LikeContructor) {
     const date = new Date()
     this._id = _id
     this.user_id = user_id

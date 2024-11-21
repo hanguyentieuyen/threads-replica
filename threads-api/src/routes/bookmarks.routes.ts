@@ -18,13 +18,13 @@ bookmarkRouter.post('/', validateMiddleware(accessTokenValidator, 'headers'), re
 
 /**
  * Description: Unbookmark post
- * Path: /posts/:post_id
+ * Path: /post/:post_id
  * Method: DELETE
  * Header: { Authorization: Bearer <access_token>}
  */
 
 bookmarkRouter.delete(
-  '/posts/:post_id',
+  '/post/:post_id',
   validateMiddleware(accessTokenValidator, 'headers'),
   requestHandler(unbookmarksController)
 )

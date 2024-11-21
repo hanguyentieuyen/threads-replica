@@ -9,7 +9,11 @@ const config = {
   resetPassword: "/users/reset-password",
   refreshTokenUrl: "refresh-access-token",
   verifyEmail: "/users/verify-email",
-  posts: "/posts"
+  posts: "/posts",
+  bookmark: "/bookmark",
+  unBookmark: "/bookmark/post",
+  like: "like",
+  unLike: "like/post"
 }
 
 export default config

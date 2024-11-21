@@ -8,10 +8,10 @@ export interface Post {
   hashtags: string[]
   mentions: string[]
   medias: string[]
-  guest_views: number
-  user_views: number
-  created_at: string
-  updated_at: string
+  guest_views?: number
+  user_views?: number
+  created_at?: string
+  updated_at?: string
 }
 export interface Posts {
   posts: Post[]

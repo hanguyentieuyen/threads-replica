@@ -36,11 +36,9 @@ export class Http {
     // interceptor request or response before handling resquest or response
     this.instance.interceptors.request.use(
       (configInterceptors) => {
-        console.log("configInterceptors: ", configInterceptors.headers)
-        console.log("accessToken: ", this.accessToken)
         // Do something before request is sent
         if (configInterceptors.headers && this.accessToken) {
-          configInterceptors.headers.authorization = this.accessToken
+          configInterceptors.headers.authorization = `Bearer ${this.accessToken}`
           return configInterceptors
         }
         return configInterceptors
