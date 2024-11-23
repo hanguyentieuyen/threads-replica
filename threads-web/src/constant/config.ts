@@ -7,13 +7,21 @@ const config = {
   forgotPassword: "/users/forgot-password",
   verifyForgotPassword: "/users/verify-forgot-password",
   resetPassword: "/users/reset-password",
-  refreshTokenUrl: "refresh-access-token",
+  changePassword: "/users/change-password",
   verifyEmail: "/users/verify-email",
+  me: "/user/me",
+  userName: "/user/:username",
+  follow: "/user/follow",
+  unfollow: "/user/follow/:user_id",
+  refreshTokenUrl: "/refresh-access-token",
   posts: "/posts",
   bookmark: "/bookmark",
-  unBookmark: "/bookmark/post",
-  like: "like",
-  unLike: "like/post"
+  unbookmark: "/bookmark/post",
+  like: "/like",
+  unlike: "/like/post",
+  search: "/search",
+  uploadImage: "/medias/upload-image",
+  uploadVideo: "/medias/upload-video"
 }
 
 export default config
