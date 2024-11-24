@@ -5,7 +5,7 @@ import { SuccessResponse } from "~/types/utils.type"
 import http from "~/utils/http"
 
 export const userApi = {
-  getMyProfile: () => http.get(config.me),
+  getMyProfile: () => http.get<SuccessResponse<User>>(config.me),
 
   updateMyProfile: (body: {
     name: string
@@ -18,7 +18,7 @@ export const userApi = {
     cover_photo: string
   }) => http.patch<User>(config.me, body),
 
-  getUserProfile: (username: string) => http.get<SuccessResponse<User>>(`${config.userName}/${username}`),
+  getUserProfile: (username: string) => http.get<SuccessResponse<User>>(`${config.users}/${username}`),
   follow: (body: { followed_user_id: string }) => http.post<SuccessResponse<Follow>>(config.follow, body),
   unfollow: (user_id: string) => http.delete<SuccessResponse<Follow>>(`${config.unfollow}/${user_id}`)
 }

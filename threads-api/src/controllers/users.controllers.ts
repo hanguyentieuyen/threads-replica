@@ -93,10 +93,10 @@ export const verifyEmailController = async (
     })
   }
   // Case 2: email is not verified
-  const result = usersService.verifyEmail(user_id)
+  const data = usersService.verifyEmail(user_id)
   return res.json({
     message: USERS_MESSAGES.EMAIL_VERIFY_SUCCESS,
-    result
+    data
   })
 }
 
@@ -284,8 +284,11 @@ export const changePasswordController = async (
 export const getMyProfileController = async (req: Request, res: Response) => {
   const { user_id } = req.decodedAuthorization as TokenPayload
 
-  const data = await usersService.getMyProfile(user_id)
-  return res.json(data)
+  const myProfileData = await usersService.getMyProfile(user_id)
+  return res.json({
+    data: myProfileData,
+    message: USERS_MESSAGES.GET_ME_SUCCESS
+  })
 }
 
 export const updateMyProfileController = async (
@@ -303,8 +306,11 @@ export const updateMyProfileController = async (
 
 export const getUserProfileController = async (req: Request<GetUserProfileReqBody>, res: Response) => {
   const { username } = req.params
-  const data = await usersService.getUserProfile(username)
-  return res.json(data)
+  const userData = await usersService.getUserProfile(username)
+  return res.json({
+    data: userData,
+    message: USERS_MESSAGES.GET_PROFILE_SUCCESS
+  })
 }
 
 export const followController = async (req: Request<ParamsDictionary, any, FollowReqBody>, res: Response) => {

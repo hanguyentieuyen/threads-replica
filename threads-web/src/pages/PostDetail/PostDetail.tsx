@@ -7,7 +7,6 @@ import PostCard from "~/components/PostCard"
 
 export const PostDetail: React.FC = () => {
   const { postId } = useParams()
-  console.log(postId)
 
   // Query the post details
   const { data: postDetailsData } = useQuery({
@@ -15,7 +14,7 @@ export const PostDetail: React.FC = () => {
     queryFn: () => postApi.getPostDetails(postId as string)
   })
 
-  const post = postDetailsData?.data.result
+  const post = postDetailsData?.data.data
   console.log(post)
   return (
     <>

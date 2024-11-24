@@ -7,18 +7,18 @@ import bookmarksService from '~/services/bookmarks.services'
 
 export const bookmarksController = async (req: Request<ParamsDictionary, any, BookmarkReqBody>, res: Response) => {
   const { user_id } = req.decodedAuthorization as TokenPayload
-  const result = await bookmarksService.bookmarks(user_id, req.body.post_id)
+  const data = await bookmarksService.bookmarks(user_id, req.body.post_id)
   return res.json({
     message: BOOKMARKS_MESSAGES.BOOKMARK_SUCCESS,
-    result
+    data
   })
 }
 
 export const unbookmarksController = async (req: Request, res: Response) => {
   const { user_id } = req.decodedAuthorization as TokenPayload
-  const result = await bookmarksService.unbookmarks(user_id, req.params.post_id)
+  const data = await bookmarksService.unbookmarks(user_id, req.params.post_id)
   return res.json({
     message: BOOKMARKS_MESSAGES.UNBOOKMARK_SUCCESS,
-    result
+    data
   })
 }

@@ -18,7 +18,7 @@ export const searchController = async (req: Request<ParamsDictionary, any, any, 
 
   return res.json({
     message: POSTS_MESSAGES.SEARCH_POST_SUCCESS,
-    result: {
+    data: {
       limit,
       page,
       total_page: Math.ceil(data.total / limit),

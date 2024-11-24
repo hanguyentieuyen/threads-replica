@@ -7,7 +7,7 @@ export const uploadImageController = async (req: Request, res: Response, next: N
   const data = await mediasService.uploadImage(req)
   return res.json({
     message: USERS_MESSAGES.UPLOAD_SUCCESS,
-    result: data
+    data
   })
 }
 
@@ -15,6 +15,6 @@ export const uploadVideoController = async (req: Request, res: Response, next: N
   const data = await mediasService.uploadVideo(req)
   return res.json({
     message: USERS_MESSAGES.UPLOAD_SUCCESS,
-    result: data
+    data
   })
 }

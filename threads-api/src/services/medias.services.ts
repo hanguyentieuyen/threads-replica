@@ -12,7 +12,7 @@ class MediasService {
   async uploadImage(req: Request) {
     const mime = (await import('mime')).default // common js
     const files = await fileImageParser(req)
-    const result = await Promise.all(
+    const data = await Promise.all(
       files.map(async (file) => {
         const newName = getNameFromFullname(file.newFilename)
         const newFullFileName = `${newName}.jpg`
@@ -37,13 +37,13 @@ class MediasService {
         }
       })
     )
-    return result
+    return data
   }
 
   async uploadVideo(req: Request) {
     const mime = (await import('mime')).default
     const files = await fileVideoParser(req)
-    const result = await Promise.all(
+    const data = await Promise.all(
       files.map(async (file) => {
         const fileUploadS3 = await uploadFileS3({
           fileName: `videos/${file.newFilename}`,
@@ -58,7 +58,7 @@ class MediasService {
       })
     )
 
-    return result
+    return data
   }
 }
 

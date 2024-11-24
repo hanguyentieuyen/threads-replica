@@ -79,7 +79,15 @@ export default function useRouteElement() {
       )
     },
     {
-      path: path.profile,
+      path: path.me,
+      element: (
+        <MainLayout>
+          <Profile />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.userProfile,
       element: (
         <MainLayout>
           <Profile />

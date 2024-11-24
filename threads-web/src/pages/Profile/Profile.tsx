@@ -5,6 +5,9 @@ import ProfileCard from "~/components/ProfileCard"
 import { Check, Pen } from "lucide-react"
 import HeaderContainer from "~/components/HeaderContainer"
 import Tabs from "~/components/Tab/Tabs"
+import { useQuery } from "@tanstack/react-query"
+import { userApi } from "~/apis/user.api"
+import { useParams } from "react-router-dom"
 
 const Profile = () => {
   const tabData = [
@@ -12,6 +15,18 @@ const Profile = () => {
     { value: "tab2", label: "Thread trả lời", content: <div>Content for Tab 2</div> },
     { value: "tab3", label: "Bài đăng lại", content: <div>Content for Tab 3</div> }
   ]
+  const { username } = useParams<{ username?: string }>()
+  console.log(username)
+
+  const { data: profileData } = useQuery({
+    queryKey: ["userData"],
+    queryFn: () => (username ? userApi.getUserProfile(username) : userApi.getMyProfile()),
+    staleTime: 1000 * 60 * 5 // cache 5 minutes
+  })
+
+  const userData = profileData?.data.data
+  console.log(userData)
+
   return (
     <>
       <Helmet>

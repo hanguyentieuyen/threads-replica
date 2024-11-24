@@ -20,7 +20,7 @@ export const getPostController = async (req: Request, res: Response) => {
   const data = await postsService.getPostDetail(post_id)
   return res.json({
     message: POSTS_MESSAGES.GET_POST_SUCCESS,
-    result: data
+    data: data
   })
 }
 
@@ -35,7 +35,7 @@ export const getPostsController = async (req: Request<ParamsDictionary, any, any
   })
   return res.json({
     message: POSTS_MESSAGES.GET_POST_SUCCESS,
-    result: {
+    data: {
       page,
       limit,
       totalPage: Math.ceil(data.total / limit),
@@ -58,7 +58,7 @@ export const getPostChildrenController = async (req: Request<PostParam, any, any
   })
   return res.json({
     message: POSTS_MESSAGES.GET_POST_SUCCESS,
-    result: {
+    data: {
       posts,
       post_type,
       limit,

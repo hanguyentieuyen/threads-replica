@@ -1,6 +1,6 @@
 export type SuccessResponse<Data> = {
   message: string
-  result: Data
+  data: Data
 }
 
 export type ErrorResponse<Data> = {

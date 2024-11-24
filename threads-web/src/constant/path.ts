@@ -6,7 +6,8 @@ const path = {
   verifyForgotPassword: "/verify-forgot-password",
   resetPassword: "/reset-password",
   verifyEmail: "/verify-email",
-  profile: "/profile",
+  me: "/me",
+  userProfile: "/users/:username",
   search: "/search",
   posts: "/posts",
   postDetail: "/posts/:postId"
