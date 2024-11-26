@@ -9,19 +9,19 @@ import VerifyForgotPassword from "./pages/VerifyForgotPassword"
 import VerifyEmail from "./pages/VerifyEmail"
 import MainLayout from "./layouts/MainLayout"
 import Profile from "./pages/Profile"
-import Home from "./pages/Home"
+import Posts from "./pages/Posts"
 import PostDetail from "./pages/PostDetail"
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
-    // {
-    //   path: "",
-    //   element: (
-    //     <MainLayout>
-    //       <Home />
-    //     </MainLayout>
-    //   )
-    // },
+    {
+      path: "",
+      element: (
+        <MainLayout>
+          <Posts />
+        </MainLayout>
+      )
+    },
     {
       path: path.login,
       element: (
@@ -66,7 +66,7 @@ export default function useRouteElement() {
       path: path.posts,
       element: (
         <MainLayout>
-          <Home />
+          <Posts />
         </MainLayout>
       )
     },

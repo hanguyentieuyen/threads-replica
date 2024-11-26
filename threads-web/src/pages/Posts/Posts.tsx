@@ -6,7 +6,7 @@ import InfiniteScroll from "~/components/InfiniteScroll"
 import ModalExample from "~/components/Modal/Modal"
 import PostCard from "~/components/PostCard"
 
-export const Home: React.FC = () => {
+export const Posts: React.FC = () => {
   const { t, i18n } = useTranslation()
 
   const changeLanguage = (lng: string) => {
