@@ -46,8 +46,8 @@ export default function Sidebar({ className = "" }: SidebarProps) {
             <img src='../src/assets/threads-app-icon.png' width={40} height={40} />
           </div>
           <ul className='flex flex-col justify-center h-full space-y-4'>
-            <SidebarItem icon={<Home className='w-8 h-8' />} path={path.posts} />
-            <SidebarItem icon={<Search className='w-8 h-8' />} />
+            <SidebarItem icon={<Home className='w-8 h-8' />} path={""} />
+            <SidebarItem icon={<Search className='w-8 h-8' />} path={path.search} />
             <SidebarItem icon={<PlusCircle className='w-8 h-8' />} />
             <SidebarItem icon={<Heart className='w-8 h-8' />} />
             <SidebarItem icon={<User className='w-8 h-8' />} path={path.me} />

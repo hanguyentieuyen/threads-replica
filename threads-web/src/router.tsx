@@ -11,6 +11,7 @@ import MainLayout from "./layouts/MainLayout"
 import Profile from "./pages/Profile"
 import Posts from "./pages/Posts"
 import PostDetail from "./pages/PostDetail"
+import Search from "./pages/Search"
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
@@ -63,18 +64,18 @@ export default function useRouteElement() {
       )
     },
     {
-      path: path.posts,
-      element: (
-        <MainLayout>
-          <Posts />
-        </MainLayout>
-      )
-    },
-    {
       path: path.postDetail,
       element: (
         <MainLayout>
           <PostDetail />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.search,
+      element: (
+        <MainLayout>
+          <Search />
         </MainLayout>
       )
     },

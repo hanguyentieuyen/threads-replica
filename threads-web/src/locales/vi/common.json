@@ -24,5 +24,7 @@
   "enterEmailToResetPassword": "Nhập email của bạn để đặt lại mật khẩu",
   "resetPassword": "Đặt lại mật khẩu",
   "enterPassword": "Nhập mật khẩu",
-  "enterConfirmPassword": "Nhập lại mật khẩu"
+  "enterConfirmPassword": "Nhập lại mật khẩu",
+  "follow": "Theo dõi",
+  "following": "Đang theo dõi"
 }

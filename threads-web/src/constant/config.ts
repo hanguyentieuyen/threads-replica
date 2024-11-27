@@ -12,7 +12,7 @@ const config = {
   me: "/users/me",
   users: "/users",
   follow: "/users/follow",
-  unfollow: "/users/follow/:user_id",
+  unfollow: "/users/follow",
   refreshTokenUrl: "/refresh-access-token",
   posts: "/posts",
   bookmark: "/bookmark",

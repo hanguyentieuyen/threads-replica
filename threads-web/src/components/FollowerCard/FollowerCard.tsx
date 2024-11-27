@@ -1,4 +1,11 @@
-import React from 'react'
+import { useMutation } from "@tanstack/react-query"
+import { AxiosResponse } from "axios"
+import { toast } from "react-toastify"
+import { userApi } from "~/apis/user.api"
+import { useToggleState } from "~/hooks/useToggleState"
+import { SuccessResponse } from "~/types/utils.type"
+import Button from "../Button"
+import { useTranslation } from "react-i18next"
 
 type UserProfileCardProps = {
   username: string
@@ -15,8 +22,46 @@ export default function FollowerCard({
   profileImage,
   isVerified = false
 }: UserProfileCardProps) {
-  const formattedFollowers = new Intl.NumberFormat('en-US', { notation: 'compact' }).format(followersCount)
+  const formattedFollowers = new Intl.NumberFormat("en-US", { notation: "compact" }).format(followersCount)
+  const { t } = useTranslation()
+  const [isFollow, setIsFollow] = useToggleState(false)
 
+  // Test api
+  const followed_user_id = "66ba5da551e0c344d1fc0269"
+
+  const followMutation = useMutation({
+    mutationFn: (body: { followed_user_id: string }) => userApi.follow(body)
+  })
+
+  const unfollowMutation = useMutation({
+    mutationFn: (followed_user_id: string) => userApi.unfollow(followed_user_id)
+  })
+
+  const handleFollow = () => {
+    followMutation.mutate(
+      { followed_user_id },
+      {
+        onSuccess: (data: AxiosResponse<SuccessResponse<unknown>, unknown>) => toast.success(data.data.message),
+        onError: (error: Error) => toast.error(error.message)
+      }
+    )
+  }
+
+  const handleUnfollow = () => {
+    unfollowMutation.mutate(followed_user_id, {
+      onSuccess: (data: AxiosResponse<SuccessResponse<unknown>, unknown>) => toast.success(data.data.message),
+      onError: (error: Error) => toast.error(error.message)
+    })
+  }
+
+  const handleFollowToggle = () => {
+    setIsFollow()
+    if (!isFollow) {
+      handleFollow()
+    } else {
+      handleUnfollow()
+    }
+  }
   return (
     <div className='flex items-center justify-between p-4 bg-white rounded-lg shadow-md'>
       <div className='flex items-center space-x-4'>
@@ -51,9 +96,9 @@ export default function FollowerCard({
           <p className='text-sm text-gray-500'>{formattedFollowers} người theo dõi</p>
         </div>
       </div>
-      <button className='px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'>
-        Theo dõi
-      </button>
+      <Button onClick={handleFollowToggle} className='border text-gray-700 text-base py-2 px-5 rounded-lg'>
+        {isFollow ? t("following") : t("follow")}
+      </Button>
     </div>
   )
 }

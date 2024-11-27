@@ -23,5 +23,7 @@
   "enterEmailToResetPassword": "Enter your email to reset password",
   "resetPassword": "Reset Password",
   "enterPassword": "Enter password",
-  "enterConfirmPassword": "Enter confirm password"
+  "enterConfirmPassword": "Enter confirm password",
+  "follow": "Follow",
+  "following": "Following"
 }
