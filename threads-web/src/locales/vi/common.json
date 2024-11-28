@@ -18,6 +18,7 @@
   "email": "Email",
   "password": "Mật khẩu",
   "confirmPassword": "Xác nhận mật khẩu",
+  "oldPassword": "Mật khẩu cũ",
   "dateOfBirth": "Ngày sinh",
   "forgotPassword": "Quên mật khẩu",
   "sendMail": "Gửi mail",
@@ -26,5 +27,6 @@
   "enterPassword": "Nhập mật khẩu",
   "enterConfirmPassword": "Nhập lại mật khẩu",
   "follow": "Theo dõi",
-  "following": "Đang theo dõi"
+  "following": "Đang theo dõi",
+  "changePassword": "Thay đổi mật khẩu"
 }

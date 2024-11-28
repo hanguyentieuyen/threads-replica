@@ -15,5 +15,5 @@ export const authApi = {
     http.post(config.resetPassword, body),
 
   verifyEmail: (body: { verify_email_token: string | null }) => http.post(config.verifyEmail, body),
-  changePassword: (body: { password: string; old_password: string }) => http.post(config.changePassword, body)
+  changePassword: (body: { password: string; old_password: string }) => http.put(config.changePassword, body)
 }

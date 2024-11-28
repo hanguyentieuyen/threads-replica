@@ -17,6 +17,7 @@
   "email": "Email",
   "password": "Password",
   "confirmPassword": "Confirm Password",
+  "oldPassword": "Old Password",
   "dateOfBirth": "Date of Birth",
   "forgotPassword": "Forgot Password",
   "sendMail": "Send Mail",
@@ -25,5 +26,6 @@
   "enterPassword": "Enter password",
   "enterConfirmPassword": "Enter confirm password",
   "follow": "Follow",
-  "following": "Following"
+  "following": "Following",
+  "changePassword": "Change password"
 }

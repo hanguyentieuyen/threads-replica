@@ -12,6 +12,7 @@ import Profile from "./pages/Profile"
 import Posts from "./pages/Posts"
 import PostDetail from "./pages/PostDetail"
 import Search from "./pages/Search"
+import ChangePassword from "./pages/ChangePassword"
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
@@ -60,6 +61,14 @@ export default function useRouteElement() {
       element: (
         <RegisterLayout>
           <ResetPassword />
+        </RegisterLayout>
+      )
+    },
+    {
+      path: path.changePassword,
+      element: (
+        <RegisterLayout>
+          <ChangePassword />
         </RegisterLayout>
       )
     },

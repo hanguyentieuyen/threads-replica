@@ -41,6 +41,16 @@ export const useValidationSchemas = () => {
     confirm_password: handleConfirmPasswordYup("password", t)
   })
 
+  const changePasswordSchemaYup = yup.object({
+    old_password: yup.string().required(t("validation.passwordRequired")),
+    password: yup
+      .string()
+      .required(t("validation.passwordRequired"))
+      .min(6, t("validation.passwordLength"))
+      .max(160, t("validation.passwordLength")),
+    confirm_password: handleConfirmPasswordYup("password", t)
+  })
+
   const userSchemaYup = yup.object({
     name: yup.string().max(160, t("validation.nameMaxLength")),
     phone: yup.string().max(20, t("validation.phoneMaxLength")),
@@ -55,6 +65,7 @@ export const useValidationSchemas = () => {
   return {
     registerSchemaYup,
     resetPasswordSchemaYup,
+    changePasswordSchemaYup,
     userSchemaYup
   }
 }
@@ -63,3 +74,4 @@ export const useValidationSchemas = () => {
 export type RegisterSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["registerSchemaYup"]>
 export type UserSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["userSchemaYup"]>
 export type ResetPasswordSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["resetPasswordSchemaYup"]>
+export type ChangePasswordSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["changePasswordSchemaYup"]>

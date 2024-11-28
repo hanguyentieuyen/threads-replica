@@ -5,6 +5,7 @@ const path = {
   forgotPassword: "/forgot-password",
   verifyForgotPassword: "/verify-forgot-password",
   resetPassword: "/reset-password",
+  changePassword: "/change-password",
   verifyEmail: "/verify-email",
   me: "/me",
   userProfile: "/users/:username",
