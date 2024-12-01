@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import Button from "~/components/Button"
 import HeaderContainer from "~/components/HeaderContainer"
 import InfiniteScroll from "~/components/InfiniteScroll"
+import Modal, { ModalContent, ModalDescription, ModalHeader, ModalTrigger } from "~/components/Modal/Modal"
 import ModalExample from "~/components/Modal/Modal"
 import PostCard from "~/components/PostCard"
 
@@ -30,26 +31,27 @@ export const Posts: React.FC = () => {
   }, [items])
 
   return (
-    <InfiniteScroll loadMore={loadMore} hasMore={hasMore} isLoading={isLoading} className='max-w-2xl mx-auto '>
-      <div className='sticky top-0 z-10'>
-        <HeaderContainer />
-        <ModalExample />
-        <button onClick={() => changeLanguage("en")}>English</button>
-        <button onClick={() => changeLanguage("vi")}>Tiếng Việt</button>
-      </div>
-      <p>{t("hello")}</p>
-      <div className='border border-gray-300 bg-white rounded-t-2xl shadow-md'>
-        <div className='w-full border-b flex items-center justify-between p-5'>
-          <img alt='avatar' src='https://via.placeholder.com/40' className='rounded-full w-10 h-10' />
-          <span className='text-left text-sm text-slate-400 w-full mx-2'>Có gì mới ?</span>
-          <Button className='border font-semibold text-gray-700 text-base py-2 px-5 rounded-lg'>Đăng</Button>
+    <>
+      <InfiniteScroll loadMore={loadMore} hasMore={hasMore} isLoading={isLoading} className='max-w-2xl mx-auto '>
+        <div className='sticky top-0 z-10'>
+          <HeaderContainer />
+          <button onClick={() => changeLanguage("en")}>English</button>
+          <button onClick={() => changeLanguage("vi")}>Tiếng Việt</button>
         </div>
-        {items.map((item) => (
-          <div key={item} className='p-4 border-b last:border-b-0'>
-            <PostCard />
+        <p>{t("hello")}</p>
+        <div className='border border-gray-300 bg-white rounded-t-2xl shadow-md'>
+          <div className='w-full border-b flex items-center justify-between p-5'>
+            <img alt='avatar' src='https://via.placeholder.com/40' className='rounded-full w-10 h-10' />
+            <span className='text-left text-sm text-slate-400 w-full mx-2'>Có gì mới ?</span>
+            <Button className='border font-semibold text-gray-700 text-base py-2 px-5 rounded-lg'>Đăng</Button>
           </div>
-        ))}
-      </div>
-    </InfiniteScroll>
+          {items.map((item) => (
+            <div key={item} className='p-4 border-b last:border-b-0'>
+              <PostCard />
+            </div>
+          ))}
+        </div>
+      </InfiniteScroll>
+    </>
   )
 }

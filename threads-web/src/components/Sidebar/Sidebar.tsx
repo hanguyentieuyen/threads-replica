@@ -2,6 +2,7 @@ import React from "react"
 import { Home, Search, PlusCircle, Heart, User, Bookmark, Menu } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import path from "~/constant/path"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 
 type SidebarProps = {
   className?: string
@@ -10,22 +11,31 @@ type SidebarProps = {
 type SidebarItemProps = {
   icon: React.ReactNode
   path?: string
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon, path }) => {
+const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>(({ icon, path, onClick, ...props }, ref) => {
   const localPath = useLocation().pathname
   const isActive = localPath === path
   const navigate = useNavigate()
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault()
-    navigate(path || "/")
+
+    path && navigate(path || "/")
   }
+
+  console.log("ref: ", ref)
 
   return (
     <li>
       <a
-        onClick={handleClick}
+        {...props}
+        ref={ref}
+        onClick={(e) => {
+          handleClick(e)
+          onClick?.(e)
+        }}
         href='#'
         className={`flex items-center p-2 text-base font-normal rounded-lg ${
           isActive ? "bg-gray-100 text-gray-900" : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
@@ -35,8 +45,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, path }) => {
       </a>
     </li>
   )
-}
-
+})
 export default function Sidebar({ className = "" }: SidebarProps) {
   return (
     <aside className={`w-full h-screen transition-transform ${className}`} aria-label='Sidebar'>
@@ -54,7 +63,12 @@ export default function Sidebar({ className = "" }: SidebarProps) {
           </ul>
           <ul className='flex flex-col justify-end h-full space-y-4'>
             <SidebarItem icon={<Bookmark className='w-8 h-8' />} />
-            <SidebarItem icon={<Menu className='w-8 h-8' />} />
+            <Popover>
+              <PopoverTrigger asChild>
+                <SidebarItem icon={<Menu className='w-8 h-8' />} />
+              </PopoverTrigger>
+              <PopoverContent>Place content for the popover here.</PopoverContent>
+            </Popover>
           </ul>
         </ul>
       </div>

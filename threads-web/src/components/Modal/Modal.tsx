@@ -23,18 +23,14 @@ export function Modal({ children }: { children: React.ReactNode }) {
 
 export function ModalTrigger({ children }: { children: React.ReactNode }) {
   const { setIsOpen } = useModalContext()
-  return (
-    <div className='px-4 py-2 bg-slate-300 text-white rounded hover:bg-slate-400' onClick={() => setIsOpen(true)}>
-      {children}
-    </div>
-  )
+  return <div onClick={() => setIsOpen(true)}>{children}</div>
 }
 
 export function ModalContent({ children }: { children: React.ReactNode }) {
   const { isOpen, setIsOpen } = useModalContext()
   if (!isOpen) return null
   return (
-    <div className='fixed insert-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50'>
+    <div className='fixed insert-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 inset-0 transition-opacity'>
       <div className='relative w-full max-w-md bg-white rounded-lg shadow-lg'>
         <button onClick={() => setIsOpen(false)} className='absolute top-2 right-2 text-gray-400 hover:text-gray-600'>
           <X width={24} />
@@ -51,16 +47,4 @@ export function ModalHeader({ children }: { children: React.ReactNode }) {
 
 export function ModalDescription({ children }: { children: React.ReactNode }) {
   return <div className='w-full'>{children}</div>
-}
-
-export default function ModalExample() {
-  return (
-    <Modal>
-      <ModalTrigger>Open modal</ModalTrigger>
-      <ModalContent>
-        <ModalHeader>Are you sure ?</ModalHeader>
-        <ModalDescription>Test modal</ModalDescription>
-      </ModalContent>
-    </Modal>
-  )
 }

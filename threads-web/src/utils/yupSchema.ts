@@ -52,14 +52,16 @@ export const useValidationSchemas = () => {
   })
 
   const userSchemaYup = yup.object({
-    name: yup.string().max(160, t("validation.nameMaxLength")),
-    phone: yup.string().max(20, t("validation.phoneMaxLength")),
-    address: yup.string().max(160, t("validation.addressMaxLength")),
-    avatar: yup.string().max(1000, t("validation.avatarMaxLength")),
-    date_of_birth: yup.date().max(today, t("validation.dateOfBirthPast")),
-    password: registerSchemaYup.fields["password"],
-    new_password: registerSchemaYup.fields["password"],
-    confirm_password: handleConfirmPasswordYup("new_password", t)
+    name: yup.string().max(160, t("validation.nameMaxLength")).optional(),
+    phone: yup.string().max(20, t("validation.phoneMaxLength")).optional(),
+    address: yup.string().max(160, t("validation.addressMaxLength")).optional(),
+    avatar: yup.string().max(1000, t("validation.avatarMaxLength")).optional(),
+    date_of_birth: yup.date().max(today, t("validation.dateOfBirthPast")).optional(),
+    bio: yup.string().optional(),
+    location: yup.string().optional(),
+    website: yup.string().optional(),
+    username: yup.string().optional(),
+    cover_photo: yup.string().optional()
   })
 
   return {

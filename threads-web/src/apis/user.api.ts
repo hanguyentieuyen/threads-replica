@@ -8,15 +8,15 @@ export const userApi = {
   getMyProfile: () => http.get<SuccessResponse<User>>(config.me),
 
   updateMyProfile: (body: {
-    name: string
-    date_of_birth: string
-    bio: string
-    location: string
-    website: string
-    username: string
-    avatar: string
-    cover_photo: string
-  }) => http.patch<User>(config.me, body),
+    name?: string
+    date_of_birth?: Date
+    bio?: string
+    location?: string
+    website?: string
+    username?: string
+    avatar?: string
+    cover_photo?: string
+  }) => http.patch<SuccessResponse<User>>(config.me, body),
 
   getUserProfile: (username: string) => http.get<SuccessResponse<User>>(`${config.users}/${username}`),
   follow: (body: { followed_user_id: string }) => http.post<SuccessResponse<Follow>>(config.follow, body),
