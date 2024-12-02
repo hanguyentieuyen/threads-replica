@@ -10,10 +10,12 @@
     "dateOfBirthPast": "Ngày sinh là ngày quá khứ",
     "missForgotPassword": "Thiếu forgot password token"
   },
+  "save": "Lưu thay đổi",
   "loginThreads": "Đăng nhập Threads",
   "registerThreads": "Đăng ký Threads",
   "signIn": "Đăng nhập",
   "signUp": "Đăng ký",
+  "logout": "Đăng xuất",
   "name": "Tên",
   "email": "Email",
   "bio": "Tiểu sử",

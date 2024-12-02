@@ -3,6 +3,11 @@ import { Home, Search, PlusCircle, Heart, User, Bookmark, Menu } from "lucide-re
 import { useLocation, useNavigate } from "react-router-dom"
 import path from "~/constant/path"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { useTranslation } from "react-i18next"
+import { useMutation } from "@tanstack/react-query"
+import { authApi } from "~/apis/auth.api"
+import { toast } from "react-toastify"
+import { clearLocalStorage } from "~/utils/auth"
 
 type SidebarProps = {
   className?: string
@@ -20,12 +25,12 @@ const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>(({ ico
   const navigate = useNavigate()
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    e.preventDefault()
+    if (path) {
+      e.preventDefault()
 
-    path && navigate(path || "/")
+      navigate(path || "/")
+    }
   }
-
-  console.log("ref: ", ref)
 
   return (
     <li>
@@ -47,6 +52,29 @@ const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>(({ ico
   )
 })
 export default function Sidebar({ className = "" }: SidebarProps) {
+  const { t } = useTranslation()
+  const logoutMutation = useMutation({
+    mutationFn: (body: { refresh_token: string }) => authApi.logout(body)
+  })
+
+  const handleLogout = () => {
+    logoutMutation.mutate(
+      { refresh_token: localStorage.getItem("refresh_token") || "" },
+      {
+        onSuccess: (data) => {
+          clearLocalStorage()
+          toast.success(data.data.message)
+          window.location.href = path.login
+        },
+        onError: (error: Error) => {
+          const message = error.message || "Logout failed. Please try again."
+          toast.error(message)
+          console.error("Error logging out:", error)
+        }
+      }
+    )
+  }
+
   return (
     <aside className={`w-full h-screen transition-transform ${className}`} aria-label='Sidebar'>
       <div className='h-full py-4 overflow-hidden'>
@@ -55,7 +83,7 @@ export default function Sidebar({ className = "" }: SidebarProps) {
             <img src='../src/assets/threads-app-icon.png' width={40} height={40} />
           </div>
           <ul className='flex flex-col justify-center h-full space-y-4'>
-            <SidebarItem icon={<Home className='w-8 h-8' />} path={""} />
+            <SidebarItem icon={<Home className='w-8 h-8' />} path={path.posts} />
             <SidebarItem icon={<Search className='w-8 h-8' />} path={path.search} />
             <SidebarItem icon={<PlusCircle className='w-8 h-8' />} />
             <SidebarItem icon={<Heart className='w-8 h-8' />} />
@@ -67,7 +95,14 @@ export default function Sidebar({ className = "" }: SidebarProps) {
               <PopoverTrigger asChild>
                 <SidebarItem icon={<Menu className='w-8 h-8' />} />
               </PopoverTrigger>
-              <PopoverContent>Place content for the popover here.</PopoverContent>
+              <PopoverContent align='start' className='p-2'>
+                <p
+                  onClick={handleLogout}
+                  className='text-red-500 font-semibold p-3 cursor-pointer hover:bg-slate-100 hover:rounded-lg'
+                >
+                  {t("logout")}
+                </p>
+              </PopoverContent>
             </Popover>
           </ul>
         </ul>

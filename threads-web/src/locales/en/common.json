@@ -9,10 +9,12 @@
     "dateOfBirthRequired": "Date of birth is required",
     "dateOfBirthPast": "Date of birth must be in the past"
   },
+  "save": "Save",
   "loginThreads": "Login Threads",
   "registerThreads": "Register Threads",
   "signIn": "Sign In",
   "signUp": "Sign Up",
+  "logout": "Log Out",
   "name": "Name",
   "email": "Email",
   "bio": "Bio",

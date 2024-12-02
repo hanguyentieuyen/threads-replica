@@ -39,7 +39,7 @@ export default function Register() {
       onSuccess: (data) => {
         reset()
         toast.success(data.data.message, { autoClose: 3000 })
-        navigate(path.home)
+        navigate(path.posts)
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {

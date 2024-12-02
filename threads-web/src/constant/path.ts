@@ -1,5 +1,4 @@
 const path = {
-  home: "/",
   register: "/register",
   login: "/login",
   forgotPassword: "/forgot-password",
@@ -10,7 +9,7 @@ const path = {
   me: "/me",
   userProfile: "/users/:username",
   search: "/search",
-  posts: "/posts",
+  posts: "/",
   postDetail: "/posts/:postId"
 }
 

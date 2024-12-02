@@ -1,11 +1,11 @@
-import { useMutation } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { authApi } from '~/apis/auth.api'
-import path from '~/constant/path'
-import { isAxiosUnauthorizedError, isAxiosUnprocessableEntityError } from '~/utils/auth'
-import { ErrorResponse } from '~/types/utils.type'
+import { useMutation } from "@tanstack/react-query"
+import { useEffect } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { toast } from "react-toastify"
+import { authApi } from "~/apis/auth.api"
+import path from "~/constant/path"
+import { isAxiosUnauthorizedError, isAxiosUnprocessableEntityError } from "~/utils/auth"
+import { ErrorResponse } from "~/types/utils.type"
 
 type Token = {
   verify_email_token: string | null
@@ -13,7 +13,7 @@ type Token = {
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams()
-  const param = searchParams.get('token')
+  const param = searchParams.get("token")
   const navigate = useNavigate()
   console.log(param)
   const verifyEmailMutation = useMutation({
@@ -26,7 +26,7 @@ export default function VerifyEmail() {
       {
         onSuccess: (data) => {
           toast.success(data.data.message, { autoClose: 30 })
-          navigate(path.home)
+          navigate(path.posts)
         }
         // onError: (error) => {
         //   if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {

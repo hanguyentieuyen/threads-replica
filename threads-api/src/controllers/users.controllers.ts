@@ -299,8 +299,8 @@ export const updateMyProfileController = async (
   const { user_id } = req.decodedAuthorization as TokenPayload
   const userData = await usersService.updateMyProfile({ user_id, payload })
   return res.json({
-    data: userData,
-    message: USERS_MESSAGES.UPDATE_ME_SUCCESS
+    message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
+    data: userData
   })
 }
 

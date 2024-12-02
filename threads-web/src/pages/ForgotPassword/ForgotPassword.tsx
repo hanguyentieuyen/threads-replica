@@ -37,7 +37,7 @@ export default function ForgotPassword() {
       onSuccess: (data) => {
         reset()
         toast.success(data.data.message)
-        navigate(path.home)
+        navigate(path.posts)
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {

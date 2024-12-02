@@ -5,7 +5,7 @@ import http from "~/utils/http"
 export const authApi = {
   register: (body: { email: string; password: string }) => http.post<AuthResponse>(config.registerUrl, body),
   login: (body: { email: string; password: string }) => http.post<AuthResponse>(config.loginUrl, body),
-  logout: () => http.post(config.logoutUrl),
+  logout: (body: { refresh_token: string }) => http.post<AuthResponse>(config.logoutUrl, body),
   forgotPassword: (body: { email: string }) => http.post(config.forgotPassword, body),
 
   verifyForgotPassword: (body: { forgot_password_token: string | null }) =>

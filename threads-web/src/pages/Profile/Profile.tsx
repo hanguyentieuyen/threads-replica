@@ -186,7 +186,7 @@ const Profile = () => {
                     register={register}
                     type='text'
                     name='coverPhoto'
-                    placeholder={t("coverPhoto'")}
+                    placeholder={t("coverPhoto")}
                     errorMessage={errors.cover_photo?.message}
                     autoComplete='on'
                   />
@@ -198,7 +198,7 @@ const Profile = () => {
                     disabled={updateMyProfileMutation.isPending}
                     className='w-[100%] flex justify-center bg-gray-950 text-white text-sm p-4 rounded-xl'
                   >
-                    {t("updateProfile")}
+                    {t("save")}
                   </Button>
                 </div>
               </div>
