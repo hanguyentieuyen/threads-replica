@@ -36,5 +36,12 @@
   "enterConfirmPassword": "Nhập lại mật khẩu",
   "follow": "Theo dõi",
   "following": "Đang theo dõi",
-  "changePassword": "Thay đổi mật khẩu"
+  "changePassword": "Thay đổi mật khẩu",
+  "editProfile": "Chỉnh sửa trang cá nhân",
+  "add": "Thêm",
+  "addBio": "Thêm tiểu sử",
+  "addAvatar": "Thêm ảnh đại diện",
+  "addBioDescription": "Hãy giới thiệu về bản thân và cho mọi người biết bạn thích gì",
+  "addAvatarDescription": "Giúp mọi người dễ dàng nhận ra bạn hơn.",
+  "post": "Đăng"
 }

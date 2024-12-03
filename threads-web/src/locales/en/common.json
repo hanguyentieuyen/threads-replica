@@ -35,5 +35,10 @@
   "enterConfirmPassword": "Enter confirm password",
   "follow": "Follow",
   "following": "Following",
-  "changePassword": "Change password"
+  "changePassword": "Change password",
+  "editProfile": "Edit profile",
+  "add": "Add",
+  "addBio": "Add Bio",
+  "addAvatar": "Add avatar",
+  "post": "Post"
 }
