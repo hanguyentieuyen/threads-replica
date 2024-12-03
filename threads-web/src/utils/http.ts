@@ -55,8 +55,8 @@ export class Http {
         const { url } = response.config
         if (url === config.loginUrl || url === config.registerUrl) {
           const data = response.data as AuthResponse
-          this.accessToken = data.data.access_token
-          this.refreshToken = data.data.refresh_token
+          this.accessToken = data?.data?.access_token || ""
+          this.refreshToken = data?.data?.refresh_token || ""
           // Store token in local storage
           setAccessTokenToLocalStorage(this.accessToken)
           setRefreshTokenToLocalStorage(this.refreshToken)

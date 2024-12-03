@@ -1,4 +1,4 @@
-import { Component, ErrorInfo, ReactNode } from 'react'
+import { Component, ErrorInfo, ReactNode } from "react"
 
 interface Props {
   children: ReactNode
@@ -12,14 +12,14 @@ export default class ErrorBoundary extends Component<Props, State> {
   public state = {
     hasError: false
   }
-  public static getDerivedStateFromError(_: Error) {
+  public static getDerivedStateFromError() {
     // update state so the next render will show the fallback UI
     return { hasError: true }
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // log the error to your error reporting service
-    console.error('Error boundary caught an error:', error, errorInfo)
+    console.error("Error boundary caught an error:", error, errorInfo)
   }
 
   public handleRetry = () => {

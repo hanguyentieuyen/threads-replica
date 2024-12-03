@@ -3,8 +3,6 @@ import { useTranslation } from "react-i18next"
 import Button from "~/components/Button"
 import HeaderContainer from "~/components/HeaderContainer"
 import InfiniteScroll from "~/components/InfiniteScroll"
-import Modal, { ModalContent, ModalDescription, ModalHeader, ModalTrigger } from "~/components/Modal/Modal"
-import ModalExample from "~/components/Modal/Modal"
 import PostCard from "~/components/PostCard"
 
 export const Posts: React.FC = () => {

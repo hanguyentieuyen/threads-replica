@@ -1,16 +1,16 @@
-import { useMutation } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { authApi } from '~/apis/auth.api'
-import path from '~/constant/path'
-import { ResetPasswordSchemaYup } from '~/utils/yupSchema'
+import { useMutation } from "@tanstack/react-query"
+import { useEffect } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { toast } from "react-toastify"
+import { authApi } from "~/apis/auth.api"
+import path from "~/constant/path"
+import { ResetPasswordSchemaYup } from "~/utils/yupSchema"
 
-type QueryParam = Pick<ResetPasswordSchemaYup, 'forgot_password_token'>
+type QueryParam = Pick<ResetPasswordSchemaYup, "forgot_password_token">
 export default function VerifyForgotPassword() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const token = searchParams.get('token')
+  const token = searchParams.get("token")
   const verifyForgotPasswordMutation = useMutation({
     mutationFn: (body: QueryParam) => authApi.verifyForgotPassword(body)
   })

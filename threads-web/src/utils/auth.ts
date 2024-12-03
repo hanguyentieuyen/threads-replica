@@ -1,5 +1,6 @@
 import { AxiosError, isAxiosError } from "axios"
 import HttpStatusCode from "~/constant/httpStatusCode.enum"
+import { User } from "~/types/user.type"
 import { ErrorResponse } from "~/types/utils.type"
 export const LocalStorageEventTarget = new EventTarget()
 
@@ -12,10 +13,18 @@ export const setAccessTokenToLocalStorage = (access_token: string) => localStora
 export const setRefreshTokenToLocalStorage = (refresh_token: string) =>
   localStorage.setItem("refresh_token", refresh_token)
 
+export const getProfileFromLocalStorage = () => {
+  const result = localStorage.getItem("user_profile")
+  return result ? JSON.parse(result) : null
+}
+export const setProfileToLocalStorage = (profile: User) => {
+  localStorage.setItem("user_profile", JSON.stringify(profile))
+}
+
 export const clearLocalStorage = () => {
   localStorage.removeItem("access_token")
   localStorage.removeItem("refresh_token")
-  localStorage.removeItem("profile")
+  localStorage.removeItem("user_profile")
 
   const clearLocalStorageEvent = new Event("clearLocalStorage")
   LocalStorageEventTarget.dispatchEvent(clearLocalStorageEvent)

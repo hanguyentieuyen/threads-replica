@@ -3,6 +3,7 @@ import { RegisterOptions, UseFormRegister } from "react-hook-form"
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: UseFormRegister<any>
   rules?: RegisterOptions
   errorMessage?: string

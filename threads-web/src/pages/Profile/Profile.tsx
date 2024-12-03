@@ -14,11 +14,12 @@ import InputText from "~/components/InputText"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
-import { isAxiosUnprocessableEntityError } from "~/utils/auth"
+import { isAxiosUnprocessableEntityError, setProfileToLocalStorage } from "~/utils/auth"
 import { ErrorResponse } from "~/types/utils.type"
 import { UserSchemaYup, useValidationSchemas } from "~/utils/yupSchema"
 import DatePicker from "~/components/DatePicker/DatePicker"
 import { useTranslation } from "react-i18next"
+import { User } from "~/types/user.type"
 
 const tabData = [
   { value: "tab1", label: "Thread", content: <div>Content for Tab 1</div> },
@@ -61,6 +62,7 @@ const Profile = () => {
     updateMyProfileMutation.mutate(data, {
       onSuccess: (data) => {
         reset()
+        setProfileToLocalStorage(data?.data?.data as User)
         toast.success(data.data.message, { autoClose: 3000 })
       },
       onError: (error) => {

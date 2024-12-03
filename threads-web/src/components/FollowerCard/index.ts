@@ -1,2 +1,2 @@
-import FollowerCard from './FollowerCard'
+import FollowerCard from "./FollowerCard"
 export default FollowerCard

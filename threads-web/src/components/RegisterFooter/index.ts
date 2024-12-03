@@ -1,3 +1,3 @@
-import RegisterFooter from './RegisterFooter'
+import RegisterFooter from "./RegisterFooter"
 
 export default RegisterFooter

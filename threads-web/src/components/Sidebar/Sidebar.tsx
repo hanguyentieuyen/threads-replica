@@ -53,6 +53,7 @@ const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>(({ ico
 })
 export default function Sidebar({ className = "" }: SidebarProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const logoutMutation = useMutation({
     mutationFn: (body: { refresh_token: string }) => authApi.logout(body)
   })
@@ -64,7 +65,7 @@ export default function Sidebar({ className = "" }: SidebarProps) {
         onSuccess: (data) => {
           clearLocalStorage()
           toast.success(data.data.message)
-          window.location.href = path.login
+          navigate(path.login)
         },
         onError: (error: Error) => {
           const message = error.message || "Logout failed. Please try again."

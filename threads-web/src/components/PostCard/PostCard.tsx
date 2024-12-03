@@ -30,6 +30,7 @@ export default function PostCard() {
     mutationFn: (post_id: string) => bookmarkApi.unbookmark(post_id)
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleMutation = (mutation: any, payload: unknown) => {
     mutation.mutate(payload, {
       onSuccess: (data: AxiosResponse<SuccessResponse<unknown>, unknown>) => toast.success(data.data.message),

@@ -1,2 +1,2 @@
-import VerifyForgotPassword from './VerifyForgotPassword'
+import VerifyForgotPassword from "./VerifyForgotPassword"
 export default VerifyForgotPassword

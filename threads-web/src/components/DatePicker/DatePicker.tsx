@@ -9,8 +9,10 @@ import { RegisterOptions, UseFormRegister, UseFormSetValue } from "react-hook-fo
 
 type DatePickerProps = {
   name: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setValue: UseFormSetValue<any>
   className?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: UseFormRegister<any>
   rules?: RegisterOptions
   errorMessage?: string

@@ -1,5 +1,5 @@
-import { X } from 'lucide-react'
-import Button from '../Button'
+import { X } from "lucide-react"
+import Button from "../Button"
 
 type ProfileCardProps = {
   name?: string

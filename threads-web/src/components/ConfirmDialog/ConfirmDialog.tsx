@@ -1,5 +1,4 @@
 import React from "react"
-import { X } from "lucide-react"
 
 interface DialogProps {
   isOpen: boolean
@@ -60,7 +59,7 @@ export function DialogExample() {
       >
         Open Dialog
       </button>
-      <Dialog
+      <ConfirmDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onConfirm={handleConfirm}

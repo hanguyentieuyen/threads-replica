@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { toast } from "react-toastify"
 import { authApi } from "~/apis/auth.api"
 import path from "~/constant/path"
-import { isAxiosUnauthorizedError, isAxiosUnprocessableEntityError } from "~/utils/auth"
+import { isAxiosUnprocessableEntityError } from "~/utils/auth"
 import { ErrorResponse } from "~/types/utils.type"
 
 type Token = {
@@ -27,18 +27,18 @@ export default function VerifyEmail() {
         onSuccess: (data) => {
           toast.success(data.data.message, { autoClose: 30 })
           navigate(path.posts)
+        },
+        onError: (error) => {
+          if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
+            const formError = error.response?.data.errors
+            if (formError) {
+              console.log("formError: ", formError)
+              Object.keys(formError).forEach((key) => {
+                console.log(key)
+              })
+            }
+          }
         }
-        // onError: (error) => {
-        //   if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
-        //     const formError = error.response?.data.errors
-        //     if (formError) {
-        //       console.log('formError: ', formError)
-        //       Object.keys(formError).forEach((key) => {
-        //         console.log(key)
-        //       })
-        //     }
-        //   }
-        // }
       }
     )
   }, [])
