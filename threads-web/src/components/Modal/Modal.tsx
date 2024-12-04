@@ -23,7 +23,11 @@ export function Modal({ children }: { children: React.ReactNode }) {
 
 export function ModalTrigger({ children }: { children: React.ReactNode }) {
   const { setIsOpen } = useModalContext()
-  return <div onClick={() => setIsOpen(true)}>{children}</div>
+  return (
+    <div className='w-full' onClick={() => setIsOpen(true)}>
+      {children}
+    </div>
+  )
 }
 
 export function ModalContent({ children }: { children: React.ReactNode }) {
