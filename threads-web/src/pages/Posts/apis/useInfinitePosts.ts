@@ -12,7 +12,9 @@ export const useInfinitePosts = () =>
     initialPageParam: 1,
     queryKey: ["posts"],
     queryFn: fetchPosts,
-    getNextPageParam: (lastPage, pages) => {
-      return lastPage.length > 0 ? pages.length + 1 : undefined
+    getNextPageParam: (lastPage) => {
+      if (lastPage.data) {
+        return lastPage.data?.page < lastPage.data?.totalPage ? lastPage.data?.page + 1 : undefined
+      }
     }
   })

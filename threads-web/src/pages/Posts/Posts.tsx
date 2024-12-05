@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import Button from "~/components/Button"
@@ -17,25 +17,11 @@ export const Posts: React.FC = () => {
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng)
   }
-  // const [items, setItems] = useState<number[]>(Array.from({ length: 20 }, (_, i) => i + 1))
-  // const [isLoading, setIsLoading] = useState(false)
-  // const [hasMore, setHasMore] = useState(true)
-
-  // const loadMore = useCallback(() => {
-  //   setIsLoading(true)
-  //   // Simulating an API call
-  //   setTimeout(() => {
-  //     const newItems = Array.from({ length: 20 }, (_, i) => items.length + i + 1)
-  //     setItems((prevItems) => [...prevItems, ...newItems])
-  //     setIsLoading(false)
-  //     if (items.length + newItems.length >= 100) {
-  //       setHasMore(false)
-  //     }
-  //   }, 1000)
-  // }, [items])
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfinitePosts()
-  const posts = data?.pages.flatMap((page) => page.data) || []
+  //const posts = data?.pages.flatMap((page) => page.data) || []
+  const posts = data?.pages[0].data?.posts || []
+  console.log("posts: ", posts)
   return (
     <>
       <InfiniteScroll
