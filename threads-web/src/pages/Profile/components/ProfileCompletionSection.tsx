@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
+import Icon from "~/components/Icon"
 import ProfileCard from "~/components/ProfileCard"
-import { Check, Pen } from "lucide-react"
 
 export const ProfileCompletionSection: React.FC = () => {
   const { t } = useTranslation()
@@ -17,14 +17,14 @@ export const ProfileCompletionSection: React.FC = () => {
           onButtonClick={() => alert("Followed")}
         />
         <ProfileCard
-          icon={<Pen width={20} height={20} />}
+          icon={<Icon name='Pen' width={20} height={20} />}
           name={t("addBio")}
           bio={t("addBioDescription")}
           buttonText={t("add")}
           onButtonClick={() => alert("Add Bio clicked")}
         />
         <ProfileCard
-          icon={<Check width={20} height={20} />}
+          icon={<Icon name='Check' width={20} height={20} />}
           name={t("addAvatar")}
           bio={t("addAvatarDescription")}
           buttonText={t("add")}

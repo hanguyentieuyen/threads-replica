@@ -1,5 +1,5 @@
-import { X } from "lucide-react"
 import Button from "../Button"
+import Icon from "../Icon"
 
 type ProfileCardProps = {
   name?: string
@@ -28,7 +28,12 @@ export default function ProfileCard({
     <div className='relative bg-gray-50 rounded-lg shadow-md p-4 w-64 text-center flex flex-col justify-between items-center'>
       {image ? (
         <div className=' w-24 h-24 mx-auto mb-4'>
-          <X width={14} className='text-gray-400 cursor-pointer absolute top-3 right-2' onClick={onCloseIcon} />
+          <Icon
+            name='X'
+            width={14}
+            className='text-gray-400 cursor-pointer absolute top-3 right-2'
+            onClick={onCloseIcon}
+          />
           <img src={image} alt='profile' className='rounded-full w-full h-full object-cover' />
         </div>
       ) : (

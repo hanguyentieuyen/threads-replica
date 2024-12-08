@@ -7,8 +7,9 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from "../Dropdown/Dropdown"
-import { ChevronDown } from "lucide-react"
+
 import Button from "../Button"
+import Icon from "../Icon"
 const dropdownItems = ["Dành cho bạn", "option 2", "option 3", "option 4", "option 5"]
 
 export default function HeaderContainer() {
@@ -23,7 +24,7 @@ export default function HeaderContainer() {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div className='w-6 h-6 bg-white rounded-full flex justify-center items-center border shadow-sm cursor-pointer'>
-            <ChevronDown size={18} />
+            <Icon name='ChevronDown' size={18} />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

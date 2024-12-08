@@ -1,7 +1,7 @@
 import React from "react"
 import { useInfiniteScroll } from "~/hooks/useInfiniteScroll"
 import ScrollContainer from "../ScrollContainer"
-import { Loader2 } from "lucide-react"
+import Icon from "../Icon"
 
 interface InfiniteScrollProps {
   children: React.ReactNode
@@ -26,7 +26,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
       {(hasMore || isLoading) && (
         <div ref={loadMoreTriggerRef}>
           <div className='flex justify-center items-center p-4'>
-            <Loader2 className='animate-spin' />
+            <Icon name='Loader2' className='animate-spin' />
           </div>
         </div>
       )}

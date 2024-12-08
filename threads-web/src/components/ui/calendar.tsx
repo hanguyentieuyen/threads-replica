@@ -1,11 +1,11 @@
 import * as React from "react"
 // import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import { DayPicker, DropdownProps } from "react-day-picker"
-import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "~/lib/utils"
 import { buttonVariants } from "~/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
 import { ScrollArea } from "~/components/ui/scroll-area"
+import Icon from "../Icon"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -74,8 +74,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
             </Select>
           )
         },
-        IconLeft: () => <ChevronLeft className='h-4 w-4' />,
-        IconRight: () => <ChevronRight className='h-4 w-4' />
+        IconLeft: () => <Icon name='ChevronLeft' className='h-4 w-4' />,
+        IconRight: () => <Icon name='ChevronRight' className='h-4 w-4' />
       }}
       {...props}
     />

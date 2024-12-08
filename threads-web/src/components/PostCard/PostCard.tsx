@@ -1,4 +1,3 @@
-import { MessageCircle, Repeat2, Heart, Bookmark } from "lucide-react"
 import PostAvatar from "../PostAvatar"
 import { useToggleState } from "~/hooks/useToggleState"
 import { likeApi } from "~/apis/like.api"
@@ -7,6 +6,7 @@ import { useMutation } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { AxiosResponse } from "axios"
 import { SuccessResponse } from "~/types/utils.type"
+import Icon from "../Icon"
 
 // Test with post_id
 const post_id = "66d6059974ecbef1214d20ab"
@@ -77,22 +77,22 @@ export default function PostCard() {
             className='flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-slate-100 cursor-pointer'
             onClick={handleLikeToggle}
           >
-            <Heart strokeWidth={2} size={16} color={like ? "red" : undefined} />
+            <Icon name='Heart' strokeWidth={2} size={16} color={like ? "red" : undefined} />
             <span>575</span>
           </div>
           <div className='flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-slate-100'>
-            <MessageCircle strokeWidth={2} size={16} />
+            <Icon name='MessageCircle' strokeWidth={2} size={16} />
             <span>5</span>
           </div>
           <div className='flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-slate-100'>
-            <Repeat2 strokeWidth={1} />
+            <Icon name='Repeat2' strokeWidth={1} />
             <span>42</span>
           </div>
           <div
             className='flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-slate-100 cursor-pointer'
             onClick={handleBookmarkToggle}
           >
-            <Bookmark strokeWidth={2} size={16} color={bookmark ? "#eab308" : undefined} />
+            <Icon name='Bookmark' strokeWidth={2} size={16} color={bookmark ? "#eab308" : undefined} />
           </div>
         </div>
       </div>

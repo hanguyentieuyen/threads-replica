@@ -53,7 +53,7 @@ const Profile = () => {
           </ModalTrigger>
           <ModalContent>
             <ModalHeader>
-              <p className='text-gray-600 font-semibold'>{t("editProfile")}</p>
+              <p className='text-gray-600 font-semibold pt-2'>{t("editProfile")}</p>
             </ModalHeader>
             <EditProfileForm />
           </ModalContent>

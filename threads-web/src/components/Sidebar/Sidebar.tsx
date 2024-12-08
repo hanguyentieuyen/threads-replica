@@ -1,5 +1,4 @@
 import React from "react"
-import { Home, Search, PlusCircle, Heart, User, Bookmark, Menu } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import path from "~/constant/path"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
@@ -8,6 +7,7 @@ import { useMutation } from "@tanstack/react-query"
 import { authApi } from "~/apis/auth.api"
 import { toast } from "react-toastify"
 import { clearLocalStorage } from "~/utils/auth"
+import Icon from "../Icon"
 
 type SidebarProps = {
   className?: string
@@ -84,17 +84,17 @@ export default function Sidebar({ className = "" }: SidebarProps) {
             <img src='../src/assets/threads-app-icon.png' width={40} height={40} />
           </div>
           <ul className='flex flex-col justify-center h-full space-y-4'>
-            <SidebarItem icon={<Home className='w-8 h-8' />} path={path.posts} />
-            <SidebarItem icon={<Search className='w-8 h-8' />} path={path.search} />
-            <SidebarItem icon={<PlusCircle className='w-8 h-8' />} />
-            <SidebarItem icon={<Heart className='w-8 h-8' />} />
-            <SidebarItem icon={<User className='w-8 h-8' />} path={path.me} />
+            <SidebarItem icon={<Icon name='Home' className='w-8 h-8' />} path={path.posts} />
+            <SidebarItem icon={<Icon name='Search' className='w-8 h-8' />} path={path.search} />
+            <SidebarItem icon={<Icon name='PlusCircle' className='w-8 h-8' />} />
+            <SidebarItem icon={<Icon name='Heart' className='w-8 h-8' />} />
+            <SidebarItem icon={<Icon name='User' className='w-8 h-8' />} path={path.me} />
           </ul>
           <ul className='flex flex-col justify-end h-full space-y-4'>
-            <SidebarItem icon={<Bookmark className='w-8 h-8' />} />
+            <SidebarItem icon={<Icon name='Bookmark' className='w-8 h-8' />} />
             <Popover>
               <PopoverTrigger asChild>
-                <SidebarItem icon={<Menu className='w-8 h-8' />} />
+                <SidebarItem icon={<Icon name='Menu' className='w-8 h-8' />} />
               </PopoverTrigger>
               <PopoverContent align='start' className='p-2'>
                 <p

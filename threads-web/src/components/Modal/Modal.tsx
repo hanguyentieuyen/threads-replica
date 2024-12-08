@@ -1,5 +1,5 @@
-import { X } from "lucide-react"
 import { useState, useContext, createContext } from "react"
+import Icon from "../Icon"
 
 type ModalContextType = {
   isOpen: boolean
@@ -37,9 +37,9 @@ export function ModalContent({ children }: { children: React.ReactNode }) {
     <div className='fixed insert-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 inset-0 transition-opacity'>
       <div className='relative w-full max-w-md bg-white rounded-lg shadow-lg'>
         <button onClick={() => setIsOpen(false)} className='absolute top-2 right-2 text-gray-400 hover:text-gray-600'>
-          <X width={24} />
+          <Icon name='X' width={20} />
         </button>
-        <div className='p-6'>{children}</div>
+        <div className='p-2'>{children}</div>
       </div>
     </div>
   )
