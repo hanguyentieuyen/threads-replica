@@ -17,7 +17,7 @@ export default function InputText({
   register,
   rules,
   errorMessage,
-  classNameInput = "bg-[#f5f5f5] w-full p-4 rounded-xl outline-none",
+  classNameInput = "bg-[#f5f5f5] w-full p-3 rounded-xl outline-none",
   classNameError = "text-sm text-red-600 mt-1 min-h-[1.25rem]",
   classNameEye = "absolute right-[5px] top-[10px] h-4 w-4 cursor-pointer",
   ...rest

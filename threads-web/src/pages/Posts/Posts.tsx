@@ -28,7 +28,7 @@ export const Posts: React.FC = () => {
         loadMore={fetchNextPage}
         hasMore={hasNextPage || false}
         isLoading={isFetchingNextPage || isLoading}
-        className='max-w-2xl mx-auto '
+        className='max-w-2xl mx-auto'
       >
         <div className='sticky top-0 z-10'>
           <HeaderContainer />

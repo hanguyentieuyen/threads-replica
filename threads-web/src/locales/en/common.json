@@ -40,5 +40,7 @@
   "add": "Add",
   "addBio": "Add Bio",
   "addAvatar": "Add avatar",
-  "post": "Post"
+  "post": "Post",
+  "suggestedFollowUp": "Suggested follow up",
+  "search": "Search"
 }

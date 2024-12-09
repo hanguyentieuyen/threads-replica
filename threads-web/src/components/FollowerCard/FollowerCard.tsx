@@ -63,13 +63,13 @@ export default function FollowerCard({
     }
   }
   return (
-    <div className='flex items-center justify-between p-4 bg-white rounded-lg shadow-md'>
+    <div className='flex items-center justify-between bg-white'>
       <div className='flex items-center space-x-4'>
-        <div className='relative w-12 h-12'>
+        <div className='relative w-10 h-10'>
           <img src={profileImage} alt={`${username}'s avatar`} className='rounded-full' />
           {isVerified && (
             <div className='absolute bottom-0 right-0 bg-blue-500 rounded-full p-1'>
-              <svg className='w-3 h-3 text-white' fill='currentColor' viewBox='0 0 20 20'>
+              <svg className='w-2 h-2 text-white' fill='currentColor' viewBox='0 0 20 20'>
                 <path
                   fillRule='evenodd'
                   d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
@@ -81,7 +81,7 @@ export default function FollowerCard({
         </div>
         <div>
           <div className='flex items-center'>
-            <h2 className='text-lg font-semibold'>{username}</h2>
+            <p className='text-sm font-semibold'>{username}</p>
             {isVerified && (
               <svg className='w-5 h-5 ml-1 text-blue-500' fill='currentColor' viewBox='0 0 20 20'>
                 <path
@@ -96,7 +96,7 @@ export default function FollowerCard({
           <p className='text-sm text-gray-500'>{formattedFollowers} người theo dõi</p>
         </div>
       </div>
-      <Button onClick={handleFollowToggle} className='border text-gray-700 text-base py-2 px-5 rounded-lg'>
+      <Button onClick={handleFollowToggle} className='border text-gray-800 font-semibold text-sm py-2 px-5 rounded-lg'>
         {isFollow ? t("following") : t("follow")}
       </Button>
     </div>
