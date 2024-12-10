@@ -12,6 +12,7 @@ import { useToggleState } from "~/hooks/useToggleState"
 import { ProfileHeader } from "./components/ProfileHeader"
 import { EditProfileForm } from "./components/EditProfileForm"
 import { ProfileCompletionSection } from "./components/ProfileCompletionSection"
+import InputText from "~/components/InputText"
 
 const tabData = [
   { value: "tab1", label: "Thread", content: <div>Content for Tab 1</div> },
@@ -43,14 +44,16 @@ const Profile = () => {
         <ProfileHeader user={userData} />
 
         <Modal>
-          <ModalTrigger>
-            <Button
-              className='text-gray-800 font-semibold text-sm p-1.5 w-full rounded-lg border mt-10'
-              onClick={setEditProfile}
-            >
-              {t("editProfile")}
-            </Button>
-          </ModalTrigger>
+          <div className='px-6'>
+            <ModalTrigger>
+              <Button
+                className='text-gray-800 font-semibold text-sm p-1.5 w-full rounded-lg border mt-3'
+                onClick={setEditProfile}
+              >
+                {t("editProfile")}
+              </Button>
+            </ModalTrigger>
+          </div>
           <ModalContent>
             <ModalHeader>
               <p className='text-gray-600 font-semibold pt-2'>{t("editProfile")}</p>
@@ -59,17 +62,19 @@ const Profile = () => {
           </ModalContent>
         </Modal>
 
-        <div className='flex mt-4 space-x-4'>
+        <div className='flex mt-4 space-x-2'>
           <Tabs defaultValue='tab1' tabs={tabData} />
         </div>
 
-        <div className='flex items-center mt-4'>
-          <img src={userData?.avatar} alt='Avatar' className='w-8 h-8 rounded-full' />
-          <input type='text' placeholder={t("whatIsNew")} className='flex-1 ml-4 p-2 border rounded-md' />
-          <button className='ml-2 bg-black text-white px-4 py-1 rounded-md'>{t("post")}</button>
+        <div className='flex items-center justify-between space-x-3 mt-4 px-6'>
+          <img src='../src/assets/capela.jpg' alt='Avatar' className='w-8 h-8 rounded-full' />
+          <InputText placeholder={t("whatIsNew")} className='w-full' />
+          <Button className='text-gray-800 font-semibold text-sm p-2 rounded-lg border'>{t("post")}</Button>
         </div>
 
-        <ProfileCompletionSection />
+        <div className='mt-2 p-6'>
+          <ProfileCompletionSection />
+        </div>
       </ContentContainer>
     </>
   )

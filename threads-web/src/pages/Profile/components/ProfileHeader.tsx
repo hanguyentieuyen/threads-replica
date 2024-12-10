@@ -6,19 +6,19 @@ interface ProfileHeaderProps {
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
   return (
-    <div className='flex items-center justify-between'>
-      <div>
-        <h1 className='text-xl font-bold'>{user?.name}</h1>
-        <p className='text-gray-500'>@{user?.username}</p>
-        <div className='flex mt-2'>
-          <div className='flex items-center space-x-1'>
-            <img src='follower1.jpg' alt='Follower 1' className='w-6 h-6 rounded-full' />
-            <img src='follower2.jpg' alt='Follower 2' className='w-6 h-6 rounded-full' />
-            <span className='text-sm text-gray-500'>{17} followers</span>
-          </div>
+    <div className='p-6'>
+      <div className='w-full flex justify-between items-center mb-4'>
+        <div className='text-left'>
+          <p className='text-2xl font-bold'>{user?.name || "hayen"} </p>
+          <p className='text-gray-500 text-sm'>{user?.username || "hn13.mew"} </p>
         </div>
+        <img src='../src/assets/capy.jpg' alt='Profile' className='w-20 h-20 rounded-full' />
       </div>
-      <img src={user?.avatar} alt='Profile' className='w-16 h-16 rounded-full' />
+      <div className='flex items-center'>
+        <img src='../src/assets/capela.jpg' alt='Follower 1' className='w-5 h-5 rounded-full' />
+        <img src='../src/assets/capy.jpg' alt='Follower 2' className='w-5 h-5 rounded-full' />
+        <span className='text-sm text-gray-500'>{17} followers</span>
+      </div>
     </div>
   )
 }

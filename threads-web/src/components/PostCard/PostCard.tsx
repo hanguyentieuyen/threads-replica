@@ -60,7 +60,7 @@ export default function PostCard() {
     <div className=' mx-auto'>
       {/* Header */}
       <div className='flex items-center'>
-        <PostAvatar name={"Hayen"} image='https://via.placeholder.com/40' postedTime='10 hours ago' />
+        <PostAvatar name={"Hayen"} image='../src/assets/capy.jpg' postedTime='10 hours ago' />
       </div>
 
       {/* Content */}

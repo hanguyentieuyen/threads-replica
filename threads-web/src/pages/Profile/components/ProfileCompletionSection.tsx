@@ -6,7 +6,7 @@ export const ProfileCompletionSection: React.FC = () => {
   const { t } = useTranslation()
 
   return (
-    <div className='mt-6'>
+    <div className='w-full'>
       <h2 className='text-gray-600 font-semibold'>{t("completeProfile")}</h2>
       <div className='flex mt-4 space-x-4'>
         <ProfileCard
