@@ -10,6 +10,7 @@ import searchRouter from './routes/search.routes'
 import mediaRouter from './routes/medias.routes'
 import { createUploadFolder } from './utils/fileparser'
 import staticRouter from './routes/static.routes'
+//import '~/utils/fake-data'
 const app = express()
 const port = 4000
 
