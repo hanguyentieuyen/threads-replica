@@ -11,6 +11,9 @@ import mediaRouter from './routes/medias.routes'
 import { createUploadFolder } from './utils/fileparser'
 import staticRouter from './routes/static.routes'
 //import '~/utils/fake-data'
+import swaggerUi from 'swagger-ui-express'
+import swaggerJSDoc from 'swagger-jsdoc'
+
 const app = express()
 const port = 4000
 
@@ -18,6 +21,21 @@ app.use(express.json()) // middleware: convert json to object
 app.get('/', (req, res) => {
   res.send('hello yen')
 })
+
+// swagger api
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Threads Replica APIs',
+      version: '1.0.0'
+    }
+  },
+  apis: ['./swagger/*.yaml']
+}
+
+const openapiSpeciation = swaggerJSDoc(options)
+
 // cors
 const corsOption: CorsOptions = {
   origin: '*'
@@ -25,6 +43,8 @@ const corsOption: CorsOptions = {
 
 // Create upload files folder
 createUploadFolder()
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpeciation))
 
 app.use(cors(corsOption))
 // route endpoint

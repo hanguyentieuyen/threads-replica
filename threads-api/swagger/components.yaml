@@ -1,0 +1,98 @@
+
+components:
+  schemas:
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: admin@gmail.com
+        password:
+          type: string
+          example: Yen@123
+    SuccessAuthentication:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            access_token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY5Mzk0YWZhNDBhNDU1ZThiYTFmNTkyIiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE3MjEyMzI2NDcsImV4cCI6MTcyMjA5NjY0N30.TfNbieW6XQs7uQ3hTyuUb9YMzITdlVBZ55OnZ684AVU
+            refresh_token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY5Mzk0YWZhNDBhNDU1ZThiYTFmNTkyIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE3MjEyMzI2NDcsImV4cCI6MTcyMjA5NjY0N30.RlaHddJRiUv6TbGXYQidVtTdoaO6gAQQfxnrYm2ve3E
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          description: The unique identifier for the user.
+          example: "669394afa40a455e8ba1f592"
+        name:
+          type: string
+          description: The user's name.
+          example: "yen"
+        email:
+          type: string
+          description: The user's email address.
+          format: email  # Ensures valid email format
+          example: "hayen.working+03@gmail.com"
+        date_of_birth:
+          type: string
+          description: The user's date of birth in ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ).
+          format: ISO8601
+          example: "2024-06-10T13:49:31.536Z"
+        created_at:
+          type: string
+          description: The timestamp of when the user was created in ISO 8601 format.
+          format: ISO8601
+          example: "2024-07-14T09:04:47.147Z"
+        updated_at:
+          type: string
+          description: The timestamp of when the user was last updated in ISO 8601 format.
+          format: ISO8601
+          example: "2024-07-14T17:07:51.979Z"
+        verify:
+          $ref: '#/components/schemas/UserVerifyStatus'
+        twitter_circle:
+          type: array
+          description: List of Twitter circle members (assumed to be empty in this case).
+          items:
+            type: string
+            format: MongoId
+          example: ['669394afa40a455e8ba1f592']  # Empty array for twitter_circle
+        bio:
+          type: string
+          description: The user's biography.
+          example: ""  # Empty string for bio
+        location:
+          type: string
+          description: The user's location.
+          example: "Ho Chi Minh City"
+        website:
+          type: string
+          description: The user's website.
+          example: ""  # Empty string for website
+        username:
+          type: string
+          description: The user's username.
+          example: "user669394afa40a455e8ba1f592"
+        avatar:
+          type: string
+          description: The user's avatar URL.
+          example: ""  # Empty string for avatar
+        cover_photo:
+          type: string
+          description: The user's cover photo URL.
+          example: ""  # Empty string for cover_photo
+    UserVerifyStatus:
+      type: number
+      enum: [Unverified, Verified, Banned]
+      example: 1
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
