@@ -26,17 +26,45 @@ servers:
   - url: http://localhost:4000
 tags:
   - name: users
-    description: Các APIs liên quan tới người dùng twitter
+    description: Threads replica users APIs 
 paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Register
+      description: 'Register Threads Replica'
+      operationId: register
+      requestBody: 
+        description: Registration Information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+        required: true
+      responses:
+        default:
+          description: Register successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                    type: string
+                    example: Register successfully
+                    $ref: '#/components/schemas/SuccessAuthentication'
+        '422':
+          description: Invalid input
   /users/login:
     post:
       tags:
         - users
-      summary: Đăng nhập
-      description: 'Đăng nhập vào hệ thống'
+      summary: Login
+      description: 'Login to Threads Replica'
       operationId: login
       requestBody: 
-        description: Thông tin đăng nhập
+        description: Login Information
         content:
           application/json:
             schema:
@@ -44,7 +72,7 @@ paths:
         required: true
       responses:
         default:
-          description: Đăng nhập thành công
+          description: Login successfully
           content:
             application/json:
               schema:
@@ -53,7 +81,6 @@ paths:
                    message:
                     type: string
                     example: Login success
-                   result: 
                     $ref: '#/components/schemas/SuccessAuthentication'
         '422':
           description: Invalid input
@@ -61,15 +88,41 @@ paths:
     get:
       tags:
         - users
-      summary: Lấy thông tin người dùng
-      description: 'Lấy thông tin người dùng'
+      summary: Get my profile
+      description: Get my profile
       operationId: getMe
       security:
         - BearerAuth: []
       responses:
         default:
-          description: Lấy thông tin user thành công
+          description: Get user profile successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /users/forgot-password:
+    post:
+      tags:
+        - users
+      summary: Forgot password
+      description: 'Forgot password'
+      operationId: forgotPassword
+      requestBody: 
+        description: Forgot password information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordBody'
+      responses:
+        default:
+          description: Forgot password Information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                    type: string
+                    example: Check email to reset password
+        '422':
+          description: Invalid input

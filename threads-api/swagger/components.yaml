@@ -1,19 +1,43 @@
 
 components:
   schemas:
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: hayen.working@gmail.com
+        password:
+          type: string
+          example: Yen@123
+        confirm_password:
+          type: string
+          example: Yen@123
+        date_of_birth:
+          type: DateISO
+          example: 2024-06-25T13:49:31.536Z
+        name:
+          type: string
+          example: yen
     LoginBody:
       type: object
       properties:
         email:
           type: string
-          example: admin@gmail.com
+          example: hayen.working@gmail.com
         password:
           type: string
           example: Yen@123
+    ForgotPasswordBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: hayen.working@gmail.com
     SuccessAuthentication:
       type: object
       properties:
-        result:
+        data:
           type: object
           properties:
             access_token:
