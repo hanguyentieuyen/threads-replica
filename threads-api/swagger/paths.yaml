@@ -27,6 +27,13 @@ servers:
 tags:
   - name: users
     description: Threads replica users APIs 
+  - name: posts
+    description: Treads replica posts API
+  - name: bookmark
+    description: Threads replica bookmarks APIs
+  - name: like
+    description: Threads replica like APIs
+
 paths:
   /users/register:
     post:
@@ -126,3 +133,60 @@ paths:
                     example: Check email to reset password
         '422':
           description: Invalid input
+  /bookmark:
+    post:
+      tags:
+        - bookmark
+      summary: Bookmark a post
+      description: Bookmark a post
+      operationId: bookmarkPost
+      security:
+        - BearerAuth: []
+      requestBody: 
+        description: Bookmark information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookmarkBody'
+      responses:
+        default:
+          description: Bookmark post successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                    type: string
+                    $ref: '#/components/schemas/Bookmark'
+        '422':
+          description: Invalid input
+  /like:
+    post:
+      tags:
+        - like
+      summary: Like a post
+      description: Like a post
+      operationId: likePost
+      security:
+        - BearerAuth: []
+      requestBody: 
+        description: Bookmark information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LikeBody'
+      responses:
+        default:
+          description: Like post successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                    type: string
+                    $ref: '#/components/schemas/Like'
+        '422':
+          description: Invalid input
+          

@@ -80,7 +80,7 @@ components:
           example: "2024-07-14T17:07:51.979Z"
         verify:
           $ref: '#/components/schemas/UserVerifyStatus'
-        twitter_circle:
+        post_circle:
           type: array
           description: List of Twitter circle members (assumed to be empty in this case).
           items:
@@ -115,6 +115,53 @@ components:
       type: number
       enum: [Unverified, Verified, Banned]
       example: 1
+    BookmarkBody:
+      type: object
+      properties:
+        post_id: string
+        example: "669394afa40a455e8ba1f592"
+    Bookmark:
+      type: object
+      properties:
+        _id: 
+          type: string
+          format: MongoId
+          description: The unique identifier for the bookmark.
+          example: "669394afa40a455e8ba1f592"
+        post_id:
+          type: string
+          format: MongoId
+          description: The unique identifier for the post.
+        user_id:
+          type: string
+          format: MongoId
+          description: The unique identifier for the user who bookmarked the post.
+        created_at:
+          type: string
+          format: DateTime
+          description: The timestamp of when the bookmark was created in ISO 8601 format.
+    LikeBody:
+      type: object
+      properties:
+        post_id: string
+        example: "669394afa40a455e8ba1f592"
+    Like:
+      type: object
+      properties:
+        _id: 
+          type: string
+          format: MongoId
+          description: The unique identifier for the bookmark.
+          example: "669394afa40a455e8ba1f592"
+        post_id:
+          type: string
+          format: MongoId
+          description: The unique identifier for the post.
+        user_id:
+          type: string
+          format: MongoId
+          description: The unique identifier for the user who bookmarked the post.
+        created_at:
   securitySchemes:
     BearerAuth:
       type: http
