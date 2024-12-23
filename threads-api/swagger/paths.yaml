@@ -107,6 +107,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /users/{user_id}:
+    get:
+      tags:
+        - users
+      summary: Get user details
+      description: Retrieves information about a specific user by their user ID.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The unique identifier of the user
+          schema:
+            type: string
+            example: 672f90bbef2ea13586c40673
+      responses:
+        '200':
+          description: User details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid user ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid user ID format
   /users/forgot-password:
     post:
       tags:
@@ -131,6 +164,67 @@ paths:
                    message:
                     type: string
                     example: Check email to reset password
+        '422':
+          description: Invalid input
+  /users/follow:
+    post:
+      tags:
+        - users
+      summary: Follow a user
+      description: Allows a user to follow another user by specifying the `followed_user_id` in the request body.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                followed_user_id:
+                  type: string
+                  description: ID of the user to follow
+                  example: 66ba5da551e0c344d1fc0269
+      responses:
+        '200':
+          description: Successfully followed the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully followed the user
+        '422':
+          description: Invalid input
+  /users/follow/{followed_user_id}:
+    delete:
+      tags:
+        - users
+      summary: Unfollow a user
+      description: Unfollows the user specified by the `followed_user_id`.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: followed_user_id
+          in: path
+          required: true
+          description: ID of the user to unfollow
+          schema:
+            type: string
+            example: 66ba5da551e0c344d1fc0269
+      responses:
+        '200':
+          description: Successfully unfollowed the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully unfollowed the user
         '422':
           description: Invalid input
   /bookmark:
@@ -161,6 +255,35 @@ paths:
                     $ref: '#/components/schemas/Bookmark'
         '422':
           description: Invalid input
+  /bookmark/post/{id}:
+    delete:
+      tags:
+        - bookmark
+      summary: Delete a bookmark by ID
+      description: Deletes a specific bookmark based on the provided ID.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the bookmark to delete.
+          schema:
+            type: string
+            example: 66d6059974ecbef1214d20ab
+      responses:
+        '200':
+          description: Successfully deleted the bookmark.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    $ref: '#/components/schemas/Bookmark'
+        '422':
+          description: Invalid input
   /like:
     post:
       tags:
@@ -171,7 +294,7 @@ paths:
       security:
         - BearerAuth: []
       requestBody: 
-        description: Bookmark information
+        description: Like information
         content:
           application/json:
             schema:
@@ -189,4 +312,32 @@ paths:
                     $ref: '#/components/schemas/Like'
         '422':
           description: Invalid input
-          
+  /like/post/{id}:
+    delete:
+      tags:
+        - like
+      summary: Remove a like from a post
+      description: Deletes the like associated with the specified post ID.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the post to remove the like from
+          schema:
+            type: string
+            example: 66d6059974ecbef1214d20ab
+      responses:
+        '200':
+          description: Like successfully removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    $ref: '#/components/schemas/Like'
+        '422':
+          description: Invalid input

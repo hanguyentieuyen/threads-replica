@@ -118,50 +118,61 @@ components:
     BookmarkBody:
       type: object
       properties:
-        post_id: string
-        example: "669394afa40a455e8ba1f592"
+        post_id: 
+          type: string
+          example: "669394afa40a455e8ba1f592"
     Bookmark:
       type: object
       properties:
-        _id: 
-          type: string
-          format: MongoId
-          description: The unique identifier for the bookmark.
-          example: "669394afa40a455e8ba1f592"
-        post_id:
-          type: string
-          format: MongoId
-          description: The unique identifier for the post.
-        user_id:
-          type: string
-          format: MongoId
-          description: The unique identifier for the user who bookmarked the post.
-        created_at:
-          type: string
-          format: DateTime
-          description: The timestamp of when the bookmark was created in ISO 8601 format.
+        data:
+          type: object
+          properties:
+            _id: 
+              type: string
+              format: MongoId
+              description: The unique identifier for the bookmark.
+              example: "669394afa40a455e8ba1f592"
+            post_id:
+              type: string
+              format: MongoId
+              description: The unique identifier for the post.
+            user_id:
+              type: string
+              format: MongoId
+              description: The unique identifier for the user who bookmarked the post.
+            created_at:
+              type: string
+              format: DateTime
+              description: The timestamp of when the bookmark was created in ISO 8601 format.
     LikeBody:
       type: object
       properties:
-        post_id: string
-        example: "669394afa40a455e8ba1f592"
+        post_id: 
+          type: string
+          example: "669394afa40a455e8ba1f592"
     Like:
       type: object
       properties:
-        _id: 
-          type: string
-          format: MongoId
-          description: The unique identifier for the bookmark.
-          example: "669394afa40a455e8ba1f592"
-        post_id:
-          type: string
-          format: MongoId
-          description: The unique identifier for the post.
-        user_id:
-          type: string
-          format: MongoId
-          description: The unique identifier for the user who bookmarked the post.
-        created_at:
+        data:
+          type: object
+          properties:
+            _id: 
+              type: string
+              format: MongoId
+              description: The unique identifier for the like.
+              example: "669394afa40a455e8ba1f592"
+            post_id:
+              type: string
+              format: MongoId
+              description: The unique identifier for the post.
+            user_id:
+              type: string
+              format: MongoId
+              description: The unique identifier for the user who liked the post.
+            created_at:
+              type: string
+              format: DateTime
+              description: The timestamp of when the like was created in ISO 8601 format.
   securitySchemes:
     BearerAuth:
       type: http
