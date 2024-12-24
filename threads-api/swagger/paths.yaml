@@ -91,6 +91,49 @@ paths:
                     $ref: '#/components/schemas/SuccessAuthentication'
         '422':
           description: Invalid input
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Logout a user
+      description: Logs out a user by invalidating the provided refresh token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutBody'
+      responses:
+        '200':
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully logged out
+        '400':
+          description: Invalid or missing refresh token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid refresh token
+        '401':
+          description: Unauthorized - Token is invalid or expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token has expired or is invalid
   /users/me:
     get:
       tags:
@@ -166,6 +209,92 @@ paths:
                     example: Check email to reset password
         '422':
           description: Invalid input
+  /users/reset-password:
+    post:
+      tags:
+        - users
+      summary: Reset user password
+      description: Allows a user to reset their password using a valid forgot password token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordBody'
+      responses:
+        '200':
+          description: Password reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Password reset successfully
+        '400':
+          description: Invalid or missing input fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Passwords do not match or token is invalid
+        '401':
+          description: Unauthorized - Token expired or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Token has expired or is invalid
+  /users/change-password:
+    post:
+      tags:
+        - users
+      summary: Change user password
+      description: Allows a user to change their password by providing the old password and a new one.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordBody'
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Password changed successfully
+        '400':
+          description: Invalid or missing input fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: New passwords do not match or old password is incorrect
+        '401':
+          description: Unauthorized - Invalid old password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Old password is incorrect
   /users/follow:
     post:
       tags:

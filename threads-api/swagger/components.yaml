@@ -28,12 +28,49 @@ components:
         password:
           type: string
           example: Yen@123
+    LogoutBody:
+      type: object
+      properties:
+       refresh_token:
+          type: string
+          description: The refresh token to invalidate
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjZjNjA4NTZkMTFjOGU1NDU2YzUyNzZmIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjowLCJpYXQiOjE3MjQyNTgwMDksImV4cCI6MTcyNTEyMjAwOX0.Yg5ZYxKDKmU2f2KOj4WFH_AXRr3gUgBGwuRRO3LCIMo
     ForgotPasswordBody:
       type: object
       properties:
         email:
           type: string
           example: hayen.working@gmail.com
+    ResetPasswordBody:
+      type: object
+      properties:
+        forgot_password_token:
+          type: string
+          description: A valid token for resetting the password
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjZiYTVkYTU1MWUwYzM0NGQxZmMwMjY5IiwidmVyaWZ5IjowLCJ0b2tlbl90eXBlIjoyLCJpYXQiOjE3MzUwNTQ3OTIsImV4cCI6MTczNTY1OTU5Mn0.uyG13czqCyeZ24ghcLVzsaz73vmbAXaVHYrkN-Y-Gv8
+        password:
+          type: string
+          description: The new password
+          example: Yen@123
+        confirm_password:
+          type: string
+          description: Confirmation of the new password
+          example: Yen@123                
+    ChangePasswordBody:
+      type: object
+      properties:
+        old_password:
+          type: string
+          description: The user's current password
+          example: Yen@123
+        password:
+          type: string
+          description: The new password
+          example: Yen@123
+        confirm_password:
+          type: string
+          description: Confirmation of the new password
+          example: Yen@123
     SuccessAuthentication:
       type: object
       properties:
