@@ -71,6 +71,45 @@ components:
           type: string
           description: Confirmation of the new password
           example: Yen@123
+    UpdateProfileBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          example: Jane Doe
+        date_of_birth:
+          type: string
+          format: date
+          description: The user's date of birth in YYYY-MM-DD format
+          example: 1990-01-01          
+        bio:
+          type: string
+          description: A short biography for the user
+          example: Software developer with a love for AI and open-source.
+        location:
+          type: string
+          description: The user's location
+          example: New York, USA
+        website:
+          type: string
+          description: The user's personal or professional website
+          example: https://janedoe.dev
+        username:
+          type: string
+          description: The user's unique username
+          example: janedoe123
+        avatar:
+          type: string
+          format: uri
+          description: URL to the user's avatar image
+          example: https://example.com/avatar.jpg
+        cover_photo:
+          type: string
+          format: uri
+          description: URL to the user's cover photo
+          example: https://example.com/cover.jpg         
+      
     SuccessAuthentication:
       type: object
       properties:

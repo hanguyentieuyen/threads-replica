@@ -134,6 +134,55 @@ paths:
                   error:
                     type: string
                     example: Token has expired or is invalid
+  /users/refresh-token:
+    post:
+      summary: Refresh the access token
+      description: Generates a new access token using a valid refresh token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+                  description: A valid refresh token to generate a new access token.
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjcxM2U3NDg4MGEzN2M1NjM3OGM5MGViIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE3MzUwNTQ0ODEsImV4cCI6MTczNTkxODQ4MX0.usOs9alkFl3f4A8JHFMy0H561Zj8IClAo9iULfoQh5g
+      responses:
+        '200':
+          description: Successfully generated a new access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login success
+                    $ref: '#/components/schemas/SuccessAuthentication'
+        '400':
+          description: Invalid refresh token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid refresh token
+        '401':
+          description: Unauthorized - Refresh token expired or invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized - Token expired or invalid
   /users/me:
     get:
       tags:
@@ -150,6 +199,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+    patch:
+      summary: Update user profile
+      description: Allows a user to update their profile information such as name, date of birth, bio, location, etc.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileBody'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid input data
+        '401':
+          description: Unauthorized - User not authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not authenticated
   /users/{user_id}:
     get:
       tags:
@@ -295,6 +380,7 @@ paths:
                   error:
                     type: string
                     example: Old password is incorrect
+    
   /users/follow:
     post:
       tags:
