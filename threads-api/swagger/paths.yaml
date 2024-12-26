@@ -90,13 +90,15 @@ paths:
                     example: Login success
                     $ref: '#/components/schemas/SuccessAuthentication'
         '422':
-          description: Invalid input
+          description: Invalid or missing input fields
   /users/logout:
     post:
       tags:
         - users
       summary: Logout a user
       description: Logs out a user by invalidating the provided refresh token.
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -165,8 +167,8 @@ paths:
                     type: string
                     example: Login success
                     $ref: '#/components/schemas/SuccessAuthentication'
-        '400':
-          description: Invalid refresh token
+        '422':
+          description: Invalid or missing input fields
           content:
             application/json:
               schema:
@@ -206,6 +208,8 @@ paths:
         - users
       summary: Update user profile
       description: Allows a user to update their profile information such as name, date of birth, bio, location, etc.
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -219,8 +223,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid input data
+        '422':
+          description: Invalid or missing input fields
           content:
             application/json:
               schema:
@@ -262,8 +266,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid user ID supplied
+        '422':
+          description: Invalid or missing input fields
           content:
             application/json:
               schema:
@@ -297,7 +301,7 @@ paths:
                     type: string
                     example: Check email to reset password
         '422':
-          description: Invalid input
+          description: Invalid or missing input fields
   /users/reset-password:
     post:
       tags:
@@ -321,7 +325,7 @@ paths:
                   message:
                     type: string
                     example: Password reset successfully
-        '400':
+        '422':
           description: Invalid or missing input fields
           content:
             application/json:
@@ -347,6 +351,8 @@ paths:
         - users
       summary: Change user password
       description: Allows a user to change their password by providing the old password and a new one.
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -384,7 +390,82 @@ paths:
                   error:
                     type: string
                     example: Old password is incorrect
-    
+  /users/verify-email:
+    post:
+      tags:
+        - users
+      summary: Verify email address
+      description: Verifies a user's email using a provided token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verify_email_token:
+                  type: string
+                  description: The token used to verify the user's email.
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjZiYTVkYTU1MWUwYzM0NGQxZmMwMjY5IiwidmVyaWZ5IjowLCJ0b2tlbl90eXBlIjoyLCJpYXQiOjE3MzUwNTQ3OTIsImV4cCI6MTczNTY1OTU5Mn0.uyG13czqCyeZ24ghcLVzsaz73vmbAXaVHYrkN-Y-Gv8"
+      responses:
+        '200':
+          description: Email verification successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email verified successfully."
+        '400':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid or expired verification token."
+  /users/verify-forgot-password:
+    post:
+      tags:
+        - users
+      summary: Verify forgot password token
+      description: Verifies the token for resetting the password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                forgot_password_token:
+                  type: string
+                  description: The token used to verify the forgot password request.
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjZiYTVkYTU1MWUwYzM0NGQxZmMwMjY5IiwidmVyaWZ5IjowLCJ0b2tlbl90eXBlIjoyLCJpYXQiOjE3Mjg0OTI4MjUsImV4cCI6MTcyOTA5NzYyNX0.d75eIKO69vqjoO1aWPLXGqiWyIGzMruLGZbtKN_dozE"
+      responses:
+        '200':
+          description: Forgot password token verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Forgot password token verified successfully."
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid signatured or JWT expired."
   /users/follow:
     post:
       tags:
@@ -416,7 +497,7 @@ paths:
                     type: string
                     example: Successfully followed the user
         '422':
-          description: Invalid input
+          description: Invalid or missing input fields
   /users/follow/{followed_user_id}:
     delete:
       tags:
@@ -445,7 +526,7 @@ paths:
                     type: string
                     example: Successfully unfollowed the user
         '422':
-          description: Invalid input
+          description: Invalid or missing input fields
   /bookmark:
     post:
       tags:
@@ -473,7 +554,7 @@ paths:
                     type: string
                     $ref: '#/components/schemas/Bookmark'
         '422':
-          description: Invalid input
+          description: Invalid or missing input fields
   /bookmark/post/{id}:
     delete:
       tags:
@@ -502,7 +583,7 @@ paths:
                     type: string
                     $ref: '#/components/schemas/Bookmark'
         '422':
-          description: Invalid input
+          description: Invalid or missing input fields
   /like:
     post:
       tags:
@@ -530,7 +611,7 @@ paths:
                     type: string
                     $ref: '#/components/schemas/Like'
         '422':
-          description: Invalid input
+          description: Invalid or missing input fields
   /like/post/{id}:
     delete:
       tags:
@@ -559,13 +640,15 @@ paths:
                     type: string
                     $ref: '#/components/schemas/Like'
         '422':
-          description: Invalid input
+          description: Invalid or missing input fields
   /posts/{id}:
     get:
       tags:
         - posts
       summary: Get a specific post by ID
       description: Retrieve detailed information about a specific post using its unique ID.
+      security:
+        - BearerAuth: []
       parameters:
         - name: id
           in: path
@@ -602,6 +685,8 @@ paths:
         - posts
       summary: Create a new post
       description: Creates a new post with the provided details.
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -621,7 +706,7 @@ paths:
                     $ref: '#/components/schemas/Post'
                 
         '422':
-          description: Unprocessable Entity
+          description: Invalid or missing input fields
           content:
             application/json:
               schema:
