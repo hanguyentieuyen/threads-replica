@@ -249,6 +249,116 @@ components:
               type: string
               format: DateTime
               description: The timestamp of when the like was created in ISO 8601 format.
+    PostBody:
+      type: object
+      properties:
+        type:
+          type: integer
+          description: Type of the post.
+          example: 0
+        audience:
+          type: integer
+          description: Audience of the post.
+          example: 0
+        content:
+          type: string
+          description: Content of the post.
+          example: "This is a test post."
+        parent_id:
+          type: string
+          nullable: true
+          description: Parent post ID (if applicable).
+          example: null
+        hashtags:
+          type: array
+          items:
+            type: string
+          description: List of hashtags.
+          example: ["#example", "#test"]
+        mentions:
+          type: array
+          items:
+            type: string
+            description: List of mentioned user IDs.
+            example: ["user123", "user456"]
+        medias:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                description: URL of the media file.
+                example: "https://example.com/media.jpg"
+              type:
+                type: string
+                description: Type of media.
+                example: "image"
+    Post:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            _id:
+              type: string
+              example: 66d606b192c854d70c7704ce
+            user_id:
+              type: string
+              example: 66c60856d11c8e5456c5276f
+            type:
+              type: integer
+              example: 0
+            audience:
+              type: integer
+              example: 0
+            content:
+              type: string
+              example: Test create a post
+            parent_id:
+              type: string
+              nullable: true
+              example: null
+            hashtags:
+              type: array
+              items:
+                type: string
+                example: []
+            mentions:
+              type: array
+              items:
+                type: string
+                example: []
+            medias:
+              type: array
+              items:
+                type: string
+                example: []
+            guest_views:
+              type: integer
+              example: 0
+            user_views:
+              type: integer
+              example: 0
+            created_at:
+              type: string
+              format: date-time
+              example: 2024-09-02T18:40:49.929Z
+            updated_at:
+              type: string
+              format: date-time
+              example: 2024-09-02T18:40:49.929Z
+            bookmarks:
+              type: array
+              items:
+                type: string
+                example: []
+            bookmark_count:
+                type: integer
+                example: 0
+            repost_count:
+                type: integer
+                example: 0
   securitySchemes:
     BearerAuth:
       type: http

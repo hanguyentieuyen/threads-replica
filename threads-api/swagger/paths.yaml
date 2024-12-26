@@ -136,6 +136,8 @@ paths:
                     example: Token has expired or is invalid
   /users/refresh-token:
     post:
+      tags:
+        - users
       summary: Refresh the access token
       description: Generates a new access token using a valid refresh token.
       requestBody:
@@ -200,6 +202,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
     patch:
+      tags:
+        - users
       summary: Update user profile
       description: Allows a user to update their profile information such as name, date of birth, bio, location, etc.
       requestBody:
@@ -556,3 +560,73 @@ paths:
                     $ref: '#/components/schemas/Like'
         '422':
           description: Invalid input
+  /posts/{id}:
+    get:
+      tags:
+        - posts
+      summary: Get a specific post by ID
+      description: Retrieve detailed information about a specific post using its unique ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the post
+          schema:
+            type: string
+            example: 66d606b192c854d70c7704ce
+      responses:
+        '200':
+          description: Successfully retrieved the post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    $ref: '#/components/schemas/Post'
+                
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Post not found
+  /posts:
+    post:
+      tags:
+        - posts
+      summary: Create a new post
+      description: Creates a new post with the provided details.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/PostBody'
+      responses:
+        '200':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    $ref: '#/components/schemas/Post'
+                
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input data"
