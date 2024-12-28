@@ -33,6 +33,8 @@ tags:
     description: Threads replica bookmarks APIs
   - name: like
     description: Threads replica like APIs
+  - name: media
+    description: Threads replica media API
 
 paths:
   /users/register:
@@ -50,16 +52,17 @@ paths:
               $ref: '#/components/schemas/RegisterBody'
         required: true
       responses:
-        default:
+        '200':
           description: Register successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                   message:
+                  message:
                     type: string
                     example: Register successfully
+                  data:
                     $ref: '#/components/schemas/SuccessAuthentication'
         '422':
           description: Invalid input
@@ -85,9 +88,10 @@ paths:
               schema:
                 type: object
                 properties:
-                   message:
+                  message:
                     type: string
                     example: Login success
+                  data:
                     $ref: '#/components/schemas/SuccessAuthentication'
         '422':
           description: Invalid or missing input fields
@@ -166,6 +170,7 @@ paths:
                   message:
                     type: string
                     example: Login success
+                  data:
                     $ref: '#/components/schemas/SuccessAuthentication'
         '422':
           description: Invalid or missing input fields
@@ -202,7 +207,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get my profile success
+                  data:
+                    $ref: '#/components/schemas/User'  
     patch:
       tags:
         - users
@@ -222,7 +233,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Change my profile success
+                  data:
+                    $ref: '#/components/schemas/User'  
         '422':
           description: Invalid or missing input fields
           content:
@@ -249,8 +266,6 @@ paths:
         - users
       summary: Get user details
       description: Retrieves information about a specific user by their user ID.
-      security:
-        - BearerAuth: []
       parameters:
         - name: user_id
           in: path
@@ -264,8 +279,14 @@ paths:
           description: User details retrieved successfully
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/User'
+               schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get user profile success
+                  data:
+                    $ref: '#/components/schemas/User'  
         '422':
           description: Invalid or missing input fields
           content:
@@ -370,7 +391,7 @@ paths:
                   message:
                     type: string
                     example: Password changed successfully
-        '400':
+        '422':
           description: Invalid or missing input fields
           content:
             application/json:
@@ -380,16 +401,6 @@ paths:
                   error:
                     type: string
                     example: New passwords do not match or old password is incorrect
-        '401':
-          description: Unauthorized - Invalid old password
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Old password is incorrect
   /users/verify-email:
     post:
       tags:
@@ -550,8 +561,10 @@ paths:
               schema:
                 type: object
                 properties:
-                   message:
+                  message:
                     type: string
+                    example: "Bookmark success"
+                  data:
                     $ref: '#/components/schemas/Bookmark'
         '422':
           description: Invalid or missing input fields
@@ -581,6 +594,8 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: "Unbookmark successfully"
+                  data:
                     $ref: '#/components/schemas/Bookmark'
         '422':
           description: Invalid or missing input fields
@@ -607,8 +622,10 @@ paths:
               schema:
                 type: object
                 properties:
-                   message:
+                  message:
                     type: string
+                    example: "Like successfully"
+                  data:
                     $ref: '#/components/schemas/Like'
         '422':
           description: Invalid or missing input fields
@@ -638,6 +655,8 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: "Unlike successfully"
+                  data:
                     $ref: '#/components/schemas/Like'
         '422':
           description: Invalid or missing input fields
@@ -667,6 +686,8 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: "Get post detail successfully"
+                  data:
                     $ref: '#/components/schemas/Post'
                 
         '404':
@@ -703,8 +724,9 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: "Post created successfully"
+                  data:
                     $ref: '#/components/schemas/Post'
-                
         '422':
           description: Invalid or missing input fields
           content:
@@ -715,3 +737,153 @@ paths:
                   error:
                     type: string
                     example: "Invalid input data"
+    get:
+      tags:
+        - posts
+      summary: Get paginated posts
+      description: Retrieves a paginated list of posts.
+      parameters:
+        - name: page
+          in: query
+          description: The page number to retrieve.
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: The number of posts per page.
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Paginated posts retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Get paginated posts successfully"
+                  data:
+                    $ref: '#/components/schemas/Post'
+        '422':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid page or limit parameters."
+  
+  /medias/upload-image:
+    post:
+      tags:
+        - media
+      summary: Upload an image
+      description: Uploads an image file to the server.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The image file to upload.
+      responses:
+        '200':
+          description: Image uploaded successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Upload success"
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        example: "https://threads-replica.s3.ap-southeast-1.amazonaws.com/images/3dd96552ba27d176ea5961500.jpg"
+                      type:
+                        type: string
+                        example: "image"
+        '500':
+          description: Invalid file upload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "File is empty."
+                  errorInfo:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "File is empty."
+  /medias/upload-video:
+    post:
+      tags:
+        - media
+      summary: Upload a video
+      description: Uploads a video file to the server.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: string
+                  format: binary
+                  description: The video file to upload.
+      responses:
+        '200':
+          description: Video uploaded successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Upload success"
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        example: "https://threads-replica.s3.ap-southeast-1.amazonaws.com/images/3dd96552ba27d176ea5961500.mp4"
+                      type:
+                        type: string
+                        example: "video"
+        '500':
+          description: Invalid file upload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "File is empty."
+                  errorInfo:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "File is empty."

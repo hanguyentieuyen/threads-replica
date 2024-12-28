@@ -109,19 +109,72 @@ components:
           format: uri
           description: URL to the user's cover photo
           example: https://example.com/cover.jpg         
-      
+    PostBody:
+      type: object
+      properties:
+        type:
+          type: integer
+          description: Type of the post.
+          example: 0
+        audience:
+          type: integer
+          description: Audience of the post.
+          example: 0
+        content:
+          type: string
+          description: Content of the post.
+          example: "This is a test post."
+        parent_id:
+          type: string
+          nullable: true
+          description: Parent post ID (if applicable).
+          example: null
+        hashtags:
+          type: array
+          items:
+            type: string
+          description: List of hashtags.
+          example: ["#example", "#test"]
+        mentions:
+          type: array
+          items:
+            type: string
+            description: List of mentioned user IDs.
+            example: ["user123", "user456"]
+        medias:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                description: URL of the media file.
+                example: "https://example.com/media.jpg"
+              type:
+                type: string
+                description: Type of media.
+                example: "image"  
+    BookmarkBody:
+      type: object
+      properties:
+        post_id: 
+          type: string
+          example: "669394afa40a455e8ba1f592"
+    LikeBody:
+      type: object
+      properties:
+        post_id: 
+          type: string
+          example: "669394afa40a455e8ba1f592"
     SuccessAuthentication:
       type: object
       properties:
-        data:
-          type: object
-          properties:
-            access_token:
-              type: string
-              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY5Mzk0YWZhNDBhNDU1ZThiYTFmNTkyIiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE3MjEyMzI2NDcsImV4cCI6MTcyMjA5NjY0N30.TfNbieW6XQs7uQ3hTyuUb9YMzITdlVBZ55OnZ684AVU
-            refresh_token:
-              type: string
-              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY5Mzk0YWZhNDBhNDU1ZThiYTFmNTkyIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE3MjEyMzI2NDcsImV4cCI6MTcyMjA5NjY0N30.RlaHddJRiUv6TbGXYQidVtTdoaO6gAQQfxnrYm2ve3E
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY5Mzk0YWZhNDBhNDU1ZThiYTFmNTkyIiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE3MjEyMzI2NDcsImV4cCI6MTcyMjA5NjY0N30.TfNbieW6XQs7uQ3hTyuUb9YMzITdlVBZ55OnZ684AVU
+        refresh_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY5Mzk0YWZhNDBhNDU1ZThiYTFmNTkyIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE3MjEyMzI2NDcsImV4cCI6MTcyMjA5NjY0N30.RlaHddJRiUv6TbGXYQidVtTdoaO6gAQQfxnrYm2ve3E
     User:
       type: object
       properties:
@@ -191,174 +244,108 @@ components:
       type: number
       enum: [Unverified, Verified, Banned]
       example: 1
-    BookmarkBody:
-      type: object
-      properties:
-        post_id: 
-          type: string
-          example: "669394afa40a455e8ba1f592"
     Bookmark:
       type: object
       properties:
-        data:
-          type: object
-          properties:
-            _id: 
-              type: string
-              format: MongoId
-              description: The unique identifier for the bookmark.
-              example: "669394afa40a455e8ba1f592"
-            post_id:
-              type: string
-              format: MongoId
-              description: The unique identifier for the post.
-            user_id:
-              type: string
-              format: MongoId
-              description: The unique identifier for the user who bookmarked the post.
-            created_at:
-              type: string
-              format: DateTime
-              description: The timestamp of when the bookmark was created in ISO 8601 format.
-    LikeBody:
-      type: object
-      properties:
-        post_id: 
+        _id: 
           type: string
+          format: MongoId
+          description: The unique identifier for the bookmark.
           example: "669394afa40a455e8ba1f592"
+        post_id:
+          type: string
+          format: MongoId
+          description: The unique identifier for the post.
+        user_id:
+          type: string
+          format: MongoId
+          description: The unique identifier for the user who bookmarked the post.
+        created_at:
+          type: string
+          format: DateTime
+          description: The timestamp of when the bookmark was created in ISO 8601 format.
     Like:
       type: object
       properties:
-        data:
-          type: object
-          properties:
-            _id: 
-              type: string
-              format: MongoId
-              description: The unique identifier for the like.
-              example: "669394afa40a455e8ba1f592"
-            post_id:
-              type: string
-              format: MongoId
-              description: The unique identifier for the post.
-            user_id:
-              type: string
-              format: MongoId
-              description: The unique identifier for the user who liked the post.
-            created_at:
-              type: string
-              format: DateTime
-              description: The timestamp of when the like was created in ISO 8601 format.
-    PostBody:
+        _id: 
+          type: string
+          format: MongoId
+          description: The unique identifier for the like.
+          example: "669394afa40a455e8ba1f592"
+        post_id:
+          type: string
+          format: MongoId
+          description: The unique identifier for the post.
+        user_id:
+          type: string
+          format: MongoId
+          description: The unique identifier for the user who liked the post.
+        created_at:
+          type: string
+          format: DateTime
+          description: The timestamp of when the like was created in ISO 8601 format.
+    Post:
       type: object
       properties:
+        _id:
+          type: string
+          example: 66d606b192c854d70c7704ce
+        user_id:
+          type: string
+          example: 66c60856d11c8e5456c5276f
         type:
           type: integer
-          description: Type of the post.
           example: 0
         audience:
           type: integer
-          description: Audience of the post.
           example: 0
         content:
           type: string
-          description: Content of the post.
-          example: "This is a test post."
+          example: Test create a post
         parent_id:
           type: string
           nullable: true
-          description: Parent post ID (if applicable).
           example: null
         hashtags:
           type: array
           items:
             type: string
-          description: List of hashtags.
-          example: ["#example", "#test"]
+            example: []
         mentions:
           type: array
           items:
             type: string
-            description: List of mentioned user IDs.
-            example: ["user123", "user456"]
+            example: []
         medias:
           type: array
           items:
-            type: object
-            properties:
-              url:
-                type: string
-                description: URL of the media file.
-                example: "https://example.com/media.jpg"
-              type:
-                type: string
-                description: Type of media.
-                example: "image"
-    Post:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            _id:
-              type: string
-              example: 66d606b192c854d70c7704ce
-            user_id:
-              type: string
-              example: 66c60856d11c8e5456c5276f
-            type:
-              type: integer
-              example: 0
-            audience:
-              type: integer
-              example: 0
-            content:
-              type: string
-              example: Test create a post
-            parent_id:
-              type: string
-              nullable: true
-              example: null
-            hashtags:
-              type: array
-              items:
-                type: string
-                example: []
-            mentions:
-              type: array
-              items:
-                type: string
-                example: []
-            medias:
-              type: array
-              items:
-                type: string
-                example: []
-            guest_views:
-              type: integer
-              example: 0
-            user_views:
-              type: integer
-              example: 0
-            created_at:
-              type: string
-              format: date-time
-              example: 2024-09-02T18:40:49.929Z
-            updated_at:
-              type: string
-              format: date-time
-              example: 2024-09-02T18:40:49.929Z
-            bookmarks:
-              type: array
-              items:
-                type: string
-                example: []
-            bookmark_count:
-                type: integer
-                example: 0
-            repost_count:
-                type: integer
-                example: 0
+            type: string
+            example: []
+        guest_views:
+          type: integer
+          example: 0
+        user_views:
+          type: integer
+          example: 0
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-09-02T18:40:49.929Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-09-02T18:40:49.929Z
+        bookmarks:
+          type: array
+          items:
+            type: string
+            example: []
+        bookmark_count:
+          type: integer
+          example: 0
+        repost_count:
+          type: integer
+          example: 0
   securitySchemes:
     BearerAuth:
       type: http
