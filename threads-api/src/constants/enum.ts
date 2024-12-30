@@ -12,7 +12,8 @@ export enum TokenType {
 
 export enum PostType {
   Post,
-  RePost
+  RePost,
+  QuotePost
 }
 
 export enum PostAudience {

@@ -160,8 +160,7 @@ userRouter.patch(
     'location',
     'website',
     'username',
-    'avatar',
-    'cover_photo'
+    'avatar'
   ]),
   requestHandler(updateMyProfileController)
 )

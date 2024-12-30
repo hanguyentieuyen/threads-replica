@@ -15,5 +15,4 @@ export interface User {
   website?: string // optional
   username?: string // optional
   avatar?: string // optional
-  cover_photo?: string // optional
 }

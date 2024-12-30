@@ -1,5 +1,7 @@
+import { User } from "./user.type"
+
 export interface Post {
-  _id?: string
+  _id: string
   user_id: string
   type: number
   audience: number
@@ -8,6 +10,7 @@ export interface Post {
   hashtags: string[]
   mentions: string[]
   medias: string[]
+  user: User
   guest_views?: number
   user_views?: number
   created_at?: string

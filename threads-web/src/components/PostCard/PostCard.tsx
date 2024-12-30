@@ -8,9 +8,26 @@ import { AxiosResponse } from "axios"
 import { SuccessResponse } from "~/types/utils.type"
 import Icon from "../Icon"
 
+type PostCardProps = {
+  postId: string
+  content: string
+  hashtags: string[]
+  mentions: string[]
+  parentId: string | null
+  username: string
+  createdAt?: string
+}
 // Test with post_id
-const post_id = "66d6059974ecbef1214d20ab"
-export default function PostCard() {
+//const post_id = "66d6059974ecbef1214d20ab"
+export default function PostCard({
+  postId,
+  content,
+  hashtags,
+  mentions,
+  parentId,
+  username,
+  createdAt
+}: PostCardProps) {
   const [like, toggleLike] = useToggleState(false)
   const [bookmark, toggleBookmark] = useToggleState(false)
 
@@ -41,18 +58,18 @@ export default function PostCard() {
   const handleLikeToggle = () => {
     toggleLike()
     if (!like) {
-      handleMutation(likeMutation, { post_id })
+      handleMutation(likeMutation, { postId })
     } else {
-      handleMutation(unlikeMutation, post_id)
+      handleMutation(unlikeMutation, postId)
     }
   }
 
   const handleBookmarkToggle = () => {
     toggleBookmark()
     if (!bookmark) {
-      handleMutation(bookmarkMutation, { post_id })
+      handleMutation(bookmarkMutation, { postId })
     } else {
-      handleMutation(unbookmarkMutation, post_id)
+      handleMutation(unbookmarkMutation, postId)
     }
   }
 
@@ -60,11 +77,11 @@ export default function PostCard() {
     <div className=' mx-auto'>
       {/* Header */}
       <div className='flex items-center'>
-        <PostAvatar name={"Hayen"} image='../src/assets/capy.jpg' postedTime='10 hours ago' />
+        <PostAvatar name={username} image='../src/assets/capy.jpg' postedTime='10 hours ago' />
       </div>
 
       {/* Content */}
-      <p className='mt-4 text-gray-800 text-left'>all you need is love 🐱💖</p>
+      <p className='mt-4 text-gray-800 text-left'>{content}</p>
       <div className='flex space-x-2 mt-2'>
         {/* <img src='https://via.placeholder.com/150' alt='Post Image 1' className='w-1/2 rounded-lg' />
         <img src='https://via.placeholder.com/150' alt='Post Image 2' className='w-1/2 rounded-lg' /> */}

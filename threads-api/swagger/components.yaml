@@ -104,11 +104,6 @@ components:
           format: uri
           description: URL to the user's avatar image
           example: https://example.com/avatar.jpg
-        cover_photo:
-          type: string
-          format: uri
-          description: URL to the user's cover photo
-          example: https://example.com/cover.jpg         
     PostBody:
       type: object
       properties:
@@ -236,10 +231,6 @@ components:
           type: string
           description: The user's avatar URL.
           example: ""  # Empty string for avatar
-        cover_photo:
-          type: string
-          description: The user's cover photo URL.
-          example: ""  # Empty string for cover_photo
     UserVerifyStatus:
       type: number
       enum: [Unverified, Verified, Banned]

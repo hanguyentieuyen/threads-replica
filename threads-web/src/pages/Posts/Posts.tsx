@@ -48,8 +48,16 @@ export const Posts: React.FC = () => {
             </Modal>
           </div>
           {posts.map((item) => (
-            <div key={item?._id} className='p-4 border-b last:border-b-0'>
-              <PostCard />
+            <div key={item._id} className='p-4 border-b last:border-b-0'>
+              <PostCard
+                postId={item._id}
+                content={item.content}
+                hashtags={item.hashtags}
+                mentions={item.mentions}
+                parentId={item.parent_id}
+                username={item.user.name}
+                createdAt={item.created_at}
+              />
             </div>
           ))}
         </div>

@@ -56,7 +56,6 @@ export interface UpdateMyProfileReqBody {
   website?: string
   username?: string
   avatar?: string
-  cover_photo?: string
 }
 
 export interface ChangePasswordReqBody {

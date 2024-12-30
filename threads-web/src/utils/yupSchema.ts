@@ -60,8 +60,7 @@ export const useValidationSchemas = () => {
     bio: yup.string().optional(),
     location: yup.string().optional(),
     website: yup.string().optional(),
-    username: yup.string().optional(),
-    cover_photo: yup.string().optional()
+    username: yup.string().optional()
   })
 
   return {

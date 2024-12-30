@@ -15,7 +15,6 @@ export const userApi = {
     website?: string
     username?: string
     avatar?: string
-    cover_photo?: string
   }) => http.patch<SuccessResponse<User>>(config.me, body),
 
   getUserProfile: (username: string) => http.get<SuccessResponse<User>>(`${config.users}/${username}`),

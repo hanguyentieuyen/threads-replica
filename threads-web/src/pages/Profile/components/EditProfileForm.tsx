@@ -118,15 +118,6 @@ export const EditProfileForm: React.FC = () => {
           autoComplete='on'
           className='w-full mb-4'
         />
-        <InputText
-          register={register}
-          type='text'
-          name='coverPhoto'
-          placeholder={t("coverPhoto")}
-          errorMessage={errors.cover_photo?.message}
-          autoComplete='on'
-          className='w-full mb-4'
-        />
         <Button
           type='submit'
           isLoading={updateMyProfileMutation.isPending}

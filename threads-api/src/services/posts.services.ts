@@ -108,6 +108,9 @@ class PostsService {
         bookmark_count: {
           $size: '$bookmarks'
         },
+        like_count: {
+          $size: '$likes'
+        },
         repost_count: {
           $size: {
             $filter: {
@@ -115,6 +118,17 @@ class PostsService {
               as: 'item',
               cond: {
                 $eq: ['$$item.type', PostType.RePost]
+              }
+            }
+          }
+        },
+        quotepost_count: {
+          $size: {
+            $filter: {
+              input: '$post_children',
+              as: 'item',
+              cond: {
+                $eq: ['$$item.type', PostType.QuotePost]
               }
             }
           }
@@ -248,6 +262,9 @@ class PostsService {
         bookmark_count: {
           $size: '$bookmarks'
         },
+        like_count: {
+          $size: '$likes'
+        },
         repost_count: {
           $size: {
             $filter: {
@@ -255,6 +272,17 @@ class PostsService {
               as: 'item',
               cond: {
                 $eq: ['$$item.type', PostType.RePost]
+              }
+            }
+          }
+        },
+        quotepost_count: {
+          $size: {
+            $filter: {
+              input: '$post_children',
+              as: 'item',
+              cond: {
+                $eq: ['$$item.type', PostType.QuotePost]
               }
             }
           }
@@ -408,12 +436,22 @@ class PostsService {
       {
         $addFields: {
           bookmark_count: { $size: '$bookmarks' },
+          like_count: { $size: '$likes' },
           repost_count: {
             $size: {
               $filter: {
                 input: '$post_children',
                 as: 'item',
                 cond: { $eq: ['$$item.type', PostType.RePost] }
+              }
+            }
+          },
+          quotepost_count: {
+            $size: {
+              $filter: {
+                input: '$post_children',
+                as: 'item',
+                cond: { $eq: ['$$item.type', PostType.QuotePost] }
               }
             }
           }
