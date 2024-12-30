@@ -1,5 +1,4 @@
 import React from "react"
-import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import Button from "~/components/Button"
 import HeaderContainer from "~/components/HeaderContainer"
@@ -11,12 +10,7 @@ import NewPostForm from "./components/NewPostForm"
 import { useInfinitePosts } from "./apis/useInfinitePosts"
 
 export const Posts: React.FC = () => {
-  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
-
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng)
-  }
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfinitePosts()
   //const posts = data?.pages.flatMap((page) => page.data) || []
@@ -32,10 +26,7 @@ export const Posts: React.FC = () => {
       >
         <div className='sticky top-0 z-10'>
           <HeaderContainer />
-          <button onClick={() => changeLanguage("en")}>English</button>
-          <button onClick={() => changeLanguage("vi")}>Tiếng Việt</button>
         </div>
-        <p>{t("hello")}</p>
         <div className='border border-gray-300 bg-white rounded-t-2xl shadow-md'>
           <div className='w-full border-b flex items-center justify-between p-5'>
             <img

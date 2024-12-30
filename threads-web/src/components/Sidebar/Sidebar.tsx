@@ -8,7 +8,19 @@ import { authApi } from "~/apis/auth.api"
 import { toast } from "react-toastify"
 import { clearLocalStorage } from "~/utils/auth"
 import Icon from "../Icon"
-
+import i18n from "~/lib/i18n"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+// eslint-disable-next-line react-refresh/only-export-components
+export const languages = [
+  {
+    value: "en",
+    label: "English"
+  },
+  {
+    value: "vi",
+    label: "Tiếng Việt"
+  }
+]
 type SidebarProps = {
   className?: string
 }
@@ -54,6 +66,16 @@ const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>(({ ico
 export default function Sidebar({ className = "" }: SidebarProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const [selectedLanguage, setSelectedLanguage] = React.useState(() => {
+    return localStorage.getItem("language") || "vi"
+  })
+
+  const handleLanguageChange = (value: string) => {
+    setSelectedLanguage(value)
+    i18n.changeLanguage(value)
+    localStorage.setItem("language", value)
+  }
+
   const logoutMutation = useMutation({
     mutationFn: (body: { refresh_token: string }) => authApi.logout(body)
   })
@@ -96,13 +118,27 @@ export default function Sidebar({ className = "" }: SidebarProps) {
               <PopoverTrigger asChild>
                 <SidebarItem icon={<Icon name='Menu' className='w-8 h-8' />} />
               </PopoverTrigger>
-              <PopoverContent align='start' className='p-2'>
-                <p
+              <PopoverContent align='start' className='p-3'>
+                <div className='w-full mb-3'>
+                  <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
+                    <SelectTrigger className='flex justify-between gap-1 bg-white p-0 px-3.5 '>
+                      <SelectValue placeholder='Pick an option' className='mr-auto' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {languages.map((lang) => (
+                        <SelectItem key={lang.value} value={lang.value.toString()}>
+                          {lang.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div
                   onClick={handleLogout}
-                  className='text-red-500 font-semibold p-3 cursor-pointer hover:bg-slate-100 hover:rounded-lg'
+                  className='text-red-500 font-semibold p-2 text-sm cursor-pointer hover:bg-slate-100 hover:rounded-lg'
                 >
                   {t("logout")}
-                </p>
+                </div>
               </PopoverContent>
             </Popover>
           </ul>
