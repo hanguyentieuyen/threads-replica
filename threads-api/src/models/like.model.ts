@@ -12,10 +12,9 @@ export default class Like {
   created_at?: Date
 
   constructor({ _id, user_id, created_at, post_id }: LikeContructor) {
-    const date = new Date()
-    this._id = _id
+    this._id = _id || new ObjectId()
     this.user_id = user_id
-    this.created_at = created_at || date
+    this.created_at = created_at || new Date()
     this.post_id = post_id
   }
 }

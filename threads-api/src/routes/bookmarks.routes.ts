@@ -3,6 +3,7 @@ import { bookmarksController, unbookmarksController } from '~/controllers/bookma
 import { accessTokenValidator } from '~/validations/users.validations'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
+import { bookmarkValidator, unbookmarkValidator } from '~/validations/posts.validations'
 
 const bookmarkRouter = Router()
 
@@ -14,7 +15,12 @@ const bookmarkRouter = Router()
  * Header: { Authorization: Bearer <access_token>}
  */
 
-bookmarkRouter.post('/', validateMiddleware(accessTokenValidator, 'headers'), requestHandler(bookmarksController))
+bookmarkRouter.post(
+  '/',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(bookmarkValidator, 'body'),
+  requestHandler(bookmarksController)
+)
 
 /**
  * Description: Unbookmark post
@@ -26,6 +32,7 @@ bookmarkRouter.post('/', validateMiddleware(accessTokenValidator, 'headers'), re
 bookmarkRouter.delete(
   '/post/:post_id',
   validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(unbookmarkValidator, 'params'),
   requestHandler(unbookmarksController)
 )
 export default bookmarkRouter

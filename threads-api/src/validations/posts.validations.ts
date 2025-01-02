@@ -38,7 +38,15 @@ export const likeValidator = Joi.object({
 })
 
 export const unlikeValidator = Joi.object({
-  liked_post_id: postIdSchema
+  post_id: postIdSchema
+})
+
+export const bookmarkValidator = Joi.object({
+  post_id: postIdSchema
+})
+
+export const unbookmarkValidator = Joi.object({
+  post_id: postIdSchema
 })
 
 export const paginationValidator = Joi.object({

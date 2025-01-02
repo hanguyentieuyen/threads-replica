@@ -58,7 +58,7 @@ export default function PostCard({
   const handleLikeToggle = () => {
     toggleLike()
     if (!like) {
-      handleMutation(likeMutation, { postId })
+      handleMutation(likeMutation, { post_id: postId })
     } else {
       handleMutation(unlikeMutation, postId)
     }
@@ -67,7 +67,7 @@ export default function PostCard({
   const handleBookmarkToggle = () => {
     toggleBookmark()
     if (!bookmark) {
-      handleMutation(bookmarkMutation, { postId })
+      handleMutation(bookmarkMutation, { post_id: postId })
     } else {
       handleMutation(unbookmarkMutation, postId)
     }

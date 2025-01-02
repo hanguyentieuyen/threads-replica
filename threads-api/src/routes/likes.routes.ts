@@ -32,7 +32,7 @@ likeRouter.post(
 likeRouter.delete(
   '/post/:post_id',
   validateMiddleware(accessTokenValidator, 'headers'),
-  validateMiddleware(unlikeValidator, 'body'),
+  validateMiddleware(unlikeValidator, 'params'),
   requestHandler(unlikesController)
 )
 export default likeRouter
