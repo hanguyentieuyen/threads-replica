@@ -94,12 +94,12 @@ class SearchService {
       // Add bookmark and repost counts
       {
         $addFields: {
-          bookmark_count: { $size: '$bookmarks' },
-          like_count: { $size: '$likes' },
+          bookmark_count: { $size: { $ifNull: ['$bookmarks', []] } },
+          like_count: { $size: { $ifNull: ['$likes', []] } },
           repost_count: {
             $size: {
               $filter: {
-                input: '$post_children',
+                input: { $ifNull: ['$post_children', []] },
                 as: 'item',
                 cond: { $eq: ['$$item.type', PostType.RePost] }
               }
@@ -108,7 +108,7 @@ class SearchService {
           quotepost_count: {
             $size: {
               $filter: {
-                input: '$post_children',
+                input: { $ifNull: ['$post_children', []] },
                 as: 'item',
                 cond: { $eq: ['$$item.type', PostType.QuotePost] }
               }
