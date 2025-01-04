@@ -13,6 +13,7 @@ import { ProfileHeader } from "./components/ProfileHeader"
 import { EditProfileForm } from "./components/EditProfileForm"
 import { ProfileCompletionSection } from "./components/ProfileCompletionSection"
 import InputText from "~/components/InputText"
+import { User } from "~/types/user.type"
 
 const tabData = [
   { value: "tab1", label: "Thread", content: <div>Content for Tab 1</div> },
@@ -32,11 +33,13 @@ const Profile = () => {
   })
 
   const userData = profileData?.data.data
-
+  console.log(userData)
+  if (!userData) return null
+  const { name, date_of_birth, bio, location, website, username: userName, avatar } = userData as User
   return (
     <>
       <Helmet>
-        <title>{`${userData?.name ?? "Guest"} (@${userData?.username ?? "unknown"}) on Threads`}</title>
+        <title>{`${userData?.name ?? "Guest"} (${userData?.username ?? "unknown"}) on Threads`}</title>
         <meta name='description' content='Profile - Threads Replica' />
       </Helmet>
       <HeaderContainer />
@@ -58,7 +61,15 @@ const Profile = () => {
             <ModalHeader>
               <p className='text-gray-600 font-semibold pt-2'>{t("editProfile")}</p>
             </ModalHeader>
-            <EditProfileForm />
+            <EditProfileForm
+              name={name}
+              date_of_birth={new Date(date_of_birth)}
+              bio={bio}
+              website={website}
+              username={userName}
+              avatar={avatar}
+              location={location}
+            />
           </ModalContent>
         </Modal>
 

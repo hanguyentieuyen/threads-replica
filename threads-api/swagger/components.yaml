@@ -334,6 +334,14 @@ components:
         bookmark_count:
           type: integer
           example: 0
+        likes:
+          type: array
+          items:
+            type: string
+            example: []
+        like_count:
+          type: integer
+          example: 0
         repost_count:
           type: integer
           example: 0

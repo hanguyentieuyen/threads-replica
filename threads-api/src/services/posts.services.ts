@@ -93,6 +93,14 @@ class PostsService {
       },
       {
         $lookup: {
+          from: 'likes',
+          localField: '_id',
+          foreignField: 'post_id',
+          as: 'likes'
+        }
+      },
+      {
+        $lookup: {
           from: 'posts',
           localField: '_id',
           foreignField: 'parent_id',
@@ -235,6 +243,14 @@ class PostsService {
           localField: '_id',
           foreignField: 'post_id',
           as: 'bookmarks'
+        }
+      },
+      {
+        $lookup: {
+          from: 'likes',
+          localField: '_id',
+          foreignField: 'post_id',
+          as: 'likes'
         }
       },
       {
@@ -403,6 +419,15 @@ class PostsService {
           localField: '_id',
           foreignField: 'post_id',
           as: 'bookmarks'
+        }
+      },
+      // Lookup likes related to the post
+      {
+        $lookup: {
+          from: 'likes',
+          localField: '_id',
+          foreignField: 'post_id',
+          as: 'likes'
         }
       },
 

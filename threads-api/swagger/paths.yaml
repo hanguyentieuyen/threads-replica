@@ -260,20 +260,20 @@ paths:
                   error:
                     type: string
                     example: User not authenticated
-  /users/{user_id}:
+  /users/{username}:
     get:
       tags:
         - users
       summary: Get user details
       description: Retrieves information about a specific user by their user ID.
       parameters:
-        - name: user_id
+        - name: username
           in: path
           required: true
           description: The unique identifier of the user
           schema:
             type: string
-            example: 672f90bbef2ea13586c40673
+            example: user672f90bbef2ea13586c40673
       responses:
         '200':
           description: User details retrieved successfully

@@ -14,7 +14,7 @@ import { User } from "~/types/user.type"
 
 type FormData = UserSchemaYup
 
-export const EditProfileForm: React.FC = () => {
+export const EditProfileForm = ({ name, date_of_birth, bio, username, avatar, location, website }: FormData) => {
   const { t } = useTranslation()
   const { userSchemaYup } = useValidationSchemas()
 
@@ -63,6 +63,7 @@ export const EditProfileForm: React.FC = () => {
           register={register}
           type='text'
           name='name'
+          value={name}
           placeholder={t("name")}
           errorMessage={errors.name?.message}
           className='w-full mb-4'
@@ -77,6 +78,7 @@ export const EditProfileForm: React.FC = () => {
           register={register}
           type='text'
           name='bio'
+          value={bio}
           placeholder={t("bio")}
           errorMessage={errors.bio?.message}
           autoComplete='on'
@@ -86,6 +88,7 @@ export const EditProfileForm: React.FC = () => {
           register={register}
           type='text'
           name='location'
+          value={location}
           placeholder={t("location")}
           errorMessage={errors.location?.message}
           autoComplete='on'
@@ -95,6 +98,7 @@ export const EditProfileForm: React.FC = () => {
           register={register}
           type='text'
           name='website'
+          value={website}
           placeholder={t("website")}
           errorMessage={errors.website?.message}
           autoComplete='on'
@@ -104,6 +108,7 @@ export const EditProfileForm: React.FC = () => {
           register={register}
           type='text'
           name='username'
+          value={username}
           placeholder={t("username")}
           errorMessage={errors.username?.message}
           autoComplete='on'
@@ -113,6 +118,7 @@ export const EditProfileForm: React.FC = () => {
           register={register}
           type='text'
           name='avatar'
+          value={avatar}
           placeholder={t("avatar")}
           errorMessage={errors.avatar?.message}
           autoComplete='on'

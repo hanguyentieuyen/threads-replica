@@ -15,6 +15,8 @@ type PostCardProps = {
   mentions: string[]
   parentId: string | null
   username: string
+  bookmarkCount: number
+  likeCount: number
   createdAt?: string
 }
 // Test with post_id
@@ -26,6 +28,8 @@ export default function PostCard({
   mentions,
   parentId,
   username,
+  bookmarkCount,
+  likeCount,
   createdAt
 }: PostCardProps) {
   const [like, toggleLike] = useToggleState(false)
@@ -81,7 +85,7 @@ export default function PostCard({
       </div>
 
       {/* Content */}
-      <p className='mt-4 text-gray-800 text-left'>{content}</p>
+      <p className='mt-4 text-gray-800 text-left line-clamp-2'>{content}</p>
       <div className='flex space-x-2 mt-2'>
         {/* <img src='https://via.placeholder.com/150' alt='Post Image 1' className='w-1/2 rounded-lg' />
         <img src='https://via.placeholder.com/150' alt='Post Image 2' className='w-1/2 rounded-lg' /> */}
@@ -95,7 +99,7 @@ export default function PostCard({
             onClick={handleLikeToggle}
           >
             <Icon name='Heart' strokeWidth={2} size={16} color={like ? "red" : undefined} />
-            <span>575</span>
+            <span>{likeCount}</span>
           </div>
           <div className='flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-slate-100'>
             <Icon name='MessageCircle' strokeWidth={2} size={16} />
@@ -110,6 +114,7 @@ export default function PostCard({
             onClick={handleBookmarkToggle}
           >
             <Icon name='Bookmark' strokeWidth={2} size={16} color={bookmark ? "#eab308" : undefined} />
+            <span>{bookmarkCount}</span>
           </div>
         </div>
       </div>
