@@ -9,12 +9,12 @@ import { SuccessResponse } from "~/types/utils.type"
 import Icon from "../Icon"
 
 type PostCardProps = {
-  postId: string
+  postId?: string
   content: string
   hashtags: string[]
   mentions: string[]
   parentId: string | null
-  username: string
+  username?: string
   bookmarkCount: number
   likeCount: number
   createdAt?: string

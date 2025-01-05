@@ -13,6 +13,8 @@ export interface Post {
   user: User
   guest_views?: number
   user_views?: number
+  bookmark_count: number
+  like_count: number
   created_at?: string
   updated_at?: string
 }

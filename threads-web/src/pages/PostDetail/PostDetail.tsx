@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 import { postApi } from "~/apis/post.api"
 import Button from "~/components/Button"
+import ContentContainer from "~/components/ContentContainer"
 import HeaderContainer from "~/components/HeaderContainer"
 import PostCard from "~/components/PostCard"
 
@@ -15,22 +16,32 @@ export const PostDetail: React.FC = () => {
   })
 
   const post = postDetailsData?.data.data
+  if (!post) return null
   console.log(post)
+  const { bookmark_count, like_count, content, hashtags, mentions, parent_id, created_at } = post
   return (
     <>
       <div className='sticky top-0 z-10'>
         <HeaderContainer />
       </div>
-      <div className='border border-gray-300 bg-white rounded-t-2xl shadow-md'>
+      <ContentContainer>
         <div className='w-full border-b flex items-center justify-between p-5'>
           <img alt='avatar' src='https://via.placeholder.com/40' className='rounded-full w-10 h-10' />
           <span className='text-left text-sm text-slate-400 w-full mx-2'>Có gì mới ?</span>
           <Button className='border font-semibold text-gray-700 text-base py-2 px-5 rounded-lg'>Đăng</Button>
         </div>
         <div className='p-4 border-b last:border-b-0'>
-          <PostCard />
+          <PostCard
+            content={content}
+            hashtags={hashtags}
+            mentions={mentions}
+            parentId={parent_id}
+            bookmarkCount={bookmark_count}
+            likeCount={like_count}
+            createdAt={created_at}
+          />
         </div>
-      </div>
+      </ContentContainer>
     </>
   )
 }
