@@ -16,6 +16,12 @@ export const Posts: React.FC = () => {
   //const posts = data?.pages.flatMap((page) => page.data) || []
   const posts = data?.pages[0].data?.posts || []
   console.log("posts: ", posts)
+
+  const postDetail = (postId: string) => `/posts/${postId}`
+  const navigatePostDetail = (postId: string) => {
+    navigate(postDetail(postId))
+  }
+
   return (
     <>
       <InfiniteScroll
@@ -48,7 +54,11 @@ export const Posts: React.FC = () => {
             </Modal>
           </div>
           {posts.map((item) => (
-            <div key={item._id} className='p-4 border-b last:border-b-0'>
+            <div
+              key={item._id}
+              className='p-4 border-b last:border-b-0 cursor-pointer'
+              onClick={() => navigatePostDetail(item._id)}
+            >
               <PostCard
                 postId={item._id}
                 content={item.content}

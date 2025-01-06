@@ -2,7 +2,7 @@ import PostAvatar from "../PostAvatar"
 import { useToggleState } from "~/hooks/useToggleState"
 import { likeApi } from "~/apis/like.api"
 import { bookmarkApi } from "~/apis/bookmark.api"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { AxiosResponse } from "axios"
 import { SuccessResponse } from "~/types/utils.type"
@@ -14,7 +14,7 @@ type PostCardProps = {
   hashtags: string[]
   mentions: string[]
   parentId: string | null
-  username?: string
+  username: string
   bookmarkCount: number
   likeCount: number
   createdAt?: string
@@ -28,27 +28,54 @@ export default function PostCard({
   mentions,
   parentId,
   username,
-  bookmarkCount,
-  likeCount,
+  bookmarkCount: initialBookmarkCount,
+  likeCount: initialLikeCount,
   createdAt
 }: PostCardProps) {
+  const queryClient = useQueryClient()
   const [like, toggleLike] = useToggleState(false)
   const [bookmark, toggleBookmark] = useToggleState(false)
 
+  const updateOptimisticData = (field: "like_count" | "bookmark_count", increment: number) => {
+    const cacheKey = [["post", postId]]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    queryClient.setQueryData(cacheKey, (oldData: any) => {
+      console.log(oldData)
+      if (!oldData) return null
+      return { ...oldData, [field]: oldData[field] + increment }
+    })
+  }
+
   const likeMutation = useMutation({
-    mutationFn: (body: { post_id: string }) => likeApi.like(body)
+    mutationFn: (body: { post_id: string }) => likeApi.like(body),
+    onError: () => {
+      updateOptimisticData("like_count", -1) // Rollback on error
+      toast.error("Failed to like the post.")
+    }
   })
 
   const unlikeMutation = useMutation({
-    mutationFn: (post_id: string) => likeApi.unlike(post_id)
+    mutationFn: (post_id: string) => likeApi.unlike(post_id),
+    onError: () => {
+      updateOptimisticData("like_count", 1)
+      toast.error("Failed to unlike the post.")
+    }
   })
 
   const bookmarkMutation = useMutation({
-    mutationFn: (body: { post_id: string }) => bookmarkApi.bookmark(body)
+    mutationFn: (body: { post_id: string }) => bookmarkApi.bookmark(body),
+    onError: () => {
+      updateOptimisticData("bookmark_count", -1)
+      toast.error("Failed to bookmark the post.")
+    }
   })
 
   const unbookmarkMutation = useMutation({
-    mutationFn: (post_id: string) => bookmarkApi.unbookmark(post_id)
+    mutationFn: (post_id: string) => bookmarkApi.unbookmark(post_id),
+    onError: () => {
+      updateOptimisticData("bookmark_count", 1)
+      toast.error("Failed to unbookmark the post.")
+    }
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,20 +86,28 @@ export default function PostCard({
     })
   }
 
-  const handleLikeToggle = () => {
+  const handleLikeToggle = (e: MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
     toggleLike()
     if (!like) {
+      updateOptimisticData("likeCount", 1) // Optimistically update
       handleMutation(likeMutation, { post_id: postId })
     } else {
+      updateOptimisticData("likeCount", -1)
       handleMutation(unlikeMutation, postId)
     }
   }
 
-  const handleBookmarkToggle = () => {
+  const handleBookmarkToggle = (e: MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
     toggleBookmark()
     if (!bookmark) {
+      updateOptimisticData("bookmarkCount", 1)
       handleMutation(bookmarkMutation, { post_id: postId })
     } else {
+      updateOptimisticData("bookmarkCount", -1)
       handleMutation(unbookmarkMutation, postId)
     }
   }
@@ -99,7 +134,7 @@ export default function PostCard({
             onClick={handleLikeToggle}
           >
             <Icon name='Heart' strokeWidth={2} size={16} color={like ? "red" : undefined} />
-            <span>{likeCount}</span>
+            <span>{initialLikeCount}</span>
           </div>
           <div className='flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-slate-100'>
             <Icon name='MessageCircle' strokeWidth={2} size={16} />
@@ -114,7 +149,7 @@ export default function PostCard({
             onClick={handleBookmarkToggle}
           >
             <Icon name='Bookmark' strokeWidth={2} size={16} color={bookmark ? "#eab308" : undefined} />
-            <span>{bookmarkCount}</span>
+            <span>{initialBookmarkCount}</span>
           </div>
         </div>
       </div>
