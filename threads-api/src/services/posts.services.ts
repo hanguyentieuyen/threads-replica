@@ -6,7 +6,7 @@ import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'
 import { PostType } from '~/constants/enum'
-import HashTag from '~/models/hashtags.model'
+import HashTag from '~/models/hashtag.model'
 
 class PostsService {
   // Handle hashtags

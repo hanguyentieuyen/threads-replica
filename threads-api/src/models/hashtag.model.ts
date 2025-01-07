@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-interface HashTagContructor {
+interface HashTagConstructor {
   _id?: ObjectId
   name: string
   created_at?: Date
@@ -9,7 +9,7 @@ export default class HashTag {
   name: string
   created_at?: Date
 
-  constructor({ _id, name, created_at }: HashTagContructor) {
+  constructor({ _id, name, created_at }: HashTagConstructor) {
     const date = new Date()
     this._id = _id || new ObjectId()
     this.name = name

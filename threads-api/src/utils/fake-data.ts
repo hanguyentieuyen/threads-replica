@@ -8,7 +8,7 @@ import databaseService from '~/services/database.services'
 import { hashPassword } from './hash'
 import Post from '~/models/post.model'
 import Follow from '~/models/follow.model'
-import HashTag from '~/models/hashtags.model'
+import HashTag from '~/models/hashtag.model'
 
 const MYID = new ObjectId('6713e74880a37c56378c90eb')
 const PASSWORD = 'Yen@123'
