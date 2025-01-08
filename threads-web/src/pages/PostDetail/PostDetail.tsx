@@ -17,7 +17,7 @@ export const PostDetail: React.FC = () => {
 
   const post = postDetailsData?.data.data
   if (!post) return null
-  console.log(post)
+
   const { bookmark_count, like_count, content, hashtags, mentions, parent_id, created_at } = post
   return (
     <>
@@ -38,6 +38,7 @@ export const PostDetail: React.FC = () => {
             parentId={parent_id}
             bookmarkCount={bookmark_count}
             likeCount={like_count}
+            username={"username"}
             createdAt={created_at}
           />
         </div>

@@ -7,6 +7,7 @@ import { toast } from "react-toastify"
 import { AxiosResponse } from "axios"
 import { SuccessResponse } from "~/types/utils.type"
 import Icon from "../Icon"
+import { useState } from "react"
 
 type PostCardProps = {
   postId?: string
@@ -33,23 +34,28 @@ export default function PostCard({
   createdAt
 }: PostCardProps) {
   const queryClient = useQueryClient()
-  const [like, toggleLike] = useToggleState(false)
-  const [bookmark, toggleBookmark] = useToggleState(false)
+  const [like, toggleLike] = useToggleState(Boolean(initialLikeCount))
+  const [bookmark, toggleBookmark] = useToggleState(Boolean(initialBookmarkCount))
+  const [likeCount, setLikeCount] = useState(initialLikeCount)
+  const [bookmarkCount, setBookmarkCount] = useState(initialBookmarkCount)
 
   const updateOptimisticData = (field: "like_count" | "bookmark_count", increment: number) => {
     const cacheKey = [["post", postId]]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     queryClient.setQueryData(cacheKey, (oldData: any) => {
-      console.log(oldData)
-      if (!oldData) return null
-      return { ...oldData, [field]: oldData[field] + increment }
+      console.log("old data:", oldData)
+      if (!oldData) {
+        // Initialize the data if it's null
+        return { [field]: increment }
+      }
+
+      return { ...oldData, [field]: (oldData[field] || 0) + increment }
     })
   }
 
   const likeMutation = useMutation({
     mutationFn: (body: { post_id: string }) => likeApi.like(body),
     onError: () => {
-      updateOptimisticData("like_count", -1) // Rollback on error
       toast.error("Failed to like the post.")
     }
   })
@@ -57,7 +63,6 @@ export default function PostCard({
   const unlikeMutation = useMutation({
     mutationFn: (post_id: string) => likeApi.unlike(post_id),
     onError: () => {
-      updateOptimisticData("like_count", 1)
       toast.error("Failed to unlike the post.")
     }
   })
@@ -65,7 +70,6 @@ export default function PostCard({
   const bookmarkMutation = useMutation({
     mutationFn: (body: { post_id: string }) => bookmarkApi.bookmark(body),
     onError: () => {
-      updateOptimisticData("bookmark_count", -1)
       toast.error("Failed to bookmark the post.")
     }
   })
@@ -73,7 +77,7 @@ export default function PostCard({
   const unbookmarkMutation = useMutation({
     mutationFn: (post_id: string) => bookmarkApi.unbookmark(post_id),
     onError: () => {
-      updateOptimisticData("bookmark_count", 1)
+      setBookmarkCount((prev) => prev + 1)
       toast.error("Failed to unbookmark the post.")
     }
   })
@@ -86,28 +90,35 @@ export default function PostCard({
     })
   }
 
-  const handleLikeToggle = (e: MouseEvent) => {
+  const handleLikeToggle = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     e.preventDefault()
     toggleLike()
     if (!like) {
-      updateOptimisticData("likeCount", 1) // Optimistically update
+      setLikeCount((prev) => prev + 1)
+
+      updateOptimisticData("like_count", 1) // Optimistically update
       handleMutation(likeMutation, { post_id: postId })
     } else {
-      updateOptimisticData("likeCount", -1)
+      setLikeCount((prev) => prev - 1)
+
+      updateOptimisticData("like_count", -1)
       handleMutation(unlikeMutation, postId)
     }
   }
 
-  const handleBookmarkToggle = (e: MouseEvent) => {
+  const handleBookmarkToggle = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     e.preventDefault()
     toggleBookmark()
     if (!bookmark) {
-      updateOptimisticData("bookmarkCount", 1)
+      setBookmarkCount((prev) => prev + 1)
+
+      updateOptimisticData("bookmark_count", 1)
       handleMutation(bookmarkMutation, { post_id: postId })
     } else {
-      updateOptimisticData("bookmarkCount", -1)
+      setBookmarkCount((prev) => prev - 1)
+      updateOptimisticData("bookmark_count", -1)
       handleMutation(unbookmarkMutation, postId)
     }
   }
@@ -134,7 +145,7 @@ export default function PostCard({
             onClick={handleLikeToggle}
           >
             <Icon name='Heart' strokeWidth={2} size={16} color={like ? "red" : undefined} />
-            <span>{initialLikeCount}</span>
+            <span>{likeCount}</span>
           </div>
           <div className='flex items-center space-x-1 px-2 py-1 rounded-full hover:bg-slate-100'>
             <Icon name='MessageCircle' strokeWidth={2} size={16} />
@@ -149,7 +160,7 @@ export default function PostCard({
             onClick={handleBookmarkToggle}
           >
             <Icon name='Bookmark' strokeWidth={2} size={16} color={bookmark ? "#eab308" : undefined} />
-            <span>{initialBookmarkCount}</span>
+            <span>{bookmarkCount}</span>
           </div>
         </div>
       </div>
