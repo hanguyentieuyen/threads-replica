@@ -1,6 +1,6 @@
 import { PostReqBody } from '~/models/requestType/Post.requests'
 import databaseService from './database.services'
-import { ObjectId, WithId } from 'mongodb'
+import { ObjectId } from 'mongodb'
 import Post from '~/models/post.model'
 import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
@@ -317,10 +317,45 @@ class PostsService {
   }
   private totalCountStage(ids: ObjectId[], userId: ObjectId) {
     return [
-      this.matchPostStage(ids, userId),
+      {
+        $match: {
+          user_id: {
+            $in: ids
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user_id',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
       {
         $unwind: {
           path: '$user'
+        }
+      },
+      {
+        $match: {
+          $or: [
+            {
+              audience: 0
+            },
+            {
+              $and: [
+                {
+                  audience: 1
+                },
+                {
+                  'user.post_circle': {
+                    $in: [new ObjectId(userId)]
+                  }
+                }
+              ]
+            }
+          ]
         }
       },
       {
@@ -357,7 +392,6 @@ class PostsService {
       databaseService.posts.aggregate(postPipline).toArray(),
       databaseService.posts.aggregate(this.totalCountStage(ids, userId)).toArray()
     ])
-
     return {
       posts,
       total: total[0]?.total || 0

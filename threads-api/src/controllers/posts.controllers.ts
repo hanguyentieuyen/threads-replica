@@ -38,7 +38,7 @@ export const getPostsController = async (req: Request<ParamsDictionary, any, any
     data: {
       page,
       limit,
-      totalPage: Math.ceil(data.total / limit),
+      total_page: Math.ceil(data.total / limit),
       posts: data.posts
     }
   })

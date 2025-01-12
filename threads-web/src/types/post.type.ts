@@ -22,5 +22,5 @@ export interface Posts {
   posts: Post[]
   page: number
   limit: number
-  totalPage: number
+  total_page: number
 }
