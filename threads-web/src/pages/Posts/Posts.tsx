@@ -8,14 +8,14 @@ import PostCard from "~/components/PostCard"
 import path from "~/constant/path"
 import NewPostForm from "./components/NewPostForm"
 import { useInfinitePosts } from "./apis/useInfinitePosts"
+import { Post as IPost } from "~/types/post.type"
 
 export const Posts: React.FC = () => {
   const navigate = useNavigate()
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfinitePosts()
-  //const posts = data?.pages.flatMap((page) => page.data) || []
-  const posts = data?.pages[0].data?.posts || []
-  console.log("posts: ", posts)
+  const posts = data?.pages.flatMap((page) => page.data?.posts) as IPost[]
+  if (!posts) return []
 
   const postDetail = (postId: string) => `/posts/${postId}`
   const navigatePostDetail = (postId: string) => {
@@ -55,20 +55,20 @@ export const Posts: React.FC = () => {
           </div>
           {posts.map((item) => (
             <div
-              key={item._id}
+              key={item?._id}
               className='p-4 border-b last:border-b-0 cursor-pointer'
               onClick={() => navigatePostDetail(item._id)}
             >
               <PostCard
                 postId={item._id}
-                content={item.content}
-                hashtags={item.hashtags}
-                mentions={item.mentions}
-                parentId={item.parent_id}
-                username={item.user.name}
-                bookmarkCount={item.bookmark_count}
-                likeCount={item.like_count}
-                createdAt={item.created_at}
+                content={item?.content}
+                hashtags={item?.hashtags}
+                mentions={item?.mentions}
+                parentId={item?.parent_id}
+                username={item?.user.username}
+                bookmarkCount={item?.bookmark_count}
+                likeCount={item?.like_count}
+                createdAt={item?.created_at}
               />
             </div>
           ))}

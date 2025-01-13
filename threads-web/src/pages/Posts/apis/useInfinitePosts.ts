@@ -2,8 +2,9 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { postApi } from "~/apis/post.api"
 
 const fetchPosts = async ({ pageParam = 1 }: { pageParam?: number }) => {
-  const limit = 10 // Number of posts per page
+  const limit = 2 // Number of posts per page
   const response = await postApi.getPosts(pageParam, limit)
+  console.log(response.data)
   return response.data
 }
 
@@ -14,7 +15,7 @@ export const useInfinitePosts = () =>
     queryFn: fetchPosts,
     getNextPageParam: (lastPage) => {
       if (lastPage.data) {
-        return lastPage.data?.page < lastPage.data?.totalPage ? lastPage.data?.page + 1 : undefined
+        return lastPage.data?.page < lastPage.data?.total_page ? lastPage.data?.page + 1 : undefined
       }
     }
   })

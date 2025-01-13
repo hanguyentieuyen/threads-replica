@@ -18,7 +18,7 @@ export const PostDetail: React.FC = () => {
   const post = postDetailsData?.data.data
   if (!post) return null
 
-  const { bookmark_count, like_count, content, hashtags, mentions, parent_id, created_at } = post
+  const { _id, bookmark_count, like_count, content, hashtags, mentions, parent_id, created_at } = post
   return (
     <>
       <div className='sticky top-0 z-10'>
@@ -32,6 +32,7 @@ export const PostDetail: React.FC = () => {
         </div>
         <div className='p-4 border-b last:border-b-0'>
           <PostCard
+            postId={_id}
             content={content}
             hashtags={hashtags}
             mentions={mentions}

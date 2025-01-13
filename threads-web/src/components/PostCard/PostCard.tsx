@@ -10,14 +10,14 @@ import Icon from "../Icon"
 import { useState } from "react"
 
 type PostCardProps = {
-  postId?: string
-  content: string
-  hashtags: string[]
-  mentions: string[]
-  parentId: string | null
-  username: string
-  bookmarkCount: number
-  likeCount: number
+  postId: string
+  content?: string
+  hashtags?: string[]
+  mentions?: string[]
+  parentId?: string | null
+  username?: string
+  bookmarkCount?: number
+  likeCount?: number
   createdAt?: string
 }
 // Test with post_id
@@ -36,8 +36,8 @@ export default function PostCard({
   const queryClient = useQueryClient()
   const [like, toggleLike] = useToggleState(Boolean(initialLikeCount))
   const [bookmark, toggleBookmark] = useToggleState(Boolean(initialBookmarkCount))
-  const [likeCount, setLikeCount] = useState(initialLikeCount)
-  const [bookmarkCount, setBookmarkCount] = useState(initialBookmarkCount)
+  const [likeCount, setLikeCount] = useState<number>(initialLikeCount || 0)
+  const [bookmarkCount, setBookmarkCount] = useState<number>(initialBookmarkCount || 0)
 
   const updateOptimisticData = (field: "like_count" | "bookmark_count", increment: number) => {
     const cacheKey = [["post", postId]]

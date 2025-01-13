@@ -13,7 +13,7 @@ export const useInfiniteScroll = (loadMore: () => void, hasMore: boolean) => {
 
   useEffect(() => {
     const currentTriggerRef = loadMoreTriggerRef.current
-    const observer = new IntersectionObserver(([entry]) => setIsIntersecting(entry.isIntersecting), { threshold: 1.0 })
+    const observer = new IntersectionObserver(([entry]) => setIsIntersecting(entry.isIntersecting), { threshold: 0.1 })
 
     if (currentTriggerRef) {
       observer.observe(currentTriggerRef)
@@ -25,6 +25,7 @@ export const useInfiniteScroll = (loadMore: () => void, hasMore: boolean) => {
       if (currentTriggerRef) {
         observer.unobserve(currentTriggerRef)
       }
+      observer.disconnect()
     }
   }, [loadMoreTriggerRef])
 
