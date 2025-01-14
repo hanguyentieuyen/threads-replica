@@ -4,6 +4,8 @@ import {
   followController,
   forgotPasswordController,
   getMyProfileController,
+  getUserFollowersController,
+  getUserFollowingController,
   getUserProfileController,
   loginController,
   logoutController,
@@ -21,6 +23,8 @@ import {
   changePasswordValidator,
   followValidator,
   forgotPasswordValidator,
+  getUserFollowersValidator,
+  getUserFollowingValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
@@ -197,6 +201,28 @@ userRouter.delete(
   validateMiddleware(accessTokenValidator, 'headers'),
   validateMiddleware(unFollowValidator, 'params'),
   requestHandler(unFollowController)
+)
+
+/**
+ * Description: Get user followers
+ * Path: :user_id/followers
+ * Method: GET
+ */
+userRouter.get(
+  '/:user_id/followers',
+  validateMiddleware(getUserFollowersValidator, 'params'),
+  requestHandler(getUserFollowersController)
+)
+
+/**
+ * Description: Get user followers
+ * Path: :user_id/followers
+ * Method: GET
+ */
+userRouter.get(
+  '/:user_id/following',
+  validateMiddleware(getUserFollowingValidator, 'params'),
+  requestHandler(getUserFollowingController)
 )
 
 export default userRouter

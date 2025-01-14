@@ -372,6 +372,92 @@ class UsersService {
     })
     return { message: USERS_MESSAGES.UNFOLLOWED_SUCCESS }
   }
+
+  async getUserFollowers({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const userFollowers = await databaseService.follows
+      .aggregate([
+        // filter follow record by followed_user_id
+        { $match: { followed_user_id: new ObjectId(user_id) } },
+        // Join collection users to get user infor of followers
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'followerDetails'
+          }
+        },
+        // Unwind the array of followers
+        { $unwind: '$followerDetails' },
+        // Get nesscessary properties of user information
+        {
+          $project: {
+            _id: 0,
+            id: '$followerDetails._id',
+            name: '$followerDetails.name',
+            username: '$followerDetails.username',
+            avatar: '$followerDetails.avatar',
+            bio: '$followerDetails.bio'
+          }
+        },
+        {
+          $skip: limit * (page - 1)
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+
+    const total = await databaseService.follows.countDocuments({
+      user_id: new ObjectId(user_id)
+    })
+
+    return { userFollowers, total }
+  }
+
+  async getUserFollowing({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const userFollowing = await databaseService.follows
+      .aggregate([
+        // filter follow record by user_id
+        { $match: { user_id: new ObjectId(user_id) } },
+        // Join collection users to get user infor of followers
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'followed_user_id',
+            foreignField: '_id',
+            as: 'followingDetails'
+          }
+        },
+        // Unwind the array of followers
+        { $unwind: '$followerDetails' },
+        // Get nesscessary properties of user information
+        {
+          $project: {
+            _id: 0,
+            id: '$followingDetails._id',
+            name: '$followingDetails.name',
+            username: '$followingDetails.username',
+            avatar: '$followingDetails.avatar',
+            bio: '$followingDetails.bio'
+          }
+        },
+        {
+          $skip: limit * (page - 1)
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+    console.log(userFollowing)
+    const total = await databaseService.follows.countDocuments({
+      user_id: new ObjectId(user_id)
+    })
+
+    return { userFollowing, total }
+  }
 }
 
 const usersService = new UsersService()

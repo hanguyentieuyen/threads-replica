@@ -1,12 +1,7 @@
-import { Request } from 'express'
 import { USERS_MESSAGES } from '~/constants/messages'
 import databaseService from '~/services/database.services'
 import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
-import { capitalize } from 'lodash'
-import { JsonWebTokenError } from 'jsonwebtoken'
-import { verifyToken } from '~/utils/jwt'
-import { envConfig } from '~/utils/config'
 import { ObjectId } from 'mongodb'
 import Joi from 'joi'
 
@@ -202,3 +197,6 @@ export const followValidator = Joi.object({
 export const unFollowValidator = Joi.object({
   user_id: userIdSchema
 })
+
+export const getUserFollowersValidator = Joi.object({ user_id: userIdSchema })
+export const getUserFollowingValidator = Joi.object({ user_id: userIdSchema })

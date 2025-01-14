@@ -70,6 +70,14 @@ export interface UnFollowReqBody extends ParamsDictionary {
   user_id: string
 }
 
+export interface GetUserFollowersReqBody extends ParamsDictionary {
+  user_id: string
+}
+
+export interface GetUserFollowingReqBody extends ParamsDictionary {
+  user_id: string
+}
+
 export interface GetUserProfileReqBody extends ParamsDictionary {
   username: string
 }

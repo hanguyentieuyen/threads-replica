@@ -10,6 +10,8 @@ import {
   ChangePasswordReqBody,
   FollowReqBody,
   ForgotPasswordReqBody,
+  GetUserFollowersReqBody,
+  GetUserFollowingReqBody,
   GetUserProfileReqBody,
   LoginReqBody,
   LogoutReqBody,
@@ -325,4 +327,36 @@ export const unFollowController = async (req: Request<UnFollowReqBody>, res: Res
   const { user_id: followed_user_id } = req.params
   const data = await usersService.unfollow({ user_id, followed_user_id })
   return res.json(data)
+}
+
+export const getUserFollowersController = async (req: Request<GetUserFollowersReqBody>, res: Response) => {
+  const { user_id } = req.params
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const data = await usersService.getUserFollowers({ user_id, limit, page })
+  return res.json({
+    data: {
+      page,
+      limit,
+      total_page: Math.ceil(data.total / limit),
+      user_followers: data.userFollowers
+    },
+    message: USERS_MESSAGES.GET_USER_FOLLOWERS_SUCCESS
+  })
+}
+
+export const getUserFollowingController = async (req: Request<GetUserFollowingReqBody>, res: Response) => {
+  const { user_id } = req.params
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const data = await usersService.getUserFollowing({ user_id, limit, page })
+  return res.json({
+    data: {
+      page,
+      limit,
+      total_page: Math.ceil(data.total / limit),
+      user_following: data.userFollowing
+    },
+    message: USERS_MESSAGES.GET_USER_FOLLOWING_SUCCESS
+  })
 }

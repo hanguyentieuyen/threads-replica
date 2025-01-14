@@ -55,6 +55,8 @@ export const USERS_MESSAGES = {
   FOLLOWED: 'Followed',
   ALREADY_UNFOLLOWED: 'Already unfollowed',
   UNFOLLOWED_SUCCESS: 'Unfollowed success',
+  GET_USER_FOLLOWERS_SUCCESS: 'Get user followers success',
+  GET_USER_FOLLOWING_SUCCESS: 'Get user following success',
   LIKE_SUCCESS: 'Like success',
   LIKED: 'Liked',
   UNLIKED_SUCCESS: 'Unlike success',
