@@ -430,8 +430,8 @@ class UsersService {
             as: 'followingDetails'
           }
         },
-        // Unwind the array of followers
-        { $unwind: '$followerDetails' },
+        // // Unwind the array of followers
+        { $unwind: '$followingDetails' },
         // Get nesscessary properties of user information
         {
           $project: {
@@ -451,7 +451,6 @@ class UsersService {
         }
       ])
       .toArray()
-    console.log(userFollowing)
     const total = await databaseService.follows.countDocuments({
       user_id: new ObjectId(user_id)
     })

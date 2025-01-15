@@ -235,6 +235,88 @@ components:
       type: number
       enum: [Unverified, Verified, Banned]
       example: 1
+    UserFollowing:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number.
+          example: 1
+        limit:
+          type: integer
+          description: Number of records per page.
+          example: 10
+        total_page:
+          type: integer
+          description: Total number of pages.
+          example: 1
+        user_following:
+          type: array
+          description: List of users being followed by the user.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the followed user.
+                example: "67607403392723f7fdf2ce69"
+              name:
+                type: string
+                description: The name of the followed user.
+                example: "Hank.Rosenbaum59"
+              username:
+                type: string
+                description: The username of the followed user.
+                example: "user67607403392723f7fdf2ce69"
+              avatar:
+                type: string
+                description: Avatar URL of the followed user.
+                example: ""
+              bio:
+                type: string
+                description: Bio of the followed user.
+                example: ""
+    UserFollowers:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number.
+          example: 1
+        limit:
+          type: integer
+          description: Number of records per page.
+          example: 10
+        total_page:
+          type: integer
+          description: Total number of pages.
+          example: 1
+        user_followers:
+          type: array
+          description: List of users being following by the user.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the followed user.
+                example: "67607403392723f7fdf2ce69"
+              name:
+                type: string
+                description: The name of the followed user.
+                example: "Hank.Rosenbaum59"
+              username:
+                type: string
+                description: The username of the followed user.
+                example: "user67607403392723f7fdf2ce69"
+              avatar:
+                type: string
+                description: Avatar URL of the followed user.
+                example: ""
+              bio:
+                type: string
+                description: Bio of the followed user.
+                example: ""    
     Bookmark:
       type: object
       properties:

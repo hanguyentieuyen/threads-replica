@@ -538,6 +538,92 @@ paths:
                     example: Successfully unfollowed the user
         '422':
           description: Invalid or missing input fields
+  /users/{user_id}/following/:
+    get:
+      tags:
+        - users
+      summary: Get list of users that the specified user is following
+      description: Retrieve a paginated list of users that a specific user is following.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user whose following list is being retrieved.
+          schema:
+            type: string
+            example: "6713e74880a37c56378c90eb"
+        - name: page
+          in: query
+          required: true
+          description: The page number to retrieve.
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          required: true
+          description: The number of records per page.
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Successfully retrieved the user's following list.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Get user following successfully"
+                  data:
+                    $ref: '#/components/schemas/UserFollowing'
+        '422':
+          description: Invalid request (e.g., missing parameters or invalid user ID).
+  /users/{user_id}/followers/:
+    get:
+      tags:
+        - users
+      summary: Get list of users that the specified user is followed
+      description: Retrieve a paginated list of users that a specific user is followed.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user whose followed list is being retrieved.
+          schema:
+            type: string
+            example: "6713e74880a37c56378c90eb"
+        - name: page
+          in: query
+          required: true
+          description: The page number to retrieve.
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          required: true
+          description: The number of records per page.
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Successfully retrieved the user's followed list.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Get user followers successfully"
+                  data:
+                    $ref: '#/components/schemas/UserFollowers'
+        '422':
+          description: Invalid request (e.g., missing parameters or invalid user ID).
   /bookmark:
     post:
       tags:
