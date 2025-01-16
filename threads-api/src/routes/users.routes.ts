@@ -4,6 +4,7 @@ import {
   followController,
   forgotPasswordController,
   getMyProfileController,
+  getUserBookmarksController,
   getUserFollowersController,
   getUserFollowingController,
   getUserProfileController,
@@ -23,6 +24,7 @@ import {
   changePasswordValidator,
   followValidator,
   forgotPasswordValidator,
+  getUserBookmarksValidator,
   getUserFollowersValidator,
   getUserFollowingValidator,
   loginValidator,
@@ -225,4 +227,14 @@ userRouter.get(
   requestHandler(getUserFollowingController)
 )
 
+/**
+ * Description: Get user bookmarks
+ * Path: :user_id/bookmarks
+ * Method: GET
+ */
+userRouter.get(
+  '/:user_id/bookmarks',
+  validateMiddleware(getUserBookmarksValidator, 'params'),
+  requestHandler(getUserBookmarksController)
+)
 export default userRouter

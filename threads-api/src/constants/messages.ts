@@ -57,6 +57,7 @@ export const USERS_MESSAGES = {
   UNFOLLOWED_SUCCESS: 'Unfollowed success',
   GET_USER_FOLLOWERS_SUCCESS: 'Get user followers successfully',
   GET_USER_FOLLOWING_SUCCESS: 'Get user following successfully',
+  GET_USER_BOOKMARKS_SUCCESS: 'Get user bookmark successfully',
   LIKE_SUCCESS: 'Like success',
   LIKED: 'Liked',
   UNLIKED_SUCCESS: 'Unlike success',

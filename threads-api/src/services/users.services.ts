@@ -1,4 +1,4 @@
-import { TokenType, UserVerifyStatus } from '~/constants/enum'
+import { PostType, TokenType, UserVerifyStatus } from '~/constants/enum'
 import { envConfig } from '~/utils/config'
 import { createToken, verifyToken } from '~/utils/jwt'
 import databaseService from './database.services'
@@ -84,6 +84,108 @@ class UsersService {
     })
   }
 
+  private lookuPostDetailStage() {
+    return [
+      {
+        $lookup: {
+          from: 'posts',
+          localField: 'post_id',
+          foreignField: '_id',
+          as: 'postDetails'
+        }
+      },
+      {
+        $lookup: {
+          from: 'hashtags',
+          localField: 'hashtags',
+          foreignField: '_id',
+          as: 'hashtags'
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'mentions',
+          foreignField: '_id',
+          as: 'mentions'
+        }
+      },
+      {
+        $addFields: {
+          mentions: {
+            $map: {
+              input: '$mentions',
+              as: 'mention',
+              in: {
+                _id: '$$mention._id',
+                name: '$$mention.name',
+                username: '$$mention.username'
+              }
+            }
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'bookmarks',
+          localField: '_id',
+          foreignField: 'post_id',
+          as: 'bookmarks'
+        }
+      },
+      {
+        $lookup: {
+          from: 'likes',
+          localField: '_id',
+          foreignField: 'post_id',
+          as: 'likes'
+        }
+      },
+      {
+        $lookup: {
+          from: 'posts',
+          localField: '_id',
+          foreignField: 'parent_id',
+          as: 'post_children'
+        }
+      }
+    ]
+  }
+
+  private addFieldsPostDetailStage() {
+    return {
+      $addFields: {
+        bookmark_count: { $size: { $ifNull: ['$bookmarks', []] } },
+        like_count: { $size: { $ifNull: ['$likes', []] } },
+        repost_count: {
+          $size: {
+            $filter: {
+              input: { $ifNull: ['$post_children', []] },
+              as: 'item',
+              cond: { $eq: ['$$item.type', PostType.RePost] }
+            }
+          }
+        },
+        quotepost_count: {
+          $size: {
+            $filter: {
+              input: { $ifNull: ['$post_children', []] },
+              as: 'item',
+              cond: { $eq: ['$$item.type', PostType.QuotePost] }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private projectPostDetailStage() {
+    return {
+      $project: {
+        post_children: 0
+      }
+    }
+  }
   async checkEmailExist(email: string) {
     const user = await databaseService.users.findOne({ email })
     return Boolean(user)
@@ -456,6 +558,51 @@ class UsersService {
     })
 
     return { userFollowing, total }
+  }
+
+  async getUserBookmarks({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const userBookmarks = await databaseService.bookmarks
+      .aggregate([
+        // filter post record by user bookmark posts
+        { $match: { user_id: new ObjectId(user_id) } },
+        {
+          $lookup: {
+            from: 'posts',
+            localField: 'post_id',
+            foreignField: '_id',
+            as: 'postDetails'
+          }
+        },
+        { $unwind: '$postDetails' },
+        {
+          $project: {
+            _id: 0,
+            id: '$postDetails._id',
+            user_id: '$postDetails.user_id',
+            type: '$postDetails.type',
+            audience: '$postDetails.audience',
+            content: '$postDetails.content',
+            parent_id: '$postDetails.parent_id',
+            hashtags: '$postDetails.hashtags',
+            mentions: '$postDetails.mentions',
+            medias: '$postDetails.medias',
+            created_at: '$postDetails.created_at',
+            updated_at: '$postDetails.updated_at'
+          }
+        },
+        {
+          $skip: limit * (page - 1)
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+    const total = await databaseService.bookmarks.countDocuments({
+      user_id: new ObjectId(user_id)
+    })
+
+    return { userBookmarks, total }
   }
 }
 

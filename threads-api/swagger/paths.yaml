@@ -624,6 +624,59 @@ paths:
                     $ref: '#/components/schemas/UserFollowers'
         '422':
           description: Invalid request (e.g., missing parameters or invalid user ID).
+  /users/{user_id}/bookmarks:
+    get:
+      tags:
+        - users
+      summary: Get bookmarks by user
+      description: Retrieve all bookmarks of a specific user with pagination.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user whose bookmarks are being retrieved.
+          schema:
+            type: string
+            example: "6713e74880a37c56378c90eb"
+        - name: page
+          in: query
+          required: false
+          description: The page number for pagination.
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          description: The number of records per page.
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Successfully retrieved user bookmarks.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                        description: Current page number.
+                      limit:
+                        type: integer
+                        description: Number of records per page.
+                      total_page:
+                        type: integer
+                        description: Total number of pages.
+                      user_bookmark_posts:
+                        $ref: '#/components/schemas/Post'
+        '422':
+          description: Invalid request parameters.
+        
   /bookmark:
     post:
       tags:

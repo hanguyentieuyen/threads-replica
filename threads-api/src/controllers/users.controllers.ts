@@ -360,3 +360,19 @@ export const getUserFollowingController = async (req: Request<GetUserFollowingRe
     message: USERS_MESSAGES.GET_USER_FOLLOWING_SUCCESS
   })
 }
+
+export const getUserBookmarksController = async (req: Request<GetUserFollowingReqBody>, res: Response) => {
+  const { user_id } = req.params
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const data = await usersService.getUserBookmarks({ user_id, limit, page })
+  return res.json({
+    data: {
+      page,
+      limit,
+      total_page: Math.ceil(data.total / limit),
+      user_bookmark_posts: data.userBookmarks
+    },
+    message: USERS_MESSAGES.GET_USER_BOOKMARKS_SUCCESS
+  })
+}
