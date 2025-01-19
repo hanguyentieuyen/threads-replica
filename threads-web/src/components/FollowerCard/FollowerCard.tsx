@@ -8,10 +8,10 @@ import Button from "../Button"
 import { useTranslation } from "react-i18next"
 
 type UserProfileCardProps = {
-  username: string
-  fullName: string
-  followersCount: number
-  profileImage: string
+  username?: string
+  fullName?: string
+  followersCount?: number
+  profileImage?: string
   isVerified?: boolean
 }
 
@@ -22,7 +22,8 @@ export default function FollowerCard({
   profileImage,
   isVerified = false
 }: UserProfileCardProps) {
-  const formattedFollowers = new Intl.NumberFormat("en-US", { notation: "compact" }).format(followersCount)
+  const formattedFollowers =
+    followersCount && new Intl.NumberFormat("en-US", { notation: "compact" }).format(followersCount)
   const { t } = useTranslation()
   const [isFollow, setIsFollow] = useToggleState(false)
 
@@ -93,7 +94,7 @@ export default function FollowerCard({
             )}
           </div>
           <p className='text-sm text-gray-500'>{fullName}</p>
-          <p className='text-sm text-gray-500'>{formattedFollowers} người theo dõi</p>
+          {formattedFollowers && <p className='text-sm text-gray-500'>{formattedFollowers} người theo dõi</p>}
         </div>
       </div>
       <Button onClick={handleFollowToggle} className='border text-gray-800 font-semibold text-sm py-2 px-5 rounded-lg'>

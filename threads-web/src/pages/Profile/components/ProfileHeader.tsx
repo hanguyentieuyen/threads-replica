@@ -1,9 +1,16 @@
+import { Modal, ModalContent, ModalTrigger } from "~/components/Modal/Modal"
+import Tabs from "~/components/Tab/Tabs"
 import { User } from "~/types/user.type"
+import { UserFollowerList } from "./UserFollowerList"
+import { UserFollowingList } from "./UserFollowingList"
 
 interface ProfileHeaderProps {
   user?: User
 }
-
+const tabData = [
+  { value: "follower", label: "Follower", content: <UserFollowerList /> },
+  { value: "following", label: "Following", content: <UserFollowingList /> }
+]
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
   return (
     <div className='p-6'>
@@ -15,9 +22,20 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ user }) => {
         <img src='../src/assets/capy.jpg' alt='Profile' className='w-20 h-20 rounded-full' />
       </div>
       <div className='flex items-center'>
-        <img src='../src/assets/capela.jpg' alt='Follower 1' className='w-5 h-5 rounded-full' />
         <img src='../src/assets/capy.jpg' alt='Follower 2' className='w-5 h-5 rounded-full' />
-        <span className='text-sm text-gray-500'>{17} followers</span>
+        <img src='../src/assets/capela.jpg' alt='Follower 1' className='w-5 h-5 rounded-full' />
+        <Modal>
+          <div className='px-6'>
+            <ModalTrigger>
+              <span className='text-sm text-gray-500'>{17} followers</span>
+            </ModalTrigger>
+          </div>
+          <ModalContent>
+            <div className='flex mt-4 space-x-2'>
+              <Tabs defaultValue='follower' tabs={tabData} />
+            </div>
+          </ModalContent>
+        </Modal>
       </div>
     </div>
   )

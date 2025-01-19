@@ -31,29 +31,9 @@ const Profile = () => {
     queryFn: () => (username ? userApi.getUserProfile(username) : userApi.getMyProfile()),
     staleTime: 1000 * 60 * 5 // cache 5 minutes
   })
-  // Test:
-  const userId = "6713e74880a37c56378c90eb"
-  const { data: userFollowing } = useQuery({
-    queryKey: ["userFollowing"],
-    queryFn: () => userApi.getUserFollowing({ user_id: userId, page: 1, limit: 10 }),
-    staleTime: 1000 * 60 * 5 // cache 5 minutes
-  })
-
-  const { data: userFollowers } = useQuery({
-    queryKey: ["userFollowers"],
-    queryFn: () => userApi.getUserFollowers({ user_id: userId, page: 1, limit: 10 }),
-    staleTime: 1000 * 60 * 5 // cache 5 minutes
-  })
 
   const userData = profileData?.data
-  const userFollowingData = userFollowing?.data
-  const userFollowersData = userFollowers?.data
-
   console.log("userProfileData: ", userData)
-
-  console.log("userFollowingData: ", userFollowingData)
-
-  console.log("userFollowersData: ", userFollowersData)
 
   if (!userData) return null
   const { name, date_of_birth, bio, location, website, username: userName, avatar } = userData as User
