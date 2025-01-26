@@ -21,8 +21,8 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ErrorBoundary>
+    <ErrorBoundary>
+      <BrowserRouter>
         <HelmetProvider>
           <QueryClientProvider client={queryClient}>
             <AppProvider>
@@ -30,7 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             </AppProvider>
           </QueryClientProvider>
         </HelmetProvider>
-      </ErrorBoundary>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>
 )
