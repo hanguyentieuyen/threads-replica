@@ -1,66 +1,94 @@
-import { useRoutes } from "react-router-dom"
-import Login from "./pages/Login"
-import Register from "./pages/Register"
+import { Navigate, Outlet, useRoutes } from "react-router-dom"
 import path from "./constant/path"
 import RegisterLayout from "./layouts/RegisterLayout"
-import ForgotPassword from "./pages/ForgotPassword"
-import ResetPassword from "./pages/ResetPassword"
-import VerifyForgotPassword from "./pages/VerifyForgotPassword"
-import VerifyEmail from "./pages/VerifyEmail"
 import MainLayout from "./layouts/MainLayout"
-import Profile from "./pages/Profile"
-import Posts from "./pages/Posts"
-import PostDetail from "./pages/PostDetail"
-import Search from "./pages/Search"
-import ChangePassword from "./pages/ChangePassword"
+import { lazy, Suspense, useContext } from "react"
+import { AppContext } from "./context/app.context"
+import LoadingScreen from "./components/LoadingScreen"
+
+const Login = lazy(() => import("./pages/Login"))
+const Register = lazy(() => import("./pages/Register"))
+const VerifyEmail = lazy(() => import("./pages/VerifyEmail"))
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"))
+const ChangePassword = lazy(() => import("./pages/ChangePassword"))
+const ResetPassword = lazy(() => import("./pages/ResetPassword"))
+const VerifyForgotPassword = lazy(() => import("./pages/VerifyForgotPassword"))
+const Profile = lazy(() => import("./pages/Profile"))
+const Posts = lazy(() => import("./pages/Posts"))
+const PostDetail = lazy(() => import("./pages/PostDetail"))
+const Search = lazy(() => import("./pages/Search"))
+
+function ProtectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
+  return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
+}
+function RejectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
+  return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
+}
 
 export default function useRouteElement() {
   const routeElements = useRoutes([
+    // Public routes (accessible by anyone)
     {
       path: "",
-      element: (
-        <MainLayout>
-          <Posts />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.login,
-      element: (
-        <RegisterLayout>
-          <Login />
-        </RegisterLayout>
-      )
-    },
-    {
-      path: path.register,
-      element: (
-        <RegisterLayout>
-          <Register />
-        </RegisterLayout>
-      )
+      element: <RejectedRoute />,
+      children: [
+        {
+          path: path.login,
+          element: (
+            <RegisterLayout>
+              <Suspense fallback={<LoadingScreen />}>
+                <Login />
+              </Suspense>
+            </RegisterLayout>
+          )
+        },
+        {
+          path: path.register,
+          element: (
+            <RegisterLayout>
+              <Suspense fallback={<LoadingScreen />}>
+                <Register />
+              </Suspense>
+            </RegisterLayout>
+          )
+        }
+      ]
     },
     {
       path: path.verifyEmail,
-      element: <VerifyEmail />
+      element: (
+        <Suspense fallback={<LoadingScreen />}>
+          <VerifyEmail />
+        </Suspense>
+      )
     },
     {
       path: path.forgotPassword,
       element: (
         <RegisterLayout>
-          <ForgotPassword />
+          <Suspense fallback={<LoadingScreen />}>
+            <ForgotPassword />
+          </Suspense>
         </RegisterLayout>
       )
     },
     {
       path: path.verifyForgotPassword,
-      element: <VerifyForgotPassword />
+      element: (
+        <Suspense fallback={<LoadingScreen />}>
+          <VerifyForgotPassword />
+        </Suspense>
+      )
     },
     {
       path: path.resetPassword,
       element: (
         <RegisterLayout>
-          <ResetPassword />
+          <Suspense fallback={<LoadingScreen />}>
+            <ResetPassword />
+          </Suspense>
         </RegisterLayout>
       )
     },
@@ -68,46 +96,80 @@ export default function useRouteElement() {
       path: path.changePassword,
       element: (
         <RegisterLayout>
-          <ChangePassword />
+          <Suspense fallback={<LoadingScreen />}>
+            <ChangePassword />
+          </Suspense>
         </RegisterLayout>
       )
     },
+
+    // Protected routes (only accessible if authenticated)
     {
-      path: path.postDetail,
+      path: "",
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: path.postDetail,
+          element: (
+            <MainLayout>
+              <Suspense fallback={<LoadingScreen />}>
+                <PostDetail />
+              </Suspense>
+            </MainLayout>
+          )
+        },
+        {
+          path: path.search,
+          element: (
+            <MainLayout>
+              <Suspense fallback={<LoadingScreen />}>
+                <Search />
+              </Suspense>
+            </MainLayout>
+          )
+        },
+        {
+          path: path.me,
+          element: (
+            <MainLayout>
+              <Suspense fallback={<LoadingScreen />}>
+                <Profile />
+              </Suspense>
+            </MainLayout>
+          )
+        },
+        {
+          path: path.userProfile,
+          element: (
+            <MainLayout>
+              <Suspense fallback={<LoadingScreen />}>
+                <Profile />
+              </Suspense>
+            </MainLayout>
+          )
+        }
+      ]
+    },
+
+    // Default route for displaying posts
+    {
+      path: "",
+      index: true,
       element: (
         <MainLayout>
-          <PostDetail />
+          <Suspense fallback={<LoadingScreen />}>
+            <Posts />
+          </Suspense>
         </MainLayout>
       )
     },
-    {
-      path: path.search,
-      element: (
-        <MainLayout>
-          <Search />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.me,
-      element: (
-        <MainLayout>
-          <Profile />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.userProfile,
-      element: (
-        <MainLayout>
-          <Profile />
-        </MainLayout>
-      )
-    },
+
+    // Catch-all route for undefined paths
     {
       path: "*",
       element: <>Not found page</>
     }
   ])
+
   return routeElements
 }
