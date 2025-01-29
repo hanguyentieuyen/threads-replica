@@ -4,6 +4,7 @@ import RegisterLayout from "./layouts/RegisterLayout"
 import MainLayout from "./layouts/MainLayout"
 import { lazy, Suspense, useContext } from "react"
 import { AppContext } from "./context/app.context"
+import LoadingScreen from "./components/LoadingScreen"
 
 const Login = lazy(() => import("./pages/Login"))
 const Register = lazy(() => import("./pages/Register"))
@@ -37,7 +38,7 @@ export default function useRouteElement() {
           path: path.login,
           element: (
             <RegisterLayout>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<LoadingScreen />}>
                 <Login />
               </Suspense>
             </RegisterLayout>
@@ -47,7 +48,7 @@ export default function useRouteElement() {
           path: path.register,
           element: (
             <RegisterLayout>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<LoadingScreen />}>
                 <Register />
               </Suspense>
             </RegisterLayout>
@@ -58,7 +59,7 @@ export default function useRouteElement() {
     {
       path: path.verifyEmail,
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<LoadingScreen />}>
           <VerifyEmail />
         </Suspense>
       )
@@ -67,7 +68,7 @@ export default function useRouteElement() {
       path: path.forgotPassword,
       element: (
         <RegisterLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<LoadingScreen />}>
             <ForgotPassword />
           </Suspense>
         </RegisterLayout>
@@ -76,7 +77,7 @@ export default function useRouteElement() {
     {
       path: path.verifyForgotPassword,
       element: (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<LoadingScreen />}>
           <VerifyForgotPassword />
         </Suspense>
       )
@@ -85,7 +86,7 @@ export default function useRouteElement() {
       path: path.resetPassword,
       element: (
         <RegisterLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<LoadingScreen />}>
             <ResetPassword />
           </Suspense>
         </RegisterLayout>
@@ -95,7 +96,7 @@ export default function useRouteElement() {
       path: path.changePassword,
       element: (
         <RegisterLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<LoadingScreen />}>
             <ChangePassword />
           </Suspense>
         </RegisterLayout>
@@ -111,7 +112,7 @@ export default function useRouteElement() {
           path: path.postDetail,
           element: (
             <MainLayout>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<LoadingScreen />}>
                 <PostDetail />
               </Suspense>
             </MainLayout>
@@ -121,7 +122,7 @@ export default function useRouteElement() {
           path: path.search,
           element: (
             <MainLayout>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<LoadingScreen />}>
                 <Search />
               </Suspense>
             </MainLayout>
@@ -131,7 +132,7 @@ export default function useRouteElement() {
           path: path.me,
           element: (
             <MainLayout>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<LoadingScreen />}>
                 <Profile />
               </Suspense>
             </MainLayout>
@@ -141,7 +142,7 @@ export default function useRouteElement() {
           path: path.userProfile,
           element: (
             <MainLayout>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<LoadingScreen />}>
                 <Profile />
               </Suspense>
             </MainLayout>
@@ -156,7 +157,7 @@ export default function useRouteElement() {
       index: true,
       element: (
         <MainLayout>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<LoadingScreen />}>
             <Posts />
           </Suspense>
         </MainLayout>
