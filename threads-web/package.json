@@ -40,7 +40,6 @@
     "react-i18next": "^15.1.1",
     "react-router-dom": "^6.25.1",
     "react-toastify": "^10.0.5",
-    "shadcn": "^2.1.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "yup": "^1.4.0"

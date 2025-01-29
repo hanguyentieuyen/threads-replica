@@ -26,12 +26,6 @@ function RejectedRoute() {
   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
-const withSuspense = (Component: unknown) => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <Component />
-  </Suspense>
-)
-
 export default function useRouteElement() {
   const routeElements = useRoutes([
     // Public routes (accessible by anyone)
@@ -41,13 +35,21 @@ export default function useRouteElement() {
       children: [
         {
           path: path.login,
-          element: <RegisterLayout>{withSuspense(Login)}</RegisterLayout>
+          element: (
+            <RegisterLayout>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Login />
+              </Suspense>
+            </RegisterLayout>
+          )
         },
         {
           path: path.register,
           element: (
             <RegisterLayout>
-              <Register />
+              <Suspense fallback={<div>Loading...</div>}>
+                <Register />
+              </Suspense>
             </RegisterLayout>
           )
         }
@@ -55,25 +57,37 @@ export default function useRouteElement() {
     },
     {
       path: path.verifyEmail,
-      element: <VerifyEmail />
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+          <VerifyEmail />
+        </Suspense>
+      )
     },
     {
       path: path.forgotPassword,
       element: (
         <RegisterLayout>
-          <ForgotPassword />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ForgotPassword />
+          </Suspense>
         </RegisterLayout>
       )
     },
     {
       path: path.verifyForgotPassword,
-      element: <VerifyForgotPassword />
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+          <VerifyForgotPassword />
+        </Suspense>
+      )
     },
     {
       path: path.resetPassword,
       element: (
         <RegisterLayout>
-          <ResetPassword />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ResetPassword />
+          </Suspense>
         </RegisterLayout>
       )
     },
@@ -81,7 +95,9 @@ export default function useRouteElement() {
       path: path.changePassword,
       element: (
         <RegisterLayout>
-          <ChangePassword />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ChangePassword />
+          </Suspense>
         </RegisterLayout>
       )
     },
@@ -95,7 +111,9 @@ export default function useRouteElement() {
           path: path.postDetail,
           element: (
             <MainLayout>
-              <PostDetail />
+              <Suspense fallback={<div>Loading...</div>}>
+                <PostDetail />
+              </Suspense>
             </MainLayout>
           )
         },
@@ -103,7 +121,9 @@ export default function useRouteElement() {
           path: path.search,
           element: (
             <MainLayout>
-              <Search />
+              <Suspense fallback={<div>Loading...</div>}>
+                <Search />
+              </Suspense>
             </MainLayout>
           )
         },
@@ -111,7 +131,9 @@ export default function useRouteElement() {
           path: path.me,
           element: (
             <MainLayout>
-              <Profile />
+              <Suspense fallback={<div>Loading...</div>}>
+                <Profile />
+              </Suspense>
             </MainLayout>
           )
         },
@@ -119,7 +141,9 @@ export default function useRouteElement() {
           path: path.userProfile,
           element: (
             <MainLayout>
-              <Profile />
+              <Suspense fallback={<div>Loading...</div>}>
+                <Profile />
+              </Suspense>
             </MainLayout>
           )
         }
@@ -129,7 +153,14 @@ export default function useRouteElement() {
     // Default route for displaying posts
     {
       path: "",
-      element: <MainLayout>{withSuspense(Posts)}</MainLayout>
+      index: true,
+      element: (
+        <MainLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Posts />
+          </Suspense>
+        </MainLayout>
+      )
     },
 
     // Catch-all route for undefined paths
