@@ -8,6 +8,7 @@ import bookmarkRouter from './routes/bookmarks.routes'
 import likeRouter from './routes/likes.routes'
 import searchRouter from './routes/search.routes'
 import mediaRouter from './routes/medias.routes'
+import hashTagsRouter from './routes/hashtags.routes'
 import { createUploadFolder } from './utils/fileparser'
 import staticRouter from './routes/static.routes'
 //import '~/utils/fake-data'
@@ -55,6 +56,7 @@ app.use('/like', likeRouter)
 app.use('/search', searchRouter)
 app.use('/medias', mediaRouter)
 app.use('/static', staticRouter)
+app.use('/hashtags', hashTagsRouter)
 
 // Database connection and indexing
 databaseService.connect().then(() => {

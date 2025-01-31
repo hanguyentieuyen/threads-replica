@@ -100,3 +100,11 @@ export const LIKES_MESSAGES = {
   LIKE_SUCCESS: 'Like success',
   UNLIKE_SUCCESS: 'Unlike success'
 }
+
+export const HASHTAGS_MESSAGES = {
+  SEARCH_CONTENT_MUST_BE_STRING: 'Search content must be string',
+  GET_HASHTAG_SUCCESS: 'Get hashtags successfully',
+  GET_HASHTAG_FAILED: 'Get hashtags failed',
+  INVALID_HASHTAG: 'Invalid hashtag',
+  HASHTAG_NOT_FOUND: 'Hashtag not found'
+}
