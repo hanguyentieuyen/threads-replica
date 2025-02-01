@@ -161,6 +161,12 @@ components:
         post_id: 
           type: string
           example: "669394afa40a455e8ba1f592"
+    HashtagBody:
+      type: object
+      properties:
+        hashtag:
+          type: string
+          example: "swagger"
     SuccessAuthentication:
       type: object
       properties:
@@ -427,6 +433,21 @@ components:
         repost_count:
           type: integer
           example: 0
+    Hashtag:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 66d606b192c854d70c7704ce
+        name:
+          type: string
+          example: "swagger"
+        created_at:
+          type: string
+          description: The timestamp of when the user was created in ISO 8601 format.
+          format: ISO8601
+          example: "2024-07-14T09:04:47.147Z"
+        
   securitySchemes:
     BearerAuth:
       type: http

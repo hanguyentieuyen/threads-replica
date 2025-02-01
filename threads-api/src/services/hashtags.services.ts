@@ -28,7 +28,14 @@ class HashTagsService {
       { upsert: true, returnDocument: 'after' }
     )
 
-    return newHashTag?.name
+    if (!newHashTag) {
+      throw new ErrorWithStatus({
+        message: HASHTAGS_MESSAGES.GET_HASHTAG_FAILED,
+        status: HTTP_STATUS.BAD_REQUEST
+      })
+    }
+
+    return newHashTag
   }
 }
 

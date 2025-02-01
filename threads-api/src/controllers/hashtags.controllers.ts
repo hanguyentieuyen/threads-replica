@@ -20,5 +20,5 @@ export const searchHashTagsController = async (
 
 export const createHashTagController = async (req: Request<ParamsDictionary, any, HashTagReqBody>, res: Response) => {
   const data = await hashTagsService.createHashTag(req.body.hashtag)
-  return res.json({ data })
+  return res.json({ message: HASHTAGS_MESSAGES.CREATE_HASHTAG_SUCCESS, data })
 }

@@ -6,21 +6,17 @@ import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'
 import { PostType } from '~/constants/enum'
-import HashTag from '~/models/hashtag.model'
+import hashTagsService from './hashtags.services'
 
 class PostsService {
   // Handle hashtags
   async handleHashTags(hashtags: string[]) {
     const hashtagsDocuments = await Promise.all(
       hashtags.map((hashtag) => {
-        // Tìm hashtag trong database nếu có thì lấy ra, nếu ko có thì tạo mới
-        return databaseService.hashtags.findOneAndUpdate(
-          { name: hashtag },
-          { $setOnInsert: new HashTag({ name: hashtag }) },
-          { upsert: true, returnDocument: 'after' }
-        )
+        return hashTagsService.createHashTag(hashtag)
       })
     )
+
     return hashtagsDocuments.map((hashtag) => hashtag?._id)
   }
   async createPost({ user_id, body }: { user_id: string; body: PostReqBody }) {

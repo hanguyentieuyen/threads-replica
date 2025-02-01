@@ -35,6 +35,8 @@ tags:
     description: Threads replica like APIs
   - name: media
     description: Threads replica media API
+  - name: hashtags
+    description: Threads replica hashtags API
 
 paths:
   /users/register:
@@ -1026,3 +1028,58 @@ paths:
                       message:
                         type: string
                         example: "File is empty."
+  
+  /hashtags:
+    post:
+      tags:
+        - hashtags
+      summary: Create new hashtag
+      description: Create a new hashtag used in the posts.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HashtagBody'
+      responses:
+        '200':
+          description: Hashtags retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Hashtag'
+        '422':
+          description: Invalid or missing input fields
+    get:
+      tags:
+        - hashtags
+      summary: Search hashtags
+      description: Returns a list of hashtags containing the search keyword.
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          required: false
+          example: "js"
+          description: Hashtags search keywords.
+      responses:
+        "200":
+          description: List of hashtags found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Get hashtags successfully"
+                  data:
+                    type: array
+                    items:
+                      type: string
+                    example: ["js", "ReactJS", "nodejs"]
+        "422":
+          description: Invalid fields

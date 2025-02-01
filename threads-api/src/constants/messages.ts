@@ -106,5 +106,7 @@ export const HASHTAGS_MESSAGES = {
   GET_HASHTAG_SUCCESS: 'Get hashtags successfully',
   GET_HASHTAG_FAILED: 'Get hashtags failed',
   HASHTAG_MUST_BE_STRING: 'Hashtag must be string',
-  HASHTAG_NOT_FOUND: 'Hashtag not found'
+  HASHTAG_NOT_FOUND: 'Hashtag not found',
+  CREATE_HASHTAG_SUCCESS: 'Create hashtag success',
+  CREATE_HASHTAG_FAILED: 'Create hashtag failed'
 }
