@@ -2,6 +2,7 @@ import { ErrorWithStatus } from '~/models/error.model'
 import databaseService from './database.services'
 import { HASHTAGS_MESSAGES } from '~/constants/messages'
 import { HTTP_STATUS } from '~/constants/httpStatus'
+import HashTag from '~/models/hashtag.model'
 
 class HashTagsService {
   async search({ searchText }: { searchText: string }) {
@@ -18,6 +19,16 @@ class HashTagsService {
       })
     }
     return hashtags.map((hashtag) => hashtag.name)
+  }
+
+  async createHashTag(hashtag: string) {
+    const newHashTag = await databaseService.hashtags.findOneAndUpdate(
+      { name: hashtag },
+      { $setOnInsert: new HashTag({ name: hashtag }) },
+      { upsert: true, returnDocument: 'after' }
+    )
+
+    return newHashTag?.name
   }
 }
 

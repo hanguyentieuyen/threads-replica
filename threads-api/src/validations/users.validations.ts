@@ -48,12 +48,12 @@ const userIdSchema = Joi.string()
     }
 
     // Look up the user in the database
-    const followed_user = await databaseService.users.findOne({
+    const user = await databaseService.users.findOne({
       _id: new ObjectId(value)
     })
 
     // Check if the user exists
-    if (!followed_user) {
+    if (!user) {
       throw new ErrorWithStatus({
         message: USERS_MESSAGES.USER_NOT_FOUND,
         status: HTTP_STATUS.NOT_FOUND

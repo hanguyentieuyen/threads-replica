@@ -105,6 +105,6 @@ export const HASHTAGS_MESSAGES = {
   SEARCH_CONTENT_MUST_BE_STRING: 'Search content must be string',
   GET_HASHTAG_SUCCESS: 'Get hashtags successfully',
   GET_HASHTAG_FAILED: 'Get hashtags failed',
-  INVALID_HASHTAG: 'Invalid hashtag',
+  HASHTAG_MUST_BE_STRING: 'Hashtag must be string',
   HASHTAG_NOT_FOUND: 'Hashtag not found'
 }
