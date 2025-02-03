@@ -4,15 +4,15 @@ import { SuccessResponse } from "~/types/utils.type"
 import http from "~/utils/http"
 
 export const mediaApi = {
-  uploadImage: (formData: FormData) => {
-    return http.post<SuccessResponse<Media>>(`${config.uploadImage}`, formData, {
+  uploadImage: (file: File) => {
+    return http.post<SuccessResponse<Media>>(`${config.uploadImage}`, file, {
       headers: {
         "Content-Type": "multipart/form-data"
       }
     })
   },
-  uploadVideo: (formData: FormData) => {
-    return http.post<SuccessResponse<Media>>(`${config.uploadVideo}`, formData, {
+  uploadVideo: (file: File) => {
+    return http.post<SuccessResponse<Media>>(`${config.uploadVideo}`, file, {
       headers: {
         "Content-Type": "multipart/form-data"
       }
