@@ -1,5 +1,5 @@
 import { AxiosError, isAxiosError } from "axios"
-import HttpStatusCode from "~/constant/httpStatusCode.enum"
+import { HttpStatusCode } from "~/constant/enum"
 import { User } from "~/types/user.type"
 import { ErrorResponse } from "~/types/utils.type"
 export const LocalStorageEventTarget = new EventTarget()

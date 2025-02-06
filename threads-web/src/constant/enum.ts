@@ -1,4 +1,4 @@
-enum HttpStatusCode {
+export enum HttpStatusCode {
   Continue = 100,
   SwitchingProtocols = 101,
   Processing = 102,
@@ -64,4 +64,18 @@ enum HttpStatusCode {
   NetworkAuthenticationRequired = 511
 }
 
-export default HttpStatusCode
+export enum PostType {
+  Post,
+  RePost,
+  QuotePost
+}
+
+export enum PostAudience {
+  Everyone,
+  FewSomeone
+}
+
+export enum MediaType {
+  Image = "image",
+  Video = "video"
+}

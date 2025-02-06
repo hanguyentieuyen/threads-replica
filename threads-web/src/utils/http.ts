@@ -11,7 +11,7 @@ import {
   setRefreshTokenToLocalStorage
 } from "./auth"
 import { AuthResponse } from "~/types/auth.type"
-import HttpStatusCode from "~/constant/httpStatusCode.enum"
+import { HttpStatusCode } from "~/constant/enum"
 import { ErrorResponse } from "~/types/utils.type"
 
 export class Http {

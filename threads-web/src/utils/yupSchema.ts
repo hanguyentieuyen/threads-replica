@@ -1,5 +1,6 @@
 import * as yup from "yup"
 import { useTranslation } from "react-i18next"
+import { MediaType, PostAudience, PostType } from "~/constant/enum"
 
 const today = new Date()
 
@@ -63,11 +64,47 @@ export const useValidationSchemas = () => {
     username: yup.string().optional()
   })
 
+  const createPostSchemaYup = yup.object({
+    type: yup
+      .number()
+      .oneOf(Object.values(PostType).filter((value) => typeof value === "number"))
+      .required(),
+    audience: yup
+      .number()
+      .oneOf(Object.values(PostAudience).filter((value) => typeof value === "number"))
+      .required(),
+    content: yup.string().nullable().default(null),
+    parent_id: yup.string().nullable().default(null),
+    hashtags: yup
+      .array()
+      .of(
+        yup
+          .string()
+          .matches(/^#\w+$/, "Invalid hashtag format")
+          .required()
+      )
+      .default([]),
+    mentions: yup.array().of(yup.string().required()).default([]),
+    medias: yup
+      .array()
+      .of(
+        yup.object({
+          url: yup.string().url().required(),
+          type: yup
+            .mixed<MediaType>()
+            .oneOf(Object.values(MediaType) as MediaType[])
+            .required()
+        })
+      )
+      .default([])
+  })
+
   return {
     registerSchemaYup,
     resetPasswordSchemaYup,
     changePasswordSchemaYup,
-    userSchemaYup
+    userSchemaYup,
+    createPostSchemaYup
   }
 }
 
@@ -76,3 +113,4 @@ export type RegisterSchemaYup = yup.InferType<ReturnType<typeof useValidationSch
 export type UserSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["userSchemaYup"]>
 export type ResetPasswordSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["resetPasswordSchemaYup"]>
 export type ChangePasswordSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["changePasswordSchemaYup"]>
+export type CreatePostSchemaYup = yup.InferType<ReturnType<typeof useValidationSchemas>["createPostSchemaYup"]>

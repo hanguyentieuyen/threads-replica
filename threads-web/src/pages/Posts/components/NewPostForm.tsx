@@ -1,56 +1,200 @@
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useMutation } from "@tanstack/react-query"
+import { useRef, useState } from "react"
+import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { toast } from "react-toastify"
+import { postApi } from "~/apis/post.api"
 import Button from "~/components/Button"
+import ButtonUploadMedia from "~/components/ButtonUploadMedia"
 import Icon from "~/components/Icon"
-import InputText from "~/components/InputText"
+import Textarea from "~/components/Textarea"
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
+import { CreatePostSchemaYup, useValidationSchemas } from "~/utils/yupSchema"
 
-export default function NewThread() {
+const hashtagsMock = ["#React", "#NextJS", "#JavaScript", "#TypeScript"]
+
+type FormData = CreatePostSchemaYup
+
+export default function NewPostForm() {
   const { t } = useTranslation()
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [content, setContent] = useState("")
+  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [previewUrl, setPreviewUrl] = useState("")
+  const [uploadedMedia, setUploadedMedia] = useState("")
+  const [isUploading, setIsUploading] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false)
+
+  console.log("previewUrl: ", previewUrl)
+  const { createPostSchemaYup } = useValidationSchemas()
+  const {
+    register,
+    setError,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors }
+  } = useForm<FormData>({
+    resolver: yupResolver(createPostSchemaYup)
+  })
+
+  const createPostMutation = useMutation({
+    mutationFn: (body: FormData) => postApi.createPost(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    console.log("data:", data)
+    createPostMutation.mutate(data, {
+      onSuccess: (data) => {
+        reset()
+        setValue("content", "")
+        setPreviewUrl("")
+        setUploadedMedia("")
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""
+        }
+        toast.success(data.data.message, { autoClose: 3000 })
+      },
+      onError: (error) => {
+        console.error(error)
+      }
+    })
+  })
+
+  const handleRemoveImage = () => {
+    setPreviewUrl("")
+    setUploadedMedia("")
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
+
+  // Giả lập API search hashtag
+  const searchHashtags = (query: string) => {
+    if (!query) return setShowDropdown(false)
+    const results = hashtagsMock.filter((tag) => tag.toLowerCase().includes(query.toLowerCase()))
+    setSuggestions(results)
+    setShowDropdown(results.length > 0)
+  }
+
+  const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value)
+    const cursorPos = e.target.selectionStart
+    const textBeforeCursor = e.target.value.slice(0, cursorPos)
+    const match = textBeforeCursor.match(/#(\w*)$/) // Tìm `#` gần nhất
+
+    if (match) {
+      searchHashtags(match[1]) // Gửi từ khóa sau `#` đến API
+    } else {
+      setShowDropdown(false)
+    }
+  }
+  const insertHashtag = (tag: string) => {
+    const cursorPos = inputRef.current?.selectionStart || 0
+    const textBeforeCursor = content.slice(0, cursorPos).replace(/#\w*$/, "") // Xóa từ đang nhập
+    const textAfterCursor = content.slice(cursorPos)
+    const newText = textBeforeCursor + tag + " " + textAfterCursor
+
+    setContent(newText)
+    setShowDropdown(false)
+  }
+
   return (
     <div className='w-full max-w-2xl mx-auto'>
-      <div className='flex flex-row items-center justify-between border-b p-2 mx-[-8px]'>
-        <Button variant='ghost' className='text-muted-foreground'>
-          Hủy
-        </Button>
-        <h1 className='text-lg font-semibold'>Thread mới</h1>
-        <div className='w-10' />
-      </div>
+      <form onSubmit={onSubmit}>
+        <div className='flex flex-row items-center justify-between border-b p-2 mx-[-8px]'>
+          <Button className='text-muted-foreground'>Hủy</Button>
+          <h1 className='text-lg font-semibold'>Thread mới</h1>
+          <div className='w-10' />
+        </div>
 
-      <div className='p-2 w-full mt-2'>
-        <div className='flex gap-3'>
-          <div className='w-10 h-10'>
-            <img src='../src/assets/capy.jpg' alt='avatar' className='w-10 h-10 rounded-full' />
+        <div className='p-2 w-full mt-2'>
+          <div className='flex gap-3'>
+            <div className='w-10 h-10'>
+              <img src='../src/assets/capy.jpg' alt='avatar' className='w-10 h-10 rounded-full' />
+            </div>
+
+            <div className='flex-1'>
+              <div className='font-medium mb-1 float-start text-sm'>hn13.mew</div>
+              <Textarea
+                register={register}
+                ref={inputRef}
+                placeholder='Có gì mới?'
+                value={content}
+                onChange={handleInputText}
+              />
+              {previewUrl && (
+                <div className='relative mt-2 rounded-lg overflow-hidden group'>
+                  <div className='relative bg-neutral2-1 p-2 rounded-lg'>
+                    <image href={previewUrl} className='w-full h-32 object-cover rounded' width={300} height={200} />
+                    {isUploading && (
+                      <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded'>
+                        <div className='w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
+                      </div>
+                    )}
+                    <button
+                      onClick={handleRemoveImage}
+                      className='absolute top-4 right-4 p-1 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-opacity opacity-0 group-hover:opacity-100'
+                      disabled={isUploading}
+                    >
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        className='h-4 w-4 text-white'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        stroke='currentColor'
+                      >
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              )}
+              <Popover open={showDropdown}>
+                <PopoverTrigger>
+                  <div />
+                </PopoverTrigger>
+                <PopoverContent>
+                  {suggestions.map((tag) => (
+                    <div key={tag} className='p-2 hover:bg-gray-200 cursor-pointer' onClick={() => insertHashtag(tag)}>
+                      {tag}
+                    </div>
+                  ))}
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+        </div>
+
+        <div className='flex flex-col gap-4 p-2 pt-0'>
+          <div className='flex items-center gap-4 w-full'>
+            <ButtonUploadMedia
+              fileInputRef={fileInputRef}
+              setIsUploading={setIsUploading}
+              setPreviewUrl={setPreviewUrl}
+              setUploadedMedia={setUploadedMedia}
+            />
+            <Button className='text-muted-foreground'>
+              <Icon name='SmilePlus' className='w-5 h-5' />
+            </Button>
+            <Button className='text-muted-foreground'>
+              <Icon name='Hash' className='w-5 h-5' />
+            </Button>
           </div>
 
-          <div className='flex-1'>
-            <div className='font-medium mb-1 float-start text-sm'>hn13.mew</div>
-            <InputText placeholder='Có gì mới?' className='border-0 p-0 text-base focus-visible:ring-0 h-auto' />
+          <div className='flex items-center gap-3 w-full'>
+            <img src='../src/assets/capela.jpg' className='w-6 h-6 rounded' />
+            <span className='text-muted-foreground text-sm'>Thêm vào thread</span>
+          </div>
+
+          <div className='w-full flex justify-between items-center pt-2'>
+            <div className='text-sm text-muted-foreground'>Bất kỳ ai cũng có thể trả lời và trích dẫn</div>
+            <Button className='text-gray-800 font-semibold text-sm p-2 rounded-lg border'>{t("post")}</Button>
           </div>
         </div>
-      </div>
-
-      <div className='flex flex-col gap-4 p-2 pt-0'>
-        <div className='flex items-center gap-4 w-full'>
-          <Button className='text-muted-foreground'>
-            <Icon name='Image' className='w-5 h-5' />
-          </Button>
-          <Button className='text-muted-foreground'>
-            <Icon name='SmilePlus' className='w-5 h-5' />
-          </Button>
-          <Button className='text-muted-foreground'>
-            <Icon name='Hash' className='w-5 h-5' />
-          </Button>
-        </div>
-
-        <div className='flex items-center gap-3 w-full'>
-          <img src='../src/assets/capela.jpg' className='w-6 h-6 rounded' />
-          <span className='text-muted-foreground text-sm'>Thêm vào thread</span>
-        </div>
-
-        <div className='w-full flex justify-between items-center pt-2'>
-          <div className='text-sm text-muted-foreground'>Bất kỳ ai cũng có thể trả lời và trích dẫn</div>
-          <Button className='text-gray-800 font-semibold text-sm p-2 rounded-lg border'>{t("post")}</Button>
-        </div>
-      </div>
+      </form>
     </div>
   )
 }
