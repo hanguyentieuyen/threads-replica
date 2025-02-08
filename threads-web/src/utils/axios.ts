@@ -1,5 +1,5 @@
 import axios, { AxiosError, type AxiosInstance } from "axios"
-import config from "~/constant/config"
+import apiEndpoints from "~/constant/config"
 import { toast } from "react-toastify"
 import {
   clearLocalStorage,
@@ -14,7 +14,7 @@ import { AuthResponse } from "~/types/auth.type"
 import { HttpStatusCode } from "~/constant/enum"
 import { ErrorResponse } from "~/types/utils.type"
 
-export class Http {
+export class Axios {
   instance: AxiosInstance
   private accessToken: string
   private refreshToken: string
@@ -25,7 +25,7 @@ export class Http {
     this.refreshToken = getRefreshTokenFromLocalStorage()
     this.refreshTokenRequest = null
     this.instance = axios.create({
-      baseURL: config.baseUrl,
+      baseURL: apiEndpoints.baseUrl,
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
@@ -53,14 +53,14 @@ export class Http {
         //Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
         const { url } = response.config
-        if (url === config.loginUrl || url === config.registerUrl) {
+        if (url === apiEndpoints.loginUrl || url === apiEndpoints.registerUrl) {
           const data = response.data as AuthResponse
           this.accessToken = data?.data?.access_token || ""
           this.refreshToken = data?.data?.refresh_token || ""
           // Store token in local storage
           setAccessTokenToLocalStorage(this.accessToken)
           setRefreshTokenToLocalStorage(this.refreshToken)
-        } else if (url === config.logoutUrl) {
+        } else if (url === apiEndpoints.logoutUrl) {
           this.accessToken = ""
           this.refreshToken = ""
           clearLocalStorage()
@@ -87,7 +87,7 @@ export class Http {
           const { url } = configError
 
           // Case error: token expired and current request is not refresh token request , then request refresh token
-          if (isAxiosExpiredTokenError(error) && url !== config.refreshTokenUrl) {
+          if (isAxiosExpiredTokenError(error) && url !== apiEndpoints.refreshTokenUrl) {
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
               : this.handleRefreshToken().finally(() => {
@@ -122,7 +122,7 @@ export class Http {
 
   private handleRefreshToken() {
     return this.instance
-      .post(config.refreshTokenUrl, {
+      .post(apiEndpoints.refreshTokenUrl, {
         refresh_token: this.refreshToken
       })
       .then((res) => {
@@ -139,5 +139,5 @@ export class Http {
       })
   }
 }
-const http = new Http().instance
-export default http
+const axiosInstance = new Axios().instance
+export default axiosInstance

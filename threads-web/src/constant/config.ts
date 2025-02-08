@@ -1,4 +1,4 @@
-const config = {
+const apiEndpoints = {
   baseUrl: "http://localhost:4000/",
   maxSizeUploadAvatar: 1048576, // bytes,
   loginUrl: "/users/login",
@@ -24,4 +24,4 @@ const config = {
   uploadVideo: "/medias/upload-video"
 }
 
-export default config
+export default apiEndpoints

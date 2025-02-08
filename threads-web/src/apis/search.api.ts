@@ -1,7 +1,7 @@
-import config from "~/constant/config"
+import apiEndpoints from "~/constant/config"
 import { Post } from "~/types/post.type"
 import { SuccessResponse } from "~/types/utils.type"
-import http from "~/utils/http"
+import axiosInstance from "~/utils/axios"
 
 export const searchApi = {
   search: (content: string, limit: number, page: number = 1) => {
@@ -11,6 +11,6 @@ export const searchApi = {
       page: page.toString()
     })
 
-    return http.get<SuccessResponse<Post>>(`${config.search}/?${params.toString()}`)
+    return axiosInstance.get<SuccessResponse<Post>>(`${apiEndpoints.search}/?${params.toString()}`)
   }
 }
