@@ -8,7 +8,8 @@ import { postApi } from "~/apis/post.api"
 import Button from "~/components/Button"
 import ButtonUploadMedia from "~/components/ButtonUploadMedia"
 import Icon from "~/components/Icon"
-import Textarea from "~/components/Textarea"
+import InputText from "~/components/InputText"
+//import Textarea from "~/components/Textarea"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { CreatePostSchemaYup, useValidationSchemas } from "~/utils/yupSchema"
 
@@ -22,13 +23,12 @@ export default function NewPostForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [content, setContent] = useState("")
   const [suggestions, setSuggestions] = useState<string[]>([])
-  const [previewUrl, setPreviewUrl] = useState("")
-  const [uploadedMedia, setUploadedMedia] = useState("")
+  const [uploadedMedias, setUploadedMedias] = useState<string[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
 
-  console.log("previewUrl: ", previewUrl)
-  const { createPostSchemaYup } = useValidationSchemas()
+  console.log("uploadedMedia: ", uploadedMedias)
+  //const { createPostSchemaYup } = useValidationSchemas()
   const {
     register,
     setError,
@@ -37,7 +37,7 @@ export default function NewPostForm() {
     reset,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(createPostSchemaYup)
+    //resolver: yupResolver(createPostSchemaYup)
   })
 
   const createPostMutation = useMutation({
@@ -45,13 +45,13 @@ export default function NewPostForm() {
   })
 
   const onSubmit = handleSubmit((data) => {
+    console.log("SUBMIT")
     console.log("data:", data)
     createPostMutation.mutate(data, {
       onSuccess: (data) => {
         reset()
         setValue("content", "")
-        setPreviewUrl("")
-        setUploadedMedia("")
+        setUploadedMedias([])
         if (fileInputRef.current) {
           fileInputRef.current.value = ""
         }
@@ -63,9 +63,8 @@ export default function NewPostForm() {
     })
   })
 
-  const handleRemoveImage = () => {
-    setPreviewUrl("")
-    setUploadedMedia("")
+  const handleRemoveMedia = (val: string) => {
+    setUploadedMedias(uploadedMedias.filter((url) => url !== val))
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
@@ -79,9 +78,9 @@ export default function NewPostForm() {
     setShowDropdown(results.length > 0)
   }
 
-  const handleInputText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleInputText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value)
-    const cursorPos = e.target.selectionStart
+    const cursorPos = e.target.selectionStart || undefined
     const textBeforeCursor = e.target.value.slice(0, cursorPos)
     const match = textBeforeCursor.match(/#(\w*)$/) // Tìm `#` gần nhất
 
@@ -109,7 +108,6 @@ export default function NewPostForm() {
           <h1 className='text-lg font-semibold'>Thread mới</h1>
           <div className='w-10' />
         </div>
-
         <div className='p-2 w-full mt-2'>
           <div className='flex gap-3'>
             <div className='w-10 h-10'>
@@ -118,24 +116,25 @@ export default function NewPostForm() {
 
             <div className='flex-1'>
               <div className='font-medium mb-1 float-start text-sm'>hn13.mew</div>
-              <Textarea
+              {/* <Textarea
                 register={register}
                 ref={inputRef}
                 placeholder='Có gì mới?'
                 value={content}
                 onChange={handleInputText}
-              />
-              {previewUrl && (
-                <div className='relative mt-2 rounded-lg overflow-hidden group'>
+              /> */}
+              <InputText register={register} type='text' name='content' onChange={handleInputText} />
+              {uploadedMedias.map((url) => (
+                <div key={url} className='relative mt-2 rounded-lg overflow-hidden group'>
                   <div className='relative bg-neutral2-1 p-2 rounded-lg'>
-                    <image href={previewUrl} className='w-full h-32 object-cover rounded' width={300} height={200} />
+                    <img src={url} className='w-full min-h-10 object-cover rounded' width={300} height={200} />
                     {isUploading && (
                       <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded'>
                         <div className='w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
                       </div>
                     )}
                     <button
-                      onClick={handleRemoveImage}
+                      onClick={() => handleRemoveMedia(url)}
                       className='absolute top-4 right-4 p-1 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-opacity opacity-0 group-hover:opacity-100'
                       disabled={isUploading}
                     >
@@ -151,7 +150,7 @@ export default function NewPostForm() {
                     </button>
                   </div>
                 </div>
-              )}
+              ))}
               <Popover open={showDropdown}>
                 <PopoverTrigger>
                   <div />
@@ -167,14 +166,12 @@ export default function NewPostForm() {
             </div>
           </div>
         </div>
-
         <div className='flex flex-col gap-4 p-2 pt-0'>
           <div className='flex items-center gap-4 w-full'>
             <ButtonUploadMedia
               fileInputRef={fileInputRef}
               setIsUploading={setIsUploading}
-              setPreviewUrl={setPreviewUrl}
-              setUploadedMedia={setUploadedMedia}
+              setUploadedMedias={setUploadedMedias}
             />
             <Button className='text-muted-foreground'>
               <Icon name='SmilePlus' className='w-5 h-5' />
@@ -191,7 +188,9 @@ export default function NewPostForm() {
 
           <div className='w-full flex justify-between items-center pt-2'>
             <div className='text-sm text-muted-foreground'>Bất kỳ ai cũng có thể trả lời và trích dẫn</div>
-            <Button className='text-gray-800 font-semibold text-sm p-2 rounded-lg border'>{t("post")}</Button>
+            <Button type='submit' className='text-gray-800 font-semibold text-sm p-2 rounded-lg border'>
+              {t("post")}
+            </Button>
           </div>
         </div>
       </form>
