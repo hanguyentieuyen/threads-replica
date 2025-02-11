@@ -1,6 +1,7 @@
-import { useState, createContext, useContext, ReactNode, forwardRef, HTMLProps } from "react"
+import { useState, createContext, useContext, ReactNode, forwardRef, HTMLProps, useRef, useEffect } from "react"
+import { cn } from "~/lib/utils"
 
-type DropdownMenuContextType = { isOpen: boolean; toggleOpen: () => void }
+type DropdownMenuContextType = { isOpen: boolean; toggleOpen: () => void; close: () => void }
 const DropdownMenuContext = createContext<DropdownMenuContextType | undefined>(undefined)
 
 const useDropdownMenuContext = () => {
@@ -13,11 +14,30 @@ const useDropdownMenuContext = () => {
 
 export function DropdownMenu({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
   const toggleOpen = () => setIsOpen((prev) => !prev)
+  const close = () => setIsOpen(false)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        close()
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isOpen])
 
   return (
-    <DropdownMenuContext.Provider value={{ isOpen, toggleOpen }}>
-      <div className='relative'>{children}</div>
+    <DropdownMenuContext.Provider value={{ isOpen, toggleOpen, close }}>
+      <div ref={menuRef} className='relative'>
+        {children}
+      </div>
     </DropdownMenuContext.Provider>
   )
 }
@@ -59,15 +79,26 @@ export const DropdownMenuLabel = ({ children }: { children: ReactNode }) => (
 
 export const DropdownMenuSeparator = () => <div className='border-t border-gray-200 my-2' />
 
-export const DropdownMenuItem = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(({ children, ...props }, ref) => (
-  <div
-    ref={ref}
-    className='flex items-center px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100'
-    {...props}
-  >
-    {children}
-  </div>
-))
+export const DropdownMenuItem = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
+  ({ children, className, onClick, ...props }, ref) => {
+    const { close } = useDropdownMenuContext()
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation() // Prevents toggling the dropdown open again
+      close()
+      if (onClick) onClick(event) // Call any additional onClick handlers!!
+    }
+    return (
+      <div
+        ref={ref}
+        onClick={handleClick}
+        className={cn("flex items-center px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100", className)}
+        {...props}
+      >
+        {children}
+      </div>
+    )
+  }
+)
 DropdownMenuItem.displayName = "DropdownMenuItem"
 
 interface DropdownMenuCheckboxItemProps extends HTMLProps<HTMLDivElement> {
@@ -93,10 +124,10 @@ export const DropdownMenuCheckboxItem = ({
 )
 
 export const DropdownMenuSubTrigger = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement>>(
-  ({ children, ...props }, ref) => (
+  ({ children, className, ...props }, ref) => (
     <div
       ref={ref}
-      className='flex items-center px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100'
+      className={cn("flex items-center px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100", className)}
       {...props}
     >
       {children}

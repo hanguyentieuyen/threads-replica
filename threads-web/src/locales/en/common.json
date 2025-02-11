@@ -43,5 +43,7 @@
   "post": "Post",
   "suggestedFollowUp": "Suggested follow up",
   "search": "Search",
-  "whatIsNew": "What is new?"
+  "whatIsNew": "What is new?",
+  "userFollowings": "User Followings",
+  "everyone": "Everyone"
 }

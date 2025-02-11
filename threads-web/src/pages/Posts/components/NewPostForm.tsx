@@ -7,10 +7,12 @@ import { toast } from "react-toastify"
 import { postApi } from "~/apis/post.api"
 import Button from "~/components/Button"
 import ButtonUploadMedia from "~/components/ButtonUploadMedia"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "~/components/Dropdown"
 import Icon from "~/components/Icon"
 import InputText from "~/components/InputText"
 //import Textarea from "~/components/Textarea"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
+import { PostAudience } from "~/constant/enum"
 import { CreatePostSchemaYup, useValidationSchemas } from "~/utils/yupSchema"
 
 const hashtagsMock = ["#React", "#NextJS", "#JavaScript", "#TypeScript"]
@@ -26,8 +28,13 @@ export default function NewPostForm() {
   const [uploadedMedias, setUploadedMedias] = useState<string[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
+  const [selectedAudience, setSelectedAudience] = useState<string>(t("everyone"))
 
   console.log("uploadedMedia: ", uploadedMedias)
+
+  const handleAudienceChange = (value: string) => {
+    setSelectedAudience(value)
+  }
   //const { createPostSchemaYup } = useValidationSchemas()
   const {
     register,
@@ -187,7 +194,27 @@ export default function NewPostForm() {
           </div>
 
           <div className='w-full flex justify-between items-center pt-2'>
-            <div className='text-sm text-muted-foreground'>Bất kỳ ai cũng có thể trả lời và trích dẫn</div>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <div className='text-sm text-muted-foreground'>{selectedAudience}</div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  className='text-sm text-muted-foreground'
+                  value={PostAudience.Everyone}
+                  onClick={() => handleAudienceChange(t("everyone"))}
+                >
+                  Bất kỳ ai cũng có thể trả lời và trích dẫn
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className='text-sm text-muted-foreground'
+                  value={PostAudience.FewSomeone}
+                  onClick={() => handleAudienceChange(t("userFollowings"))}
+                >
+                  Trang cá nhân mà bạn theo dõi
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button type='submit' className='text-gray-800 font-semibold text-sm p-2 rounded-lg border'>
               {t("post")}
             </Button>
