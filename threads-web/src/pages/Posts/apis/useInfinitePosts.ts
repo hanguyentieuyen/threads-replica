@@ -4,7 +4,6 @@ import { postApi } from "~/apis/post.api"
 const fetchPosts = async ({ pageParam = 1 }: { pageParam?: number }) => {
   const limit = 2 // Number of posts per page
   const response = await postApi.getPosts(pageParam, limit)
-  console.log(response.data)
   return response.data
 }
 

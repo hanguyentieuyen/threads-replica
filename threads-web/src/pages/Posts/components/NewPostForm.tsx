@@ -1,9 +1,9 @@
-import { yupResolver } from "@hookform/resolvers/yup"
 import { useMutation } from "@tanstack/react-query"
 import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { toast } from "react-toastify"
+import { hashtagApi } from "~/apis/hashtag.api"
 import { postApi } from "~/apis/post.api"
 import Button from "~/components/Button"
 import ButtonUploadMedia from "~/components/ButtonUploadMedia"
@@ -12,10 +12,9 @@ import Icon from "~/components/Icon"
 import InputText from "~/components/InputText"
 //import Textarea from "~/components/Textarea"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
-import { PostAudience } from "~/constant/enum"
-import { CreatePostSchemaYup, useValidationSchemas } from "~/utils/yupSchema"
-
-const hashtagsMock = ["#React", "#NextJS", "#JavaScript", "#TypeScript"]
+import { PostAudience, PostType } from "~/constant/enum"
+import { Hashtag } from "~/types/hashtag.type"
+import { CreatePostSchemaYup } from "~/utils/yupSchema"
 
 type FormData = CreatePostSchemaYup
 
@@ -24,37 +23,40 @@ export default function NewPostForm() {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [content, setContent] = useState("")
-  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [suggestions, setSuggestions] = useState<Hashtag[]>([])
   const [uploadedMedias, setUploadedMedias] = useState<string[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const [selectedAudience, setSelectedAudience] = useState<string>(t("everyone"))
 
-  console.log("uploadedMedia: ", uploadedMedias)
+  // media url: https://threads-replica.s3.ap-southeast-1.amazonaws.com/images/9998fcdcfe7e048a9e92e5101.jpg
+  //console.log("uploadedMedia: ", uploadedMedias)
 
   const handleAudienceChange = (value: string) => {
     setSelectedAudience(value)
   }
-  //const { createPostSchemaYup } = useValidationSchemas()
-  const {
-    register,
-    setError,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors }
-  } = useForm<FormData>({
-    //resolver: yupResolver(createPostSchemaYup)
-  })
+
+  const { register, handleSubmit, setValue, reset } = useForm<FormData>()
 
   const createPostMutation = useMutation({
     mutationFn: (body: FormData) => postApi.createPost(body)
   })
 
   const onSubmit = handleSubmit((data) => {
-    console.log("SUBMIT")
     console.log("data:", data)
-    createPostMutation.mutate(data, {
+
+    const newPost: FormData = {
+      type: PostType.Post,
+      content: data.content,
+      audience: selectedAudience === "everyone" ? PostAudience.Everyone : PostAudience.Everyone,
+      hashtags: [],
+      medias: [],
+      mentions: [],
+      parent_id: null
+    }
+    console.log("new post: ", newPost)
+
+    createPostMutation.mutate(newPost, {
       onSuccess: (data) => {
         reset()
         setValue("content", "")
@@ -78,11 +80,12 @@ export default function NewPostForm() {
   }
 
   // Giả lập API search hashtag
-  const searchHashtags = (query: string) => {
+  const searchHashtags = async (query: string) => {
     if (!query) return setShowDropdown(false)
-    const results = hashtagsMock.filter((tag) => tag.toLowerCase().includes(query.toLowerCase()))
-    setSuggestions(results)
-    setShowDropdown(results.length > 0)
+    const res = await hashtagApi.searchHashtags(query)
+
+    setSuggestions(res.data.data ?? [])
+    setShowDropdown(res.data.data !== undefined && res.data.data.length > 0)
   }
 
   const handleInputText = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,7 +167,11 @@ export default function NewPostForm() {
                 </PopoverTrigger>
                 <PopoverContent>
                   {suggestions.map((tag) => (
-                    <div key={tag} className='p-2 hover:bg-gray-200 cursor-pointer' onClick={() => insertHashtag(tag)}>
+                    <div
+                      key={tag._id}
+                      className='p-2 hover:bg-gray-200 cursor-pointer'
+                      onClick={() => insertHashtag(tag.name)}
+                    >
                       {tag}
                     </div>
                   ))}

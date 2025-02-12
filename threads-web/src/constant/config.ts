@@ -19,6 +19,7 @@ const apiEndpoints = {
   unbookmark: "/bookmark/post",
   like: "/like",
   unlike: "/like/post",
+  hashtags: "/hashtags",
   search: "/search",
   uploadImage: "/medias/upload-image",
   uploadVideo: "/medias/upload-video"
