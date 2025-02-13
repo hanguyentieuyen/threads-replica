@@ -1,4 +1,4 @@
-import { useState, useContext, createContext } from "react"
+import { useState, useContext, createContext, forwardRef, useImperativeHandle } from "react"
 import Icon from "../Icon"
 
 type ModalContextType = {
@@ -16,10 +16,16 @@ const useModalContext = () => {
   return context
 }
 
-export function Modal({ children }: { children: React.ReactNode }) {
+export const Modal = forwardRef(({ children }: { children: React.ReactNode }, ref) => {
   const [isOpen, setIsOpen] = useState(false)
+
+  useImperativeHandle(ref, () => ({
+    open: () => setIsOpen(true),
+    close: () => setIsOpen(false)
+  }))
+
   return <ModalContext.Provider value={{ isOpen, setIsOpen }}>{children}</ModalContext.Provider>
-}
+})
 
 export function ModalTrigger({ children }: { children: React.ReactNode }) {
   const { setIsOpen } = useModalContext()
@@ -33,8 +39,17 @@ export function ModalTrigger({ children }: { children: React.ReactNode }) {
 export function ModalContent({ children }: { children: React.ReactNode }) {
   const { isOpen, setIsOpen } = useModalContext()
   if (!isOpen) return null
+
+  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setIsOpen(false)
+    }
+  }
   return (
-    <div className='fixed insert-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 inset-0 transition-opacity'>
+    <div
+      onClick={handleClose}
+      className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 transition-opacity'
+    >
       <div className='relative w-full max-w-md bg-white rounded-lg shadow-lg'>
         <button onClick={() => setIsOpen(false)} className='absolute top-2 right-2 text-gray-400 hover:text-gray-600'>
           <Icon name='X' width={20} />
@@ -46,9 +61,13 @@ export function ModalContent({ children }: { children: React.ReactNode }) {
 }
 
 export function ModalHeader({ children }: { children: React.ReactNode }) {
-  return <div className='mb-4'>{children}</div>
+  return <div className='mb-4 font-bold text-lg'>{children}</div>
 }
 
 export function ModalDescription({ children }: { children: React.ReactNode }) {
-  return <div className='w-full'>{children}</div>
+  return <div className='text-sm text-gray-600'>{children}</div>
+}
+
+export function ModalFooter({ children }: { children: React.ReactNode }) {
+  return <div className='mt-4 flex justify-end space-x-2'>{children}</div>
 }

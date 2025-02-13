@@ -13,7 +13,6 @@ import InputText from "~/components/InputText"
 //import Textarea from "~/components/Textarea"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { PostAudience, PostType } from "~/constant/enum"
-import { Hashtag } from "~/types/hashtag.type"
 import { CreatePostSchemaYup } from "~/utils/yupSchema"
 
 type FormData = CreatePostSchemaYup
@@ -23,7 +22,7 @@ export default function NewPostForm() {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [content, setContent] = useState("")
-  const [suggestions, setSuggestions] = useState<Hashtag[]>([])
+  const [suggestions, setSuggestions] = useState<string[]>([])
   const [uploadedMedias, setUploadedMedias] = useState<string[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
@@ -85,6 +84,7 @@ export default function NewPostForm() {
     const res = await hashtagApi.searchHashtags(query)
 
     setSuggestions(res.data.data ?? [])
+    console.log(suggestions)
     setShowDropdown(res.data.data !== undefined && res.data.data.length > 0)
   }
 
@@ -101,6 +101,7 @@ export default function NewPostForm() {
     }
   }
   const insertHashtag = (tag: string) => {
+    console.log("tag: ", tag)
     const cursorPos = inputRef.current?.selectionStart || 0
     const textBeforeCursor = content.slice(0, cursorPos).replace(/#\w*$/, "") // Xóa từ đang nhập
     const textAfterCursor = content.slice(cursorPos)
@@ -170,7 +171,7 @@ export default function NewPostForm() {
                     <div
                       key={tag._id}
                       className='p-2 hover:bg-gray-200 cursor-pointer'
-                      onClick={() => insertHashtag(tag.name)}
+                      onClick={() => insertHashtag(tag)}
                     >
                       {tag}
                     </div>
