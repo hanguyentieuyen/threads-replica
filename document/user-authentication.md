@@ -7,11 +7,11 @@ sequenceDiagram
     participant User
     participant System
 
-    User->>System: Nhập email và password
-    alt Đăng nhập thành công
-        System-->>User: Trả về access_token và refresh_token
-    else Đăng nhập thất bại
-        System-->>User: Thông báo lỗi
+    User->>System: Enter email and password
+    alt Login successful
+        System-->>User: Return access_token and refresh_token
+    else Login failed
+        System-->>User: Error message
     end
 ```
 
@@ -23,12 +23,12 @@ sequenceDiagram
     participant System
     participant EmailService
 
-    User->>System: Nhập email, password và confirm_password [/register]
-    System-->>User: Xác nhận đăng kí thành công
+    User->>System: Enter email, password và confirm_password [/register]
+    System-->>User: Confirm registration successful
     System->>EmailService: Connect AWS SES
-    EmailService-->>User: Gửi email xác nhận với link xác thực tài khoản
-    User->>System: Click vào link email [/verify-email]
-    System-->>User: Tài khoản được xác thực thành công
+    EmailService-->>User: Send confirmation email with account verification link
+    User->>System: Click on email link to verify token [/verify-email]
+    System-->>User: Account verified successfully
 ```
 
 ## 3. Forgot Password Flow
@@ -39,12 +39,12 @@ sequenceDiagram
     participant System
     participant EmailService
 
-    User->>System: Nhập email để yêu cầu reset mật khẩu [/forgot-password]
-    System-->>User: Xác nhận yêu cầu quên mật khẩu
+    User->>System: Enter email to request password reset[/forgot-password]
+    System-->>User: Confirm forgot password request
     System->>EmailService: Connect AWS SES
-    EmailService-->>User: Gửi email với link reset password
-    User->>System: Click vào link để reset password [/verify-forgot-password]
-    System-->User: Xác thực forgot_password token thành công
-    User->>System: Nhập mật khẩu cũ, mật khẩu mới, forgot_password_token [/reset-password]
-    System-->>User: Tài khoản reset password thành công
+    EmailService-->>User: Send email with password reset link
+    User->>System: Click on link to reset password [/verify-forgot-password]
+    System-->User: Forgot_password token authentication successful
+    User->>System: Enter old password, new password, forgot_password_token [/reset-password]
+    System-->>User: Account password reset successful
 ```
