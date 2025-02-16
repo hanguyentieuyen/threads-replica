@@ -33,8 +33,9 @@ import { verifyToken } from '~/utils/jwt'
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
   const { email, password } = req.validateData
   const hashedPassword = hashPassword(password)
+
   // Check if the user exists in the database
-  const user = await databaseService.users.findOne({ email, password: hashedPassword })
+  const user = await usersService.getUserByEmailPassword({ email, hashedPassword })
   if (user === null) {
     throw new Error(USERS_MESSAGES.EMAIL_OR_PASSWORD_IS_INCORRECT)
   }
@@ -79,9 +80,8 @@ export const verifyEmailController = async (
     })
   }
   const { user_id } = req.decodedVerifyEmailToken as TokenPayload
-  const user = await databaseService.users.findOne({
-    _id: new ObjectId(user_id)
-  })
+
+  const user = await usersService.getUserById(user_id)
   // Case 0: user not found
   if (!user) {
     return res.status(HTTP_STATUS.NOT_FOUND).json({
@@ -150,7 +150,7 @@ export const forgotPasswordController = async (
   req: Request<ParamsDictionary, any, ForgotPasswordReqBody>,
   res: Response
 ) => {
-  const user = await databaseService.users.findOne({ email: req.validateData.email })
+  const user = await usersService.getUserByEmail({ email: req.validateData.email })
   if (user === null) {
     throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
   }
@@ -175,7 +175,7 @@ export const verifyForgotPasswordController = async (
     })
 
     const { user_id } = decodedForgotPasswordToken
-    const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+    const user = await usersService.getUserById(user_id)
     // check user exist
     if (user === null) {
       throw new ErrorWithStatus({
@@ -227,8 +227,7 @@ export const resetPasswordController = async (
 
     const { user_id } = decodedToken
 
-    // Find the user by ID
-    const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+    const user = await usersService.getUserById(user_id)
     if (!user) {
       throw new ErrorWithStatus({
         message: USERS_MESSAGES.USER_NOT_FOUND,
@@ -269,7 +268,7 @@ export const changePasswordController = async (
   const { user_id } = req.decodedAuthorization
   const { old_password, password } = req.validateData
   // Check if user exists
-  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  const user = await usersService.getUserById(user_id)
   if (!user) {
     throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
   }

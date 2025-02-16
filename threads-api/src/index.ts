@@ -20,7 +20,20 @@ const port = 4000
 
 app.use(express.json()) // middleware: convert json to object
 app.get('/', (req, res) => {
-  res.send('hello yen')
+  res.send(`<html>
+      <head>
+        <title>Threads Replica API</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+          h1 { color: #ff4d4d; }
+        </style>
+      </head>
+      <body>
+        <h1>😸 Welcome to Threads Replica API</h1>
+        <p>👉 <a href='https://threads-replica-5n8l.onrender.com/api-docs'>Click here</a> to read the apis documentation</p>
+        <p>Make with ❤️ by <strong><a href='https://github.com/hanguyentieuyen'>hanguyentieuyen</a></strong></p>
+      </body>
+    </html>`)
 })
 
 // swagger api

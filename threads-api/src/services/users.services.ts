@@ -84,108 +84,6 @@ class UsersService {
     })
   }
 
-  private lookuPostDetailStage() {
-    return [
-      {
-        $lookup: {
-          from: 'posts',
-          localField: 'post_id',
-          foreignField: '_id',
-          as: 'postDetails'
-        }
-      },
-      {
-        $lookup: {
-          from: 'hashtags',
-          localField: 'hashtags',
-          foreignField: '_id',
-          as: 'hashtags'
-        }
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'mentions',
-          foreignField: '_id',
-          as: 'mentions'
-        }
-      },
-      {
-        $addFields: {
-          mentions: {
-            $map: {
-              input: '$mentions',
-              as: 'mention',
-              in: {
-                _id: '$$mention._id',
-                name: '$$mention.name',
-                username: '$$mention.username'
-              }
-            }
-          }
-        }
-      },
-      {
-        $lookup: {
-          from: 'bookmarks',
-          localField: '_id',
-          foreignField: 'post_id',
-          as: 'bookmarks'
-        }
-      },
-      {
-        $lookup: {
-          from: 'likes',
-          localField: '_id',
-          foreignField: 'post_id',
-          as: 'likes'
-        }
-      },
-      {
-        $lookup: {
-          from: 'posts',
-          localField: '_id',
-          foreignField: 'parent_id',
-          as: 'post_children'
-        }
-      }
-    ]
-  }
-
-  private addFieldsPostDetailStage() {
-    return {
-      $addFields: {
-        bookmark_count: { $size: { $ifNull: ['$bookmarks', []] } },
-        like_count: { $size: { $ifNull: ['$likes', []] } },
-        repost_count: {
-          $size: {
-            $filter: {
-              input: { $ifNull: ['$post_children', []] },
-              as: 'item',
-              cond: { $eq: ['$$item.type', PostType.RePost] }
-            }
-          }
-        },
-        quotepost_count: {
-          $size: {
-            $filter: {
-              input: { $ifNull: ['$post_children', []] },
-              as: 'item',
-              cond: { $eq: ['$$item.type', PostType.QuotePost] }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  private projectPostDetailStage() {
-    return {
-      $project: {
-        post_children: 0
-      }
-    }
-  }
   async checkEmailExist(email: string) {
     const user = await databaseService.users.findOne({ email })
     return Boolean(user)
@@ -223,6 +121,17 @@ class UsersService {
       access_token,
       refresh_token
     }
+  }
+
+  async getUserByEmail({ email }: { email: string }) {
+    return await databaseService.users.findOne({ email })
+  }
+
+  async getUserByEmailPassword({ email, hashedPassword }: { email: string; hashedPassword: string }) {
+    return await databaseService.users.findOne({ email, password: hashedPassword })
+  }
+  async getUserById(user_id: string) {
+    return await databaseService.users.findOne({ _id: new ObjectId(user_id) })
   }
 
   async login({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
