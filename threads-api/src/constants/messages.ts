@@ -88,7 +88,9 @@ export const POSTS_MESSAGES = {
   SEARCH_POST_SUCCESS: 'Search posts successfully',
   SEARCH_CONTENT_MUST_BE_STRING: 'Search content must be string',
   MEDIA_TYPE_MUST_BE_ONE_OF_VALUES: 'Media type must be one of values',
-  PEOPLE_FOLLOW_MUST_BE_0_OR_1: 'Peole follow must be 0 or 1'
+  PEOPLE_FOLLOW_MUST_BE_0_OR_1: 'Peole follow must be 0 or 1',
+  CREATE_COMMENT_SUCCESS: 'Create comment success',
+  CREATE_COMMENT_FAILED: 'Create comment failed'
 } as const
 
 export const BOOKMARKS_MESSAGES = {

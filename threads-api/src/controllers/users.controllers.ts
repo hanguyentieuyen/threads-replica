@@ -316,7 +316,7 @@ export const getUserProfileController = async (req: Request<GetUserProfileReqBod
 
 export const followController = async (req: Request<ParamsDictionary, any, FollowReqBody>, res: Response) => {
   const { user_id } = req.decodedAuthorization as TokenPayload
-  const { followed_user_id } = req.body
+  const { followed_user_id } = req.validateData
   const data = await usersService.follow({ user_id, followed_user_id })
   return res.json(data)
 }

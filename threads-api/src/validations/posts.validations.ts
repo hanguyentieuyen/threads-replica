@@ -74,6 +74,11 @@ export const postValidator = Joi.object({
   })
 })
 
+export const createCommentValidator = Joi.object({
+  parent_id: Joi.string().allow(null),
+  content: Joi.string().required().min(1)
+})
+
 export const createPostValidator = Joi.object({
   type: Joi.number()
     .valid(...postTypes)
