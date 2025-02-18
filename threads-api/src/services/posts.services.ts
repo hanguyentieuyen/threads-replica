@@ -67,21 +67,6 @@ class PostsService {
         }
       },
       {
-        $addFields: {
-          mentions: {
-            $map: {
-              input: '$mentions',
-              as: 'mention',
-              in: {
-                _id: '$$mention._id',
-                name: '$$mention.name',
-                username: '$$mention.username'
-              }
-            }
-          }
-        }
-      },
-      {
         $lookup: {
           from: 'bookmarks',
           localField: '_id',
@@ -99,6 +84,39 @@ class PostsService {
       },
       {
         $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'post_id',
+          as: 'comments'
+        }
+      },
+
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'comments.user_id',
+          foreignField: '_id',
+          as: 'userInfo'
+        }
+      },
+      {
+        $unwind: { path: '$userInfo', preserveNullAndEmptyArrays: true }
+      },
+      {
+        $addFields: {
+          'comments.username': '$userInfo.username',
+          'comments.avatar': '$userInfo.avatar'
+        }
+      },
+
+      {
+        $project: {
+          userInfo: 0
+        }
+      },
+
+      {
+        $lookup: {
           from: 'posts',
           localField: '_id',
           foreignField: 'parent_id',
@@ -111,6 +129,17 @@ class PostsService {
   private addFieldsPostDetailStage() {
     return {
       $addFields: {
+        mentions: {
+          $map: {
+            input: '$mentions',
+            as: 'mention',
+            in: {
+              _id: '$$mention._id',
+              name: '$$mention.name',
+              username: '$$mention.username'
+            }
+          }
+        },
         bookmark_count: { $size: { $ifNull: ['$bookmarks', []] } },
         like_count: { $size: { $ifNull: ['$likes', []] } },
         repost_count: {
@@ -138,7 +167,14 @@ class PostsService {
   private projectPostDetailStage() {
     return {
       $project: {
-        post_children: 0
+        post_children: 0,
+        comments: {
+          _id: 0,
+          user_id: 0,
+          post_id: 0,
+          parent_id: 0,
+          updated_at: 0
+        }
       }
     }
   }
@@ -538,6 +574,7 @@ class PostsService {
   }
 
   async createComment({ user_id, post_id, body }: { user_id: string; post_id: string; body: CommentReqBody }) {
+    console.log('post_id: ', post_id)
     const data = await databaseService.comments.insertOne(
       new Comment({
         user_id: new ObjectId(user_id),

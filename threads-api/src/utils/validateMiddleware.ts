@@ -9,12 +9,15 @@ export const validateMiddleware = (schemas: Schema, dataLocation: 'body' | 'head
     try {
       const data = dataLocation === 'headers' ? { authorization: req.headers.authorization } : req[dataLocation]
       // validate data with joi
-      const value = await schemas.validateAsync(data, { abortEarly: false })
-      req.validateData = value
+      const validatedData = await schemas.validateAsync(data, { abortEarly: false })
+      req.validateData = {
+        ...(req.validateData || {}),
+        ...validatedData
+      }
 
       //  verify the access token
       if (dataLocation === 'headers') {
-        const accessToken = value.authorization.split(' ')[1]
+        const accessToken = validatedData.authorization.split(' ')[1]
 
         const decodedAuthorization = await verifyAccessToken(accessToken)
         req.decodedAuthorization = decodedAuthorization
