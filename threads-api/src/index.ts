@@ -14,6 +14,7 @@ import staticRouter from './routes/static.routes'
 //import '~/utils/fake-data'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
+import commentsRouter from './routes/comments.routes'
 
 const app = express()
 const port = 4000
@@ -70,6 +71,7 @@ app.use('/search', searchRouter)
 app.use('/medias', mediaRouter)
 app.use('/static', staticRouter)
 app.use('/hashtags', hashTagsRouter)
+app.use('/comments', commentsRouter)
 
 // Database connection and indexing
 databaseService.connect().then(() => {

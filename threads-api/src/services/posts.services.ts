@@ -574,7 +574,6 @@ class PostsService {
   }
 
   async createComment({ user_id, post_id, body }: { user_id: string; post_id: string; body: CommentReqBody }) {
-    console.log('post_id: ', post_id)
     const data = await databaseService.comments.insertOne(
       new Comment({
         user_id: new ObjectId(user_id),
