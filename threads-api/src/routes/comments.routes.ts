@@ -1,25 +1,24 @@
 import { Router } from 'express'
-import { getCommentsController } from '~/controllers/comments.controllers'
+import { createCommentController } from '~/controllers/posts.controllers'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
-import { postValidator } from '~/validations/posts.validations'
+import { createCommentValidator } from '~/validations/comment.validations'
 import { accessTokenValidator } from '~/validations/users.validations'
 
 const commentsRouter = Router()
 
 /**
- * Description: Get comments and child comments
+ * Description: create a new comment
  * Path: /
- * Method: GET
- * Param: post_id: string
+ * Method: POST
  * Header: { Authorization: Bearer <access_token>}
+ * Body: { parent_id: string, content_id: string, post_id: string}
  */
-
-commentsRouter.get(
-  '/:post_id/replies',
+commentsRouter.post(
+  '/',
+  validateMiddleware(createCommentValidator, 'body'),
   validateMiddleware(accessTokenValidator, 'headers'),
-  validateMiddleware(postValidator, 'params'),
-  requestHandler(getCommentsController)
+  requestHandler(createCommentController)
 )
 
 export default commentsRouter

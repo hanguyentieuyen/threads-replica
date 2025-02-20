@@ -23,7 +23,6 @@ class CommentsService {
 
     // Just count parent comments
     const total = await databaseService.comments.countDocuments({ post_id: new ObjectId(post_id), parent_id: null })
-    console.log(comments)
     return { comments, total }
   }
 }

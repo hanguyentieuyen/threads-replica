@@ -11,7 +11,7 @@ const postTypes = convertEnumToArray(PostType)
 const postAudience = convertEnumToArray(PostAudience)
 const mediaTypes = convertEnumToArray(MediaType)
 
-const postIdSchema = Joi.string().custom(async (value) => {
+export const postIdSchema = Joi.string().custom(async (value) => {
   if (!ObjectId.isValid(value)) {
     throw new ErrorWithStatus({
       message: POSTS_MESSAGES.INVALID_POST_ID,
@@ -72,11 +72,6 @@ export const postValidator = Joi.object({
     }
     return value
   })
-})
-
-export const createCommentValidator = Joi.object({
-  parent_id: Joi.string().allow(null),
-  content: Joi.string().required().min(1)
 })
 
 export const createPostValidator = Joi.object({

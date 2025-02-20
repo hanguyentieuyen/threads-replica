@@ -149,6 +149,27 @@ components:
                 type: string
                 description: Type of media.
                 example: "image"  
+    CommentBody:
+      type: object
+      required:
+        - content
+        - post_id
+      properties:
+        parent_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID của bình luận cha (nếu là bình luận con), bằng null là bình luận cha
+          example: null
+        content:
+          type: string
+          description: Nội dung bình luận
+          example: "test change path route"
+        post_id:
+          type: string
+          format: uuid
+          description: ID của bài viết mà bình luận thuộc về
+          example: "67acc2015cab1b73b457df4f"
     BookmarkBody:
       type: object
       properties:
@@ -433,6 +454,48 @@ components:
         repost_count:
           type: integer
           example: 0
+    Comment:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: uuid
+          description: ID của bình luận (MongoDB ObjectId)
+          example: "67b75c5c22df5e02a2553773"
+        user_id:
+          type: string
+          format: uuid
+          description: ID của người dùng đã bình luận
+          example: "6713e74880a37c56378c90eb"
+        post_id:
+          type: string
+          format: uuid
+          description: ID của bài viết chứa bình luận
+          example: "67acc2015cab1b73b457df4f"
+        parent_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: ID của bình luận cha (nếu là bình luận con)
+          example: null
+        content:
+          type: string
+          description: Nội dung bình luận
+          example: "test change path route"
+        like_count:
+          type: integer
+          description: Số lượt thích bình luận
+          example: 0
+        created_at:
+          type: string
+          format: date-time
+          description: Thời gian tạo bình luận
+          example: "2025-02-20T16:46:20.234Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Thời gian cập nhật bình luận
+          example: "2025-02-20T16:46:20.234Z"
     Hashtag:
       type: object
       properties:

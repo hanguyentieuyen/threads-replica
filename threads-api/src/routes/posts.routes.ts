@@ -1,13 +1,11 @@
 import { Router } from 'express'
 import {
-  createCommentController,
   createPostController,
   getPostChildrenController,
   getPostController,
   getPostsController
 } from '~/controllers/posts.controllers'
 import {
-  createCommentValidator,
   createPostValidator,
   getPostChildrenValidator,
   paginationValidator,
@@ -16,6 +14,7 @@ import {
 import { accessTokenValidator } from '~/validations/users.validations'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
+import { getCommentsController } from '~/controllers/comments.controllers'
 
 const postsRouter = Router()
 
@@ -77,17 +76,18 @@ postsRouter.get(
 )
 
 /**
- * Description: create a new comment
- * Path: /:post_id/comments
- * Method: POST
+ * Description: Get comments and child comments
+ * Path: /posts/:post_id/comments
+ * Method: GET
+ * Param: post_id: string
  * Header: { Authorization: Bearer <access_token>}
- * Query: { parent_id: string, content_id: string}
  */
-postsRouter.post(
+
+postsRouter.get(
   '/:post_id/comments',
-  validateMiddleware(postValidator, 'params'),
-  validateMiddleware(createCommentValidator, 'body'),
   validateMiddleware(accessTokenValidator, 'headers'),
-  requestHandler(createCommentController)
+  validateMiddleware(postValidator, 'params'),
+  requestHandler(getCommentsController)
 )
+
 export default postsRouter
