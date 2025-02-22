@@ -1,4 +1,6 @@
 import { Request, Response } from 'express'
+import { POSTS_MESSAGES } from '~/constants/messages'
+import { TokenPayload } from '~/models/requestType/User.requests'
 import commentsService from '~/services/comments.services'
 
 export const getCommentsController = async (req: Request, res: Response) => {
@@ -13,5 +15,41 @@ export const getCommentsController = async (req: Request, res: Response) => {
       total_page: Math.ceil(data.total / limit),
       comments: data.comments
     }
+  })
+}
+
+export const createCommentController = async (req: Request, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { post_id, parent_id, content } = req.validateData
+
+  const data = await commentsService.createComment({
+    user_id,
+    post_id,
+    body: {
+      parent_id,
+      content
+    }
+  })
+  return res.json({
+    message: POSTS_MESSAGES.CREATE_COMMENT_SUCCESS,
+    data
+  })
+}
+
+export const likeCommentController = async (req: Request, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { comment_id } = req.validateData
+  const data = await commentsService.likeComment({ user_id, comment_id })
+  return res.json({
+    data
+  })
+}
+
+export const unlikeCommentController = async (req: Request, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { comment_id } = req.validateData
+  const data = await commentsService.unlikeComment({ user_id, comment_id })
+  return res.json({
+    data
   })
 }

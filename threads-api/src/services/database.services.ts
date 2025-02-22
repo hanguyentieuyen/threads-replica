@@ -9,6 +9,7 @@ import Post from '~/models/post.model'
 import Bookmark from '~/models/bookmark.model'
 import HashTag from '~/models/hashtag.model'
 import Comment from '~/models/comment.model'
+import CommentLike from '~/models/commentLike.model'
 
 config()
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@threads-replica.ugxgau4.mongodb.net/?retryWrites=true&w=majority&appName=Threads-Replica`
@@ -66,6 +67,10 @@ class DatabaseService {
 
   get comments(): Collection<Comment> {
     return this.db.collection(envConfig.dbCommentsCollection)
+  }
+
+  get commentLikes(): Collection<CommentLike> {
+    return this.db.collection(envConfig.dbCommentLikesCollection)
   }
 }
 

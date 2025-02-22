@@ -2,13 +2,11 @@ import { PostReqBody } from '~/models/requestType/Post.requests'
 import databaseService from './database.services'
 import { ObjectId } from 'mongodb'
 import Post from '~/models/post.model'
-import Comment from '~/models/comment.model'
 import { ErrorWithStatus } from '~/models/error.model'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'
 import { PostType } from '~/constants/enum'
 import hashTagsService from './hashtags.services'
-import { CommentReqBody } from '~/models/requestType/Comment.requests'
 
 class PostsService {
   // Handle hashtags
@@ -571,25 +569,6 @@ class PostsService {
     })
 
     return { posts, total }
-  }
-
-  async createComment({ user_id, post_id, body }: { user_id: string; post_id: string; body: CommentReqBody }) {
-    const data = await databaseService.comments.insertOne(
-      new Comment({
-        user_id: new ObjectId(user_id),
-        post_id: new ObjectId(post_id),
-        content: body.content,
-        parent_id: body.parent_id
-      })
-    )
-    const newComment = await databaseService.comments.findOne({ _id: data.insertedId })
-    if (!newComment) {
-      throw new ErrorWithStatus({
-        message: POSTS_MESSAGES.CREATE_COMMENT_FAILED,
-        status: HTTP_STATUS.BAD_REQUEST
-      })
-    }
-    return newComment
   }
 }
 

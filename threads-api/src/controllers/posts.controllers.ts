@@ -67,21 +67,3 @@ export const getPostChildrenController = async (req: Request<PostParam, any, any
     }
   })
 }
-
-export const createCommentController = async (req: Request, res: Response) => {
-  const { user_id } = req.decodedAuthorization as TokenPayload
-  const { post_id, parent_id, content } = req.validateData
-
-  const data = await postsService.createComment({
-    user_id,
-    post_id,
-    body: {
-      parent_id,
-      content
-    }
-  })
-  return res.json({
-    message: POSTS_MESSAGES.CREATE_COMMENT_SUCCESS,
-    data
-  })
-}

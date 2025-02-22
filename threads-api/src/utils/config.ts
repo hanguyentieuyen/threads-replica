@@ -11,6 +11,7 @@ export const envConfig = {
   dbPostsCollection: process.env.DB_POSTS_COLLECTION as string,
   dbHashTagsCollection: process.env.DB_HASHTAGS_COLLECTION as string,
   dbCommentsCollection: process.env.DB_COMMENTS_COLLECTION as string,
+  dbCommentLikesCollection: process.env.DB_COMMENT_LIKES_COLLECTION as string,
   dbRefreshTokensCollection: process.env.DB_REFRESHTOKEN_COLLECTION as string,
   jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,
   jwtSecretRefreshToken: process.env.JWT_SECRET_REFRESH_TOKEN as string,

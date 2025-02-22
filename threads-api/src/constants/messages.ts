@@ -93,15 +93,20 @@ export const POSTS_MESSAGES = {
   CREATE_COMMENT_FAILED: 'Create comment failed'
 } as const
 
+export const COMMENTS_MESSAGES = {
+  INVALID_COMMENT: 'Invalid comment',
+  COMMENT_ID_IS_REQUIRED: 'Comment ID is required'
+} as const
+
 export const BOOKMARKS_MESSAGES = {
   BOOKMARK_SUCCESS: 'Bookmark success',
   UNBOOKMARK_SUCCESS: 'Unbookmark success'
-}
+} as const
 
 export const LIKES_MESSAGES = {
   LIKE_SUCCESS: 'Like success',
   UNLIKE_SUCCESS: 'Unlike success'
-}
+} as const
 
 export const HASHTAGS_MESSAGES = {
   SEARCH_CONTENT_MUST_BE_STRING: 'Search content must be string',
@@ -111,4 +116,4 @@ export const HASHTAGS_MESSAGES = {
   HASHTAG_NOT_FOUND: 'Hashtag not found',
   CREATE_HASHTAG_SUCCESS: 'Create hashtag success',
   CREATE_HASHTAG_FAILED: 'Create hashtag failed'
-}
+} as const
