@@ -39,17 +39,13 @@ erDiagram
         date created_at
         date updated_at
     }
-    COMMENTS {
+    POST_LIKES {
         ObjectId _id
         ObjectId user_id
         ObjectId post_id
-        ObjectId parent_comment_id
-        string content
-        int likes_count
         date created_at
-        date updated_at
     }
-    LIKES {
+    POST_BOOKMARKS {
         ObjectId _id
         ObjectId user_id
         ObjectId post_id
@@ -66,25 +62,38 @@ erDiagram
         ObjectId followed_user_id
         date created_at
     }
-    BOOKMARKS {
+    COMMENTS {
         ObjectId _id
         ObjectId user_id
         ObjectId post_id
+        ObjectId parent_comment_id
+        string content
+        int likes_count
+        date created_at
+        date updated_at
+    }
+    COMMENT_LIKES {
+        ObjectId _id
+        ObjectId user_id
+        ObjectId comment_id
         date created_at
     }
 
     USERS ||--o{ REFRESH_TOKENS : "has"
     USERS ||--o{ POSTS : "writes"
     USERS ||--o{ COMMENTS : "makes"
-    USERS ||--o{ LIKES : "likes"
+    USERS ||--o{ POST_LIKES : "likes"
     USERS ||--o{ FOLLOWERS : "follows"
-    USERS ||--o{ BOOKMARKS : "saves"
+    USERS ||--o{ POST_BOOKMARKS : "saves"
+    USERS ||--o{ COMMENT_LIKES : "likes"
 
     POSTS ||--o{ COMMENTS : "has"
-    POSTS ||--o{ LIKES : "has"
-    POSTS ||--o{ BOOKMARKS : "has"
+    POSTS ||--o{ POST_LIKES : "has"
+    POSTS ||--o{ POST_BOOKMARKS : "has"
 
     COMMENTS ||--o| COMMENTS : "replies to"
+    COMMENTS ||--o| COMMENT_LIKES : "like"
+
 
     POSTS ||--o{ HASHTAGS : "contains"
     HASHTAGS ||--o{ POSTS : "tagged in"

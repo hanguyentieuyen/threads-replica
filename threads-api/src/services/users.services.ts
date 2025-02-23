@@ -470,7 +470,7 @@ class UsersService {
   }
 
   async getUserBookmarks({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
-    const userBookmarks = await databaseService.bookmarks
+    const userBookmarks = await databaseService.postBookmarks
       .aggregate([
         // filter post record by user bookmark posts
         { $match: { user_id: new ObjectId(user_id) } },
@@ -507,7 +507,7 @@ class UsersService {
         }
       ])
       .toArray()
-    const total = await databaseService.bookmarks.countDocuments({
+    const total = await databaseService.postBookmarks.countDocuments({
       user_id: new ObjectId(user_id)
     })
 

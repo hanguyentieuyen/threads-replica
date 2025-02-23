@@ -4,7 +4,7 @@ import Bookmark from '~/models/bookmark.model'
 
 class BookmarksService {
   async bookmarks(user_id: string, post_id: string) {
-    const data = await databaseService.bookmarks.findOneAndUpdate(
+    const data = await databaseService.postBookmarks.findOneAndUpdate(
       { user_id: new ObjectId(user_id), post_id: new ObjectId(post_id) },
       { $setOnInsert: new Bookmark({ user_id: new ObjectId(user_id), post_id: new ObjectId(post_id) }) },
       { upsert: true, returnDocument: 'after' }
@@ -13,7 +13,7 @@ class BookmarksService {
   }
 
   async unbookmarks(user_id: string, post_id: string) {
-    const data = await databaseService.bookmarks.findOneAndDelete({
+    const data = await databaseService.postBookmarks.findOneAndDelete({
       user_id: new ObjectId(user_id),
       post_id: new ObjectId(post_id)
     })

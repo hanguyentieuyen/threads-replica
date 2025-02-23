@@ -4,9 +4,9 @@ import RefreshToken from '~/models/refreshToken.model'
 import { envConfig } from '~/utils/config'
 import User from '~/models/user.model'
 import Follower from '~/models/follow.model'
-import Like from '~/models/like.model'
 import Post from '~/models/post.model'
-import Bookmark from '~/models/bookmark.model'
+import PostLike from '~/models/like.model'
+import PostBookmark from '~/models/bookmark.model'
 import HashTag from '~/models/hashtag.model'
 import Comment from '~/models/comment.model'
 import CommentLike from '~/models/commentLike.model'
@@ -49,10 +49,6 @@ class DatabaseService {
     return this.db.collection(envConfig.dbFollowsCollection)
   }
 
-  get likes(): Collection<Like> {
-    return this.db.collection(envConfig.dbLikesCollection)
-  }
-
   get hashtags(): Collection<HashTag> {
     return this.db.collection(envConfig.dbHashTagsCollection)
   }
@@ -61,8 +57,12 @@ class DatabaseService {
     return this.db.collection(envConfig.dbPostsCollection)
   }
 
-  get bookmarks(): Collection<Bookmark> {
-    return this.db.collection(envConfig.dbBookmarksCollection)
+  get postLikes(): Collection<PostLike> {
+    return this.db.collection(envConfig.dbPostLikesCollection)
+  }
+
+  get postBookmarks(): Collection<PostBookmark> {
+    return this.db.collection(envConfig.dbPostBookmarksCollection)
   }
 
   get comments(): Collection<Comment> {

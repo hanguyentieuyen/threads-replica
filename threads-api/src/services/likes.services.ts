@@ -4,7 +4,7 @@ import Like from '~/models/like.model'
 
 class LikesService {
   async likes(user_id: string, post_id: string) {
-    const data = await databaseService.likes.findOneAndUpdate(
+    const data = await databaseService.postLikes.findOneAndUpdate(
       { user_id: new ObjectId(user_id), post_id: new ObjectId(post_id) },
       { $setOnInsert: new Like({ user_id: new ObjectId(user_id), post_id: new ObjectId(post_id) }) },
       { upsert: true, returnDocument: 'after' }
@@ -13,7 +13,7 @@ class LikesService {
   }
 
   async unlikes(user_id: string, post_id: string) {
-    const data = await databaseService.likes.findOneAndDelete({
+    const data = await databaseService.postLikes.findOneAndDelete({
       user_id: new ObjectId(user_id),
       post_id: new ObjectId(post_id)
     })
