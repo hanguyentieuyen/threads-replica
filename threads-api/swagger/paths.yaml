@@ -923,6 +923,57 @@ paths:
                   error:
                     type: string
                     example: "Invalid page or limit parameters."
+  /posts/{post_id}/comments:
+    get:
+      tags:
+        - comments
+      summary: Get comments of a post
+      description: Retrieve a paginated list of comments for a specific post
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          description: ID of the post
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          description: Number of comments per page
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                      limit:
+                        type: integer
+                      total_page:
+                        type: integer
+                      comments:
+                        $ref: '#/components/schemas/Comments'
+        "422":
+          description: Invalid query parameters
+    
   /comments:
     post:
       tags:
@@ -960,6 +1011,59 @@ paths:
                   error:
                     type: string
                     example: "Invalid input data"
+  /comments/{comment_id}/like:
+    post:
+      tags:
+        - comments
+      summary: Like a comment
+      description: Like a specific comment by its ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          description: ID of the comment to like
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful like response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CommentLike'
+        "422":
+          description: Invalid query parameters
+    delete:
+      tags:
+        - comments
+      summary: Unlike a comment
+      description: Like a specific comment by its ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          description: ID of the comment to unlike
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful unlike response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CommentLike'
+        "422":
+          description: Invalid query parameters
   /medias/upload-image:
     post:
       tags:

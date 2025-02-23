@@ -496,6 +496,54 @@ components:
           format: date-time
           description: Thời gian cập nhật bình luận
           example: "2025-02-20T16:46:20.234Z"
+    Comments:
+      type: array
+      items:
+        type: object
+        properties:
+          _id:
+            type: string
+          content:
+            type: string
+          like_count:
+            type: integer
+          created_at:
+            type: string
+            format: date-time
+          children_comments:
+            type: array
+            items:
+              type: object
+              properties:
+                _id:
+                  type: string
+                content:
+                  type: string
+                like_count:
+                  type: integer
+                created_at:
+                  type: string
+                  format: date-time
+                username:
+                  type: string
+                user_avatar:
+                  type: string
+          username:
+            type: string
+          user_avatar:
+            type: string
+    CommentLike:
+      type: object
+      properties:
+        _id:
+          type: string
+        comment_id:
+          type: string
+        user_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
     Hashtag:
       type: object
       properties:

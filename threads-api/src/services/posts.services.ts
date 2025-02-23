@@ -325,6 +325,7 @@ class PostsService {
 
   private paginationPostStage(limit: number, page: number) {
     return [
+      { $sort: { created_at: -1 } },
       {
         $skip: limit * (page - 1)
       },

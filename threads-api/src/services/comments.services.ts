@@ -21,6 +21,100 @@ class CommentsService {
           }
         },
 
+        {
+          $lookup: {
+            from: 'comment_likes',
+            localField: '_id',
+            foreignField: 'comment_id',
+            as: 'comment_likes'
+          }
+        },
+        {
+          $addFields: {
+            like_count: { $size: '$comment_likes' }
+          }
+        },
+        {
+          $project: {
+            comment_likes: 0
+          }
+        },
+        {
+          $lookup: {
+            from: 'comment_likes',
+            localField: 'children_comments._id',
+            foreignField: 'comment_id',
+            as: 'comment_likes_child'
+          }
+        },
+        {
+          $addFields: {
+            'children_comments.like_count': { $size: '$comment_likes_child' }
+          }
+        },
+        {
+          $project: {
+            comment_likes_child: 0
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user_details'
+          }
+        },
+        {
+          $unwind: { path: '$user_details', preserveNullAndEmptyArrays: true }
+        },
+        {
+          $addFields: {
+            username: '$user_details.username',
+            user_avatar: '$user_details.avatar'
+          }
+        },
+        {
+          $project: {
+            user_details: 0
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'children_comments.user_id',
+            foreignField: '_id',
+            as: 'user_details_child'
+          }
+        },
+        {
+          $unwind: { path: '$user_details_child', preserveNullAndEmptyArrays: true }
+        },
+        {
+          $addFields: {
+            'children_comments.username': '$user_details_child.username',
+            'children_comments.user_avatar': '$user_details_child.avatar'
+          }
+        },
+        {
+          $project: {
+            user_details_child: 0
+          }
+        },
+        {
+          $project: {
+            user_id: 0,
+            post_id: 0,
+            parent_id: 0,
+            updated_at: 0,
+            children_comments: {
+              user_id: 0,
+              post_id: 0,
+              parent_id: 0,
+              updated_at: 0
+            }
+          }
+        },
         { $sort: { created_at: -1 } },
         { $skip: (page - 1) * limit },
         { $limit: limit }
