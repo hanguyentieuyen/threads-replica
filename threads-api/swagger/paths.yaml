@@ -29,10 +29,6 @@ tags:
     description: Threads replica users APIs 
   - name: posts
     description: Treads replica posts API
-  - name: bookmark
-    description: Threads replica bookmarks APIs
-  - name: like
-    description: Threads replica like APIs
   - name: media
     description: Threads replica media API
   - name: hashtags
@@ -681,21 +677,23 @@ paths:
         '422':
           description: Invalid request parameters.
         
-  /bookmark:
+  /posts/{post_id}/bookmark:
     post:
       tags:
-        - bookmark
+        - posts
       summary: Bookmark a post
       description: Bookmark a post
       operationId: bookmarkPost
       security:
         - BearerAuth: []
-      requestBody: 
-        description: Bookmark information
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BookmarkBody'
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          description: The ID of the bookmark to delete.
+          schema:
+            type: string
+            example: 66d6059974ecbef1214d20ab
       responses:
         default:
           description: Bookmark post successfully
@@ -711,16 +709,15 @@ paths:
                     $ref: '#/components/schemas/Bookmark'
         '422':
           description: Invalid or missing input fields
-  /bookmark/post/{id}:
     delete:
       tags:
-        - bookmark
+        - posts
       summary: Delete a bookmark by ID
       description: Deletes a specific bookmark based on the provided ID.
       security:
         - BearerAuth: []
       parameters:
-        - name: id
+        - name: post_id
           in: path
           required: true
           description: The ID of the bookmark to delete.
@@ -742,21 +739,23 @@ paths:
                     $ref: '#/components/schemas/Bookmark'
         '422':
           description: Invalid or missing input fields
-  /like:
+  /posts/{post_id}/like:
     post:
       tags:
-        - like
+        - posts
       summary: Like a post
       description: Like a post
       operationId: likePost
       security:
         - BearerAuth: []
-      requestBody: 
-        description: Like information
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LikeBody'
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          description: ID of the post to remove the like from
+          schema:
+            type: string
+            example: 66d6059974ecbef1214d20ab
       responses:
         default:
           description: Like post successfully
@@ -772,16 +771,15 @@ paths:
                     $ref: '#/components/schemas/Like'
         '422':
           description: Invalid or missing input fields
-  /like/post/{id}:
     delete:
       tags:
-        - like
+        - posts
       summary: Remove a like from a post
       description: Deletes the like associated with the specified post ID.
       security:
         - BearerAuth: []
       parameters:
-        - name: id
+        - name: post_id
           in: path
           required: true
           description: ID of the post to remove the like from

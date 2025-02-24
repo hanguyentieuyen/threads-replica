@@ -4,8 +4,6 @@ import usersRouter from './routes/users.routes'
 import { defaultErrorHandler } from './utils/error.middlewares'
 import cors, { CorsOptions } from 'cors'
 import postsRouter from './routes/posts.routes'
-import bookmarkRouter from './routes/bookmarks.routes'
-import likeRouter from './routes/likes.routes'
 import searchRouter from './routes/search.routes'
 import mediaRouter from './routes/medias.routes'
 import hashTagsRouter from './routes/hashtags.routes'
@@ -65,8 +63,6 @@ app.use(cors(corsOption))
 // route endpoint
 app.use('/users', usersRouter)
 app.use('/posts', postsRouter)
-app.use('/bookmark', bookmarkRouter)
-app.use('/like', likeRouter)
 app.use('/search', searchRouter)
 app.use('/medias', mediaRouter)
 app.use('/static', staticRouter)

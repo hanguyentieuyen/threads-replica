@@ -11,41 +11,32 @@ const postTypes = convertEnumToArray(PostType)
 const postAudience = convertEnumToArray(PostAudience)
 const mediaTypes = convertEnumToArray(MediaType)
 
-export const postIdSchema = Joi.string().custom(async (value) => {
-  if (!ObjectId.isValid(value)) {
-    throw new ErrorWithStatus({
-      message: POSTS_MESSAGES.INVALID_POST_ID,
-      status: HTTP_STATUS.NOT_FOUND
-    })
-  }
+export const postIdSchema = Joi.string()
+  .external(async (value) => {
+    if (!ObjectId.isValid(value)) {
+      throw new ErrorWithStatus({
+        message: POSTS_MESSAGES.INVALID_POST_ID,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
 
-  const liked_post_id = await databaseService.posts.findOne({
-    _id: new ObjectId(value)
+    const isExistPostId = await databaseService.posts.findOne({
+      _id: new ObjectId(value)
+    })
+
+    if (!isExistPostId) {
+      throw new ErrorWithStatus({
+        message: POSTS_MESSAGES.POST_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    return value
+  })
+  .messages({
+    'string.base': POSTS_MESSAGES.INVALID_POST_ID
   })
 
-  if (liked_post_id === null) {
-    throw new ErrorWithStatus({
-      message: POSTS_MESSAGES.POST_NOT_FOUND,
-      status: HTTP_STATUS.NOT_FOUND
-    })
-  }
-
-  return value // Return value when validation passes
-})
-
-export const likeValidator = Joi.object({
-  post_id: postIdSchema
-})
-
-export const unlikeValidator = Joi.object({
-  post_id: postIdSchema
-})
-
-export const bookmarkValidator = Joi.object({
-  post_id: postIdSchema
-})
-
-export const unbookmarkValidator = Joi.object({
+export const postIdValidator = Joi.object({
   post_id: postIdSchema
 })
 

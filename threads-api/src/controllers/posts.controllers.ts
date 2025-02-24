@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { PostType } from '~/constants/enum'
-import { POSTS_MESSAGES } from '~/constants/messages'
+import { BOOKMARKS_MESSAGES, LIKES_MESSAGES, POSTS_MESSAGES } from '~/constants/messages'
 import { Pagination, PostParam, PostQuery, PostReqBody } from '~/models/requestType/Post.requests'
 import { TokenPayload } from '~/models/requestType/User.requests'
 import postsService from '~/services/posts.services'
@@ -65,5 +65,45 @@ export const getPostChildrenController = async (req: Request<PostParam, any, any
       page,
       total_page: Math.ceil(total / limit)
     }
+  })
+}
+
+export const bookmarkPostController = async (req: Request<ParamsDictionary, any, PostParam>, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { post_id } = req.validateData
+  const data = await postsService.bookmarkPost(user_id, post_id)
+  return res.json({
+    message: BOOKMARKS_MESSAGES.BOOKMARK_SUCCESS,
+    data
+  })
+}
+
+export const unbookmarkPostController = async (req: Request<ParamsDictionary, any, PostParam>, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { post_id } = req.validateData
+  const data = await postsService.unbookmarkPost(user_id, post_id)
+  return res.json({
+    message: BOOKMARKS_MESSAGES.UNBOOKMARK_SUCCESS,
+    data
+  })
+}
+
+export const likePostController = async (req: Request<ParamsDictionary, any, PostParam>, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { post_id } = req.validateData
+  const data = await postsService.likePost(user_id, post_id)
+  return res.json({
+    message: LIKES_MESSAGES.LIKE_SUCCESS,
+    data
+  })
+}
+
+export const unlikePostController = async (req: Request<ParamsDictionary, any, PostParam>, res: Response) => {
+  const { user_id } = req.decodedAuthorization as TokenPayload
+  const { post_id } = req.validateData
+  const data = await postsService.unlikePost(user_id, post_id)
+  return res.json({
+    message: LIKES_MESSAGES.UNLIKE_SUCCESS,
+    data
   })
 }

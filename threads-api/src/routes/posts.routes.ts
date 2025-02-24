@@ -1,14 +1,19 @@
 import { Router } from 'express'
 import {
+  bookmarkPostController,
   createPostController,
   getPostChildrenController,
   getPostController,
-  getPostsController
+  getPostsController,
+  likePostController,
+  unbookmarkPostController,
+  unlikePostController
 } from '~/controllers/posts.controllers'
 import {
   createPostValidator,
   getPostChildrenValidator,
   paginationValidator,
+  postIdValidator,
   postValidator
 } from '~/validations/posts.validations'
 import { accessTokenValidator } from '~/validations/users.validations'
@@ -77,7 +82,7 @@ postsRouter.get(
 
 /**
  * Description: Get comments and child comments
- * Path: /posts/:post_id/comments
+ * Path: /:post_id/comments
  * Method: GET
  * Param: post_id: string
  * Header: { Authorization: Bearer <access_token>}
@@ -90,4 +95,60 @@ postsRouter.get(
   requestHandler(getCommentsController)
 )
 
+/**
+ * Description: Like a Post
+ * Path: /:post_id/like
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token>}
+ */
+
+postsRouter.post(
+  '/:post_id/like',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(postIdValidator, 'params'),
+  requestHandler(likePostController)
+)
+
+/**
+ * Description: Unlike Post
+ * Path: /:post_id/like
+ * Method: DELETE
+ * Header: { Authorization: Bearer <access_token>}
+ */
+
+postsRouter.delete(
+  '/:post_id/like',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(postIdValidator, 'params'),
+  requestHandler(unlikePostController)
+)
+
+/**
+ * Description: Bookmark post
+ * Path: /:post_id/bookmark
+ * Method: POST
+ * Body: {post_id: string}
+ * Header: { Authorization: Bearer <access_token>}
+ */
+
+postsRouter.post(
+  '/:post_id/bookmark',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(postIdValidator, 'params'),
+  requestHandler(bookmarkPostController)
+)
+
+/**
+ * Description: Unbookmark post
+ * Path: /:post_id/bookmark
+ * Method: DELETE
+ * Header: { Authorization: Bearer <access_token>}
+ */
+
+postsRouter.delete(
+  '/:post_id/bookmark',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(postIdValidator, 'params'),
+  requestHandler(unbookmarkPostController)
+)
 export default postsRouter

@@ -7,6 +7,8 @@ import { HTTP_STATUS } from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'
 import { PostType } from '~/constants/enum'
 import hashTagsService from './hashtags.services'
+import PostBookmark from '~/models/postBookmark.model'
+import PostLike from '~/models/postLike.model'
 
 class PostsService {
   // Handle hashtags
@@ -432,7 +434,7 @@ class PostsService {
   }
 
   // Query children posts
-  private getPostsPipeline(post_id: string, post_type: PostType, limit: number, page: number) {
+  private getPostChildrensPipeline(post_id: string, post_type: PostType, limit: number, page: number) {
     return [
       // Match posts based on parent_id and post type
       {
@@ -561,7 +563,7 @@ class PostsService {
     user_id?: string
   }) {
     const posts = await databaseService.posts
-      .aggregate(this.getPostsPipeline(post_id, post_type, limit, page))
+      .aggregate(this.getPostChildrensPipeline(post_id, post_type, limit, page))
       .toArray()
 
     const total = await databaseService.posts.countDocuments({
@@ -570,6 +572,40 @@ class PostsService {
     })
 
     return { posts, total }
+  }
+
+  async bookmarkPost(user_id: string, post_id: string) {
+    const data = await databaseService.postBookmarks.findOneAndUpdate(
+      { user_id: new ObjectId(user_id), post_id: new ObjectId(post_id) },
+      { $setOnInsert: new PostBookmark({ user_id: new ObjectId(user_id), post_id: new ObjectId(post_id) }) },
+      { upsert: true, returnDocument: 'after' }
+    )
+    return data
+  }
+
+  async unbookmarkPost(user_id: string, post_id: string) {
+    const data = await databaseService.postBookmarks.findOneAndDelete({
+      user_id: new ObjectId(user_id),
+      post_id: new ObjectId(post_id)
+    })
+    return data
+  }
+
+  async likePost(user_id: string, post_id: string) {
+    const data = await databaseService.postLikes.findOneAndUpdate(
+      { user_id: new ObjectId(user_id), post_id: new ObjectId(post_id) },
+      { $setOnInsert: new PostLike({ user_id: new ObjectId(user_id), post_id: new ObjectId(post_id) }) },
+      { upsert: true, returnDocument: 'after' }
+    )
+    return data
+  }
+
+  async unlikePost(user_id: string, post_id: string) {
+    const data = await databaseService.postLikes.findOneAndDelete({
+      user_id: new ObjectId(user_id),
+      post_id: new ObjectId(post_id)
+    })
+    return data
   }
 }
 
