@@ -4,10 +4,9 @@ import { SuccessResponse } from "~/types/utils.type"
 import axiosInstance from "~/utils/axios"
 
 export const hashtagApi = {
-  searchHashtags: (search: string) => {
+  search: (search: string) => {
     const params = new URLSearchParams({ search: search })
-    return axiosInstance.get<SuccessResponse<Hashtag[]>>(`${apiEndpoints.hashtags}/?${params}`)
+    return axiosInstance.get<SuccessResponse<Hashtag[]>>(apiEndpoints.hashtag.search, { params })
   },
-  createHashtag: (body: { hashtag: string }) =>
-    axiosInstance.post<SuccessResponse<Hashtag>>(`${apiEndpoints.hashtags}`, body)
+  create: (body: { hashtag: string }) => axiosInstance.post<SuccessResponse<Hashtag>>(apiEndpoints.hashtag.create, body)
 }

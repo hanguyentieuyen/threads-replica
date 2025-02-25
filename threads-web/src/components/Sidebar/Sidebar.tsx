@@ -10,7 +10,6 @@ import { clearLocalStorage } from "~/utils/auth"
 import Icon from "../Icon"
 import i18n from "~/lib/i18n"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-// eslint-disable-next-line react-refresh/only-export-components
 export const languages = [
   {
     value: "en",

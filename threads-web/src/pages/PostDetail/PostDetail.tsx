@@ -12,7 +12,7 @@ export const PostDetail: React.FC = () => {
   // Query the post details
   const { data: postDetailsData } = useQuery({
     queryKey: ["post", postId],
-    queryFn: () => postApi.getPostDetails(postId as string)
+    queryFn: () => postApi.detail(postId as string)
   })
 
   const post = postDetailsData?.data.data

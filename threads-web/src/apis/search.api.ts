@@ -11,6 +11,8 @@ export const searchApi = {
       page: page.toString()
     })
 
-    return axiosInstance.get<SuccessResponse<Post>>(`${apiEndpoints.search}/?${params.toString()}`)
+    return axiosInstance.get<SuccessResponse<Post>>(apiEndpoints.search.searchPost, {
+      params: params
+    })
   }
 }

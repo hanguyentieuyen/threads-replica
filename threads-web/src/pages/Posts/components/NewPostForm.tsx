@@ -38,7 +38,7 @@ export default function NewPostForm() {
   const { register, handleSubmit, setValue, reset } = useForm<FormData>()
 
   const createPostMutation = useMutation({
-    mutationFn: (body: FormData) => postApi.createPost(body)
+    mutationFn: (body: FormData) => postApi.create(body)
   })
 
   const onSubmit = handleSubmit((data) => {
@@ -81,7 +81,7 @@ export default function NewPostForm() {
   // Giả lập API search hashtag
   const searchHashtags = async (query: string) => {
     if (!query) return setShowDropdown(false)
-    const res = await hashtagApi.searchHashtags(query)
+    const res = await hashtagApi.search(query)
 
     setSuggestions(res.data.data ?? [])
     console.log(suggestions)

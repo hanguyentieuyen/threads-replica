@@ -1,7 +1,6 @@
 import PostAvatar from "../PostAvatar"
 import { useToggleState } from "~/hooks/useToggleState"
-import { likeApi } from "~/apis/like.api"
-import { bookmarkApi } from "~/apis/bookmark.api"
+import { postApi } from "~/apis/post.api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { AxiosResponse } from "axios"
@@ -54,28 +53,28 @@ export default function PostCard({
   }
 
   const likeMutation = useMutation({
-    mutationFn: (body: { post_id: string }) => likeApi.like(body),
+    mutationFn: (post_id: string) => postApi.like(post_id),
     onError: () => {
       toast.error("Failed to like the post.")
     }
   })
 
   const unlikeMutation = useMutation({
-    mutationFn: (post_id: string) => likeApi.unlike(post_id),
+    mutationFn: (post_id: string) => postApi.unlike(post_id),
     onError: () => {
       toast.error("Failed to unlike the post.")
     }
   })
 
   const bookmarkMutation = useMutation({
-    mutationFn: (body: { post_id: string }) => bookmarkApi.bookmark(body),
+    mutationFn: (post_id: string) => postApi.bookmark(post_id),
     onError: () => {
       toast.error("Failed to bookmark the post.")
     }
   })
 
   const unbookmarkMutation = useMutation({
-    mutationFn: (post_id: string) => bookmarkApi.unbookmark(post_id),
+    mutationFn: (post_id: string) => postApi.unbookmark(post_id),
     onError: () => {
       setBookmarkCount((prev) => prev + 1)
       toast.error("Failed to unbookmark the post.")
@@ -98,7 +97,7 @@ export default function PostCard({
       setLikeCount((prev) => prev + 1)
 
       updateOptimisticData("like_count", 1) // Optimistically update
-      handleMutation(likeMutation, { post_id: postId })
+      handleMutation(likeMutation, postId)
     } else {
       setLikeCount((prev) => prev - 1)
 
@@ -115,7 +114,7 @@ export default function PostCard({
       setBookmarkCount((prev) => prev + 1)
 
       updateOptimisticData("bookmark_count", 1)
-      handleMutation(bookmarkMutation, { post_id: postId })
+      handleMutation(bookmarkMutation, postId)
     } else {
       setBookmarkCount((prev) => prev - 1)
       updateOptimisticData("bookmark_count", -1)

@@ -8,7 +8,7 @@ export const mediaApi = {
     const form = new FormData()
     form.append("image", file)
 
-    return axiosInstance.post<SuccessResponse<Media[]>>(`${apiEndpoints.uploadImage}`, form, {
+    return axiosInstance.post<SuccessResponse<Media[]>>(apiEndpoints.media.uploadImage, form, {
       headers: {
         "Content-Type": "multipart/form-data"
       }
@@ -19,7 +19,7 @@ export const mediaApi = {
     const form = new FormData()
     form.append("video", file)
 
-    return axiosInstance.post<SuccessResponse<Media[]>>(`${apiEndpoints.uploadVideo}`, form, {
+    return axiosInstance.post<SuccessResponse<Media[]>>(apiEndpoints.media.uploadVideo, form, {
       headers: {
         "Content-Type": "multipart/form-data"
       }
