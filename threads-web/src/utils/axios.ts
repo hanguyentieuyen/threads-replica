@@ -53,14 +53,14 @@ export class Axios {
         //Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
         const { url } = response.config
-        if (url === apiEndpoints.loginUrl || url === apiEndpoints.registerUrl) {
+        if (url === apiEndpoints.auth.login || url === apiEndpoints.auth.register) {
           const data = response.data as AuthResponse
           this.accessToken = data?.data?.access_token || ""
           this.refreshToken = data?.data?.refresh_token || ""
           // Store token in local storage
           setAccessTokenToLocalStorage(this.accessToken)
           setRefreshTokenToLocalStorage(this.refreshToken)
-        } else if (url === apiEndpoints.logoutUrl) {
+        } else if (url === apiEndpoints.auth.logout) {
           this.accessToken = ""
           this.refreshToken = ""
           clearLocalStorage()
@@ -87,7 +87,7 @@ export class Axios {
           const { url } = configError
 
           // Case error: token expired and current request is not refresh token request , then request refresh token
-          if (isAxiosExpiredTokenError(error) && url !== apiEndpoints.refreshTokenUrl) {
+          if (isAxiosExpiredTokenError(error) && url !== apiEndpoints.auth.refreshToken) {
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
               : this.handleRefreshToken().finally(() => {
@@ -122,7 +122,7 @@ export class Axios {
 
   private handleRefreshToken() {
     return this.instance
-      .post(apiEndpoints.refreshTokenUrl, {
+      .post(apiEndpoints.auth.refreshToken, {
         refresh_token: this.refreshToken
       })
       .then((res) => {

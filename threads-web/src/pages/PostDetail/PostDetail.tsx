@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
+import { commentApi } from "~/apis/comment.api"
 import { postApi } from "~/apis/post.api"
-import Button from "~/components/Button"
 import ContentContainer from "~/components/ContentContainer"
 import HeaderContainer from "~/components/HeaderContainer"
 import PostCard from "~/components/PostCard"
-
+import Comment from "~/components/Comment"
 export const PostDetail: React.FC = () => {
   const { postId } = useParams()
 
@@ -15,8 +15,16 @@ export const PostDetail: React.FC = () => {
     queryFn: () => postApi.detail(postId as string)
   })
 
+  // Query the comments of post
+  const { data: commentsData } = useQuery({
+    queryKey: ["comments", postId],
+    queryFn: () => commentApi.get({ post_id: postId as string, page: 1, limit: 20 })
+  })
+
   const post = postDetailsData?.data.data
   if (!post) return null
+  const comments = commentsData?.data
+  console.log(comments)
 
   const { _id, bookmark_count, like_count, content, hashtags, mentions, parent_id, created_at } = post
   return (
@@ -25,11 +33,6 @@ export const PostDetail: React.FC = () => {
         <HeaderContainer />
       </div>
       <ContentContainer>
-        <div className='w-full border-b flex items-center justify-between p-5'>
-          <img alt='avatar' src='https://via.placeholder.com/40' className='rounded-full w-10 h-10' />
-          <span className='text-left text-sm text-slate-400 w-full mx-2'>Có gì mới ?</span>
-          <Button className='border font-semibold text-gray-700 text-base py-2 px-5 rounded-lg'>Đăng</Button>
-        </div>
         <div className='p-4 border-b last:border-b-0'>
           <PostCard
             postId={_id}
@@ -42,6 +45,9 @@ export const PostDetail: React.FC = () => {
             username={"username"}
             createdAt={created_at}
           />
+        </div>
+        <div>
+          <Comment postId={_id} parentCommentId={null} />
         </div>
       </ContentContainer>
     </>

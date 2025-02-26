@@ -5,8 +5,7 @@ import axiosInstance from "~/utils/axios"
 export const authApi = {
   register: (body: { email: string; password: string }) =>
     axiosInstance.post<AuthResponse>(apiEndpoints.auth.register, body),
-  login: (body: { email: string; password: string }) =>
-    axiosInstance.post<AuthResponse>(apiEndpoints.auth.logout, body),
+  login: (body: { email: string; password: string }) => axiosInstance.post<AuthResponse>(apiEndpoints.auth.login, body),
   logout: (body: { refresh_token: string }) => axiosInstance.post<AuthResponse>(apiEndpoints.auth.logout, body),
   forgotPassword: (body: { email: string }) => axiosInstance.post(apiEndpoints.auth.forgotPassword, body),
 
