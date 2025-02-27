@@ -1,5 +1,5 @@
 export interface Comment {
-  id: string
+  _id: string
   content: string
   like_count: number
   username: string
@@ -13,7 +13,7 @@ export interface Comments {
   limit: number
   total_page: number
   comments: {
-    id: string
+    _id: string
     content: string
     like_count: number
     username: string
@@ -35,7 +35,7 @@ export interface NewComment {
 }
 
 export interface CommentLike {
-  id: string
+  _id: string
   comment_id: string
   user_id: string
   created_at: string
