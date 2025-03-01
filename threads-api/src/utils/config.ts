@@ -26,5 +26,9 @@ export const envConfig = {
   awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   awsRegion: process.env.AWS_REGION as string,
   s3BucketName: process.env.S3_BUCKET_NAME as string,
-  sesFromAddress: process.env.SES_FROM_ADDRESS as string
+  sesFromAddress: process.env.SES_FROM_ADDRESS as string,
+  clientRedirectCallback: process.env.CLIENT_REDIRECT_CALLBACK as string,
+  googleClientId: process.env.GOOGLE_CLIENT_ID as string,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+  googleRedirectUri: process.env.GOOGLE_REDIRECT_URI as string
 }
