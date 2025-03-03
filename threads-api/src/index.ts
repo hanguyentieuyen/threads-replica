@@ -13,9 +13,9 @@ import staticRouter from './routes/static.routes'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
 import commentsRouter from './routes/comments.routes'
+import { envConfig } from './utils/config'
 
 const app = express()
-const port = 4000
 
 app.use(express.json()) // middleware: convert json to object
 app.get('/', (req, res) => {
@@ -78,6 +78,6 @@ databaseService.connect().then(() => {
 app.use(defaultErrorHandler)
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running at port ${port}`)
+app.listen(envConfig.port, () => {
+  console.log(`Server is running at port ${envConfig.port}`)
 })

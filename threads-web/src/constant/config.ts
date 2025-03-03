@@ -9,7 +9,8 @@ const apiEndpoints = {
     verifyForgotPassword: "/users/verify-forgot-password",
     resetPassword: "/users/reset-password",
     changePassword: "/users/change-password",
-    verifyEmail: "/users/verify-email"
+    verifyEmail: "/users/verify-email",
+    loginWithGoogle: "/users/oauth/google"
   },
   user: {
     getMyProfile: "/users/me",

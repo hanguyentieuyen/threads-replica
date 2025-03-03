@@ -17,5 +17,7 @@ export const authApi = {
 
   verifyEmail: (body: { verify_email_token: string | null }) => axiosInstance.post(apiEndpoints.auth.verifyEmail, body),
   changePassword: (body: { password: string; old_password: string }) =>
-    axiosInstance.put(apiEndpoints.auth.changePassword, body)
+    axiosInstance.put(apiEndpoints.auth.changePassword, body),
+
+  loginWithGoogle: () => axiosInstance.get(apiEndpoints.auth.loginWithGoogle)
 }

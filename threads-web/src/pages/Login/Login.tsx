@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { t } from "i18next"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
@@ -32,6 +32,54 @@ export default function Login() {
     mutationFn: (body: FormData) => authApi.login(body)
   })
 
+  // const useLoginWithGoogleQuery = () => {
+  //   return useQuery({
+  //     queryKey: ["googleLogin"],
+  //     queryFn: () => authApi.loginWithGoogle()
+  //   })
+  // }
+
+  // const useGoogleLogin = () => {
+  //   return useMutation({
+  //     mutationFn: () => authApi.loginWithGoogle(),
+  //     onSuccess: (data) => {
+  //       console.log("Login Success:", data)
+  //       // localStorage.setItem("accessToken", data?.accessToken)
+  //     },
+  //     onError: (error) => {
+  //       console.error("Login Failed:", error)
+  //     }
+  //   })
+  // }
+  // const { mutate, isPending } = useGoogleLogin()
+
+  // const handleGoogleLogin = () => {
+  //   mutate()
+  // }
+
+  const handleLogin = () => {
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+    const redirectUri = encodeURIComponent(import.meta.env.VITE_GOOGLE_REDIRECT_URI)
+    const scope = encodeURIComponent("email profile")
+
+    if (!clientId) {
+      console.error("Missing GOOGLE_CLIENT_ID. Check your environment variables.")
+      return
+    }
+
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth
+      ?client_id=${clientId}
+      &redirect_uri=${redirectUri}
+      &response_type=code
+      &scope=${scope}
+      &access_type=offline
+      &prompt=consent`.replace(/\s+/g, "") // Remove spaces for URL safety
+
+    console.log(authUrl)
+
+    window.location.href = authUrl
+  }
+
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
@@ -58,7 +106,7 @@ export default function Login() {
   return (
     <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
       <form onSubmit={onSubmit}>
-        <div className='p-6 flex flex-col justify-between items-center'>
+        <div className='p-6 flex flex-col justify-between items-center w-full'>
           <span className='text-md text-stone-950 font-bold'>{t("loginThreads")}</span>
           <div className='mt-4 w-full'>
             <InputText
@@ -84,7 +132,7 @@ export default function Login() {
               type='submit'
               isLoading={loginMutation.isPending}
               disabled={loginMutation.isPending}
-              className='w-[100%] flex justify-center bg-gray-950 text-white text-sm p-4 rounded-xl'
+              className='w-full flex justify-center bg-gray-950 text-white text-sm p-3 rounded-xl'
             >
               {t("signIn")}
             </Button>
@@ -100,6 +148,15 @@ export default function Login() {
           <hr className='w-full mt-8'></hr>
         </div>
       </form>
+      <div className='w-full mt-4'>
+        <Button
+          onClick={handleLogin}
+          className='w-full flex justify-center items-center space-x-2 bg-gray-950 text-white text-sm p-3 rounded-xl'
+        >
+          <img src='src/assets/signingoogle.svg' className='h-7 w-7' />
+          <span>{t("signInWithGoogle")}</span>
+        </Button>
+      </div>
     </div>
   )
 }
