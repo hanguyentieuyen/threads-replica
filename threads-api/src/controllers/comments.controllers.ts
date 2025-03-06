@@ -36,6 +36,23 @@ export const createCommentController = async (req: Request, res: Response) => {
   })
 }
 
+export const updateCommentController = async (req: Request, res: Response) => {
+  const { comment_id, content } = req.validateData
+
+  const data = await commentsService.updateComment({ id: comment_id, content })
+  return res.json({
+    data
+  })
+}
+
+export const deleteCommentController = async (req: Request, res: Response) => {
+  const { comment_id } = req.validateData
+  const data = await commentsService.deleteComment({ id: comment_id })
+  return res.json({
+    data
+  })
+}
+
 export const likeCommentController = async (req: Request, res: Response) => {
   const { user_id } = req.decodedAuthorization as TokenPayload
   const { comment_id } = req.validateData

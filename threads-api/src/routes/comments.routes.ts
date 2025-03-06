@@ -1,12 +1,14 @@
 import { Router } from 'express'
 import {
   createCommentController,
+  deleteCommentController,
   likeCommentController,
-  unlikeCommentController
+  unlikeCommentController,
+  updateCommentController
 } from '~/controllers/comments.controllers'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
-import { commentIdValidator, createCommentValidator } from '~/validations/comment.validations'
+import { commentIdValidator, createCommentValidator, updateCommentValidator } from '~/validations/comment.validations'
 import { accessTokenValidator } from '~/validations/users.validations'
 
 const commentsRouter = Router()
@@ -23,6 +25,33 @@ commentsRouter.post(
   validateMiddleware(createCommentValidator, 'body'),
   validateMiddleware(accessTokenValidator, 'headers'),
   requestHandler(createCommentController)
+)
+
+/**
+ * Description: update comment
+ * Path: /:comment_id
+ * Method: PUT
+ * Header: { Authorization: Bearer <access_token>}
+ */
+commentsRouter.put(
+  '/:comment_id',
+  validateMiddleware(commentIdValidator, 'params'),
+  validateMiddleware(updateCommentValidator, 'body'),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  requestHandler(updateCommentController)
+)
+
+/**
+ * Description: delete comment
+ * Path: /:comment_id
+ * Method: DELETE
+ * Header: { Authorization: Bearer <access_token>}
+ */
+commentsRouter.delete(
+  '/:comment_id',
+  validateMiddleware(commentIdValidator, 'params'),
+  validateMiddleware(accessTokenValidator, 'headers'),
+  requestHandler(deleteCommentController)
 )
 
 /**

@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
 import databaseService from './database.services'
 import { CommentReqBody } from '~/models/requestType/Comment.requests'
-import { POSTS_MESSAGES } from '~/constants/messages'
+import { COMMENTS_MESSAGES, POSTS_MESSAGES } from '~/constants/messages'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/models/error.model'
 import Comment from '~/models/comment.model'
@@ -145,10 +145,57 @@ class CommentsService {
     return newComment
   }
 
+  async updateComment({ id, content }: { id: string; content: string }) {
+    const data = await databaseService.comments.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: { content, updated_at: new Date() } },
+      { returnDocument: 'after' } // return comment after update
+    )
+
+    if (!data) {
+      throw new ErrorWithStatus({
+        message: COMMENTS_MESSAGES.COMMENT_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+
+    return data
+  }
+
+  async deleteComment({ id }: { id: string }) {
+    const comment = await databaseService.comments.findOne({ _id: new ObjectId(id) })
+    if (!comment) {
+      throw new ErrorWithStatus({
+        message: COMMENTS_MESSAGES.COMMENT_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+
+    const commentIdsToDelete = [new ObjectId(id)]
+
+    // parent comment
+    if (comment.parent_id === null) {
+      // get child comment of parent comment
+      const childComments = await databaseService.comments.find({ parent_id: new ObjectId(id) }).toArray()
+
+      const childCommentIds = childComments.map((c) => c._id)
+      commentIdsToDelete.push(...childCommentIds)
+    }
+
+    // delete comment (child + parent)
+    await databaseService.comments.deleteMany({ _id: { $in: commentIdsToDelete } })
+
+    // delete likes of deleted comment
+    await databaseService.commentLikes.deleteMany({ comment_id: { $in: commentIdsToDelete } })
+    return {
+      message: COMMENTS_MESSAGES.DELETE_SUCCESS
+    }
+  }
+
   async likeComment({ user_id, comment_id }: { user_id: string; comment_id: string }) {
     const data = await databaseService.commentLikes.findOneAndUpdate(
       { user_id: new ObjectId(user_id), comment_id: new ObjectId(comment_id) },
-      { $setOnInsert: new CommentLike({ user_id: new ObjectId(user_id), comment_id: new ObjectId(comment_id) }) },
+      { $setOnInsert: new CommentLike({ user_id: new ObjectId(user_id), comment_id: new ObjectId(comment_id) }) }, // create new if don't find one
       { upsert: true, returnDocument: 'after' }
     )
     return data

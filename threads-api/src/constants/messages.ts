@@ -95,7 +95,9 @@ export const POSTS_MESSAGES = {
 
 export const COMMENTS_MESSAGES = {
   INVALID_COMMENT: 'Invalid comment',
-  COMMENT_ID_IS_REQUIRED: 'Comment ID is required'
+  COMMENT_ID_IS_REQUIRED: 'Comment ID is required',
+  COMMENT_NOT_FOUND: 'Comment not found',
+  DELETE_SUCCESS: 'Delete comment success'
 } as const
 
 export const BOOKMARKS_MESSAGES = {

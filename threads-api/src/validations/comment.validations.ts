@@ -28,3 +28,7 @@ export const createCommentValidator = Joi.object({
   parent_id: Joi.string().allow(null),
   content: Joi.string().required().min(1)
 })
+
+export const updateCommentValidator = Joi.object({
+  content: Joi.string().required().min(1)
+})
