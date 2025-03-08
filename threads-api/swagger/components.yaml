@@ -170,6 +170,14 @@ components:
           format: uuid
           description: ID của bài viết mà bình luận thuộc về
           example: "67acc2015cab1b73b457df4f"
+    UpdateCommentBody:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          example: "Update new content for a comment"
     BookmarkBody:
       type: object
       properties:

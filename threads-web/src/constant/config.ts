@@ -32,6 +32,8 @@ const apiEndpoints = {
   comment: {
     get: (id: string) => `/posts/${id}/comments`,
     create: "/comments",
+    update: (id: string) => `/comments/${id}`,
+    delete: (id: string) => `/comments/${id}`,
     like: (id: string) => `/comments/${id}/like`,
     unlike: (id: string) => `/comments/${id}/like`
   },

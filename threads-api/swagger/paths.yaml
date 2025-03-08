@@ -1009,6 +1009,86 @@ paths:
                   error:
                     type: string
                     example: "Invalid input data"
+  /comments/{comment_id}:
+    put:
+      tags:
+        - comments
+      summary: Update a comment
+      description: Update a comment.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          description: ID of the comment
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCommentBody'
+      responses:
+        '200':
+          description: Comment updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Update comment successfully"
+                  data:
+                    $ref: '#/components/schemas/Comment'
+        '422':
+          description: Invalid or missing input fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input data"
+    delete:
+      tags:
+        - comments
+      summary: Delete a comment
+      description: Delete a comment.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          description: ID of the comment
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Delete comment success"
+        '422':
+          description: Invalid or missing input fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input data"
+      
   /comments/{comment_id}/like:
     post:
       tags:
