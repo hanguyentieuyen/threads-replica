@@ -47,7 +47,7 @@ export default function CommentInput({ className, postId, parentCommentId }: Com
         rows={1}
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder='Trả lời catalinmpit...'
+        placeholder='Comment.....'
         className='w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-200'
       />
       <Button

@@ -24,7 +24,6 @@ export const PostDetail: React.FC = () => {
   })
   console.log(commentsData?.data)
   const comments = commentsData?.data
-
   const post = postDetailsData?.data.data
   if (!post || !comments) return <LoadingScreen />
 
