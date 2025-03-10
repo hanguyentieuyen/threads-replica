@@ -78,6 +78,16 @@ erDiagram
         ObjectId comment_id
         date created_at
     }
+    NOTIFICATIONS {
+        ObjectId _id
+        string type
+        boolean read
+        ObjectId recipent_id
+        ObjectId sender_id
+        ObjectId resource_id
+        string message
+        date created_at
+    }
 
     USERS ||--o{ REFRESH_TOKENS : "has"
     USERS ||--o{ POSTS : "writes"
@@ -86,6 +96,8 @@ erDiagram
     USERS ||--o{ FOLLOWERS : "follows"
     USERS ||--o{ POST_BOOKMARKS : "saves"
     USERS ||--o{ COMMENT_LIKES : "likes"
+    USERS ||--o{ NOTIFICATIONS : "receives"
+    USERS ||--o{ NOTIFICATIONS : "sends"
 
     POSTS ||--o{ COMMENTS : "has"
     POSTS ||--o{ POST_LIKES : "has"
@@ -94,8 +106,12 @@ erDiagram
     COMMENTS ||--o| COMMENTS : "replies to"
     COMMENTS ||--o| COMMENT_LIKES : "like"
 
-
     POSTS ||--o{ HASHTAGS : "contains"
     HASHTAGS ||--o{ POSTS : "tagged in"
+
+    NOTIFICATIONS ||--|{ USERS : "notifies"
+    NOTIFICATIONS ||--o| POSTS : "related to"
+    NOTIFICATIONS ||--o| COMMENTS : "related to"
+
 
 ```

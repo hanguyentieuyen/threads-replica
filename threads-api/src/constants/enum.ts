@@ -35,3 +35,9 @@ export enum PeopleFollow {
   Anyone = '0',
   Following = '1'
 }
+
+export enum NotificationType {
+  LIKE = 'like',
+  COMMENT = 'comment',
+  FOLLOW = 'follow'
+}
