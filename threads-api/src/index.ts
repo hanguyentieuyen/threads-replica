@@ -14,6 +14,9 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
 import commentsRouter from './routes/comments.routes'
 import { envConfig } from './utils/config'
+import notificationsRouter from './routes/notifications.routes'
+import { createServer } from 'http'
+import initializeSocket from './utils/socket'
 
 const app = express()
 
@@ -57,6 +60,8 @@ const corsOption: CorsOptions = {
 // Create upload files folder
 createUploadFolder()
 
+const server = createServer(app)
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpeciation))
 
 app.use(cors(corsOption))
@@ -68,6 +73,7 @@ app.use('/medias', mediaRouter)
 app.use('/static', staticRouter)
 app.use('/hashtags', hashTagsRouter)
 app.use('/comments', commentsRouter)
+app.use('/notifications', notificationsRouter)
 
 // Database connection and indexing
 databaseService.connect().then(() => {
@@ -77,7 +83,8 @@ databaseService.connect().then(() => {
 // Error handler middleware
 app.use(defaultErrorHandler)
 
+initializeSocket(server)
 // Start the server
-app.listen(envConfig.port, () => {
+server.listen(envConfig.port, () => {
   console.log(`Server is running at port ${envConfig.port}`)
 })
