@@ -382,3 +382,18 @@ export const getUserBookmarksController = async (req: Request<GetUserFollowingRe
     message: USERS_MESSAGES.GET_USER_BOOKMARKS_SUCCESS
   })
 }
+
+export const searchUsersController = async (req: Request, res: Response) => {
+  const { query } = req.params
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const data = await usersService.searchUsers({ username: query, limit, page })
+  return res.json({
+    data: {
+      page,
+      limit,
+      total_page: Math.ceil(data.total / limit),
+      users: data.users
+    }
+  })
+}

@@ -201,3 +201,9 @@ export const unFollowValidator = Joi.object({
 export const getUserFollowersValidator = Joi.object({ user_id: userIdSchema })
 export const getUserFollowingValidator = Joi.object({ user_id: userIdSchema })
 export const getUserBookmarksValidator = Joi.object({ user_id: userIdSchema })
+
+export const searchUserValidator = Joi.object({
+  query: Joi.string().messages({
+    'string.base': USERS_MESSAGES.SEARCH_QUERY_MUST_BE_STRING
+  })
+})

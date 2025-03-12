@@ -14,10 +14,10 @@ const notificationsRouter = Router()
  * Header: { Authorization: Bearer <access_token>}
  * Params: {limit: number, page: number, read: boolean, type: enum}
  */
-notificationsRouter.get(
-  '/',
-  validateMiddleware(accessTokenValidator, 'headers'),
-  validateMiddleware(paginationValidator, 'params'),
-  requestHandler(getNotificationsController)
-)
+// notificationsRouter.get(
+//   '/',
+//   validateMiddleware(accessTokenValidator, 'headers'),
+//   validateMiddleware(paginationValidator, 'params'),
+//   requestHandler(getNotificationsController)
+// )
 export default notificationsRouter

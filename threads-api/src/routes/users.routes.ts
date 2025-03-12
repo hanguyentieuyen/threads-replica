@@ -14,6 +14,7 @@ import {
   refreshTokenController,
   registerController,
   resetPasswordController,
+  searchUsersController,
   unFollowController,
   updateMyProfileController,
   verifyEmailController,
@@ -32,6 +33,7 @@ import {
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator,
+  searchUserValidator,
   unFollowValidator,
   verifyEmailTokenValidator,
   verifyForgotPasswordValidator
@@ -39,6 +41,7 @@ import {
 import { UpdateMyProfileReqBody } from '~/models/requestType/User.requests'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
+import { paginationValidator } from '~/validations/posts.validations'
 
 const userRouter = Router()
 /**
@@ -221,6 +224,7 @@ userRouter.delete(
  */
 userRouter.get(
   '/:user_id/followers',
+  validateMiddleware(accessTokenValidator, 'headers'),
   validateMiddleware(getUserFollowersValidator, 'params'),
   requestHandler(getUserFollowersController)
 )
@@ -232,6 +236,7 @@ userRouter.get(
  */
 userRouter.get(
   '/:user_id/following',
+  validateMiddleware(accessTokenValidator, 'headers'),
   validateMiddleware(getUserFollowingValidator, 'params'),
   requestHandler(getUserFollowingController)
 )
@@ -243,7 +248,22 @@ userRouter.get(
  */
 userRouter.get(
   '/:user_id/bookmarks',
+  validateMiddleware(accessTokenValidator, 'headers'),
   validateMiddleware(getUserBookmarksValidator, 'params'),
   requestHandler(getUserBookmarksController)
+)
+
+/**
+ * Description: Search text user
+ * Path: search/
+ * Method: GET
+ * Query: query="username"
+ */
+userRouter.get(
+  '/search',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(paginationValidator, 'params'),
+  validateMiddleware(searchUserValidator, 'params'),
+  requestHandler(searchUsersController)
 )
 export default userRouter

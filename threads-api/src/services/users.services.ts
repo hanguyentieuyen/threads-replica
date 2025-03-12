@@ -597,6 +597,25 @@ class UsersService {
 
     return { userBookmarks, total }
   }
+
+  async searchUsers({ username, limit, page }: { username: string; limit: number; page: number }) {
+    const regex = new RegExp(username, 'i')
+    const users = await databaseService.users
+      .find({ username: regex })
+      .skip(limit * (page - 1))
+      .limit(limit)
+      .toArray()
+
+    if (users === null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    const total = await databaseService.users.countDocuments({ username: regex })
+
+    return { users, total }
+  }
 }
 
 const usersService = new UsersService()
