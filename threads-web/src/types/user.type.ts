@@ -17,6 +17,12 @@ export interface User {
   avatar?: string // optional
 }
 
+export interface Users {
+  page: number
+  limit: number
+  total_page: number
+  users: User[]
+}
 export interface UserFollowers {
   page: number
   limit: number

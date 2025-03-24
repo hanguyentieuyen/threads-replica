@@ -255,12 +255,12 @@ userRouter.get(
 
 /**
  * Description: Search text user
- * Path: search/
+ * Path: /
  * Method: GET
  * Query: query="username"
  */
 userRouter.get(
-  '/search',
+  '/',
   validateMiddleware(accessTokenValidator, 'headers'),
   validateMiddleware(paginationValidator, 'params'),
   validateMiddleware(searchUserValidator, 'params'),

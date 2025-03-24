@@ -384,15 +384,16 @@ export const getUserBookmarksController = async (req: Request<GetUserFollowingRe
 }
 
 export const searchUsersController = async (req: Request, res: Response) => {
-  const { query } = req.params
-  const limit = Number(req.query.limit)
-  const page = Number(req.query.page)
-  const data = await usersService.searchUsers({ username: query, limit, page })
+  const { query, limit, page } = req.validateData
+  const limitQuery = Number(limit)
+  const pageQuery = Number(page)
+  const data = await usersService.searchUsers({ username: query, limit: limitQuery, page: pageQuery })
+  console.log('TOTAL: ', data.total)
   return res.json({
     data: {
-      page,
-      limit,
-      total_page: Math.ceil(data.total / limit),
+      page: pageQuery,
+      limit: limitQuery,
+      total_page: Math.ceil(data.total / limitQuery),
       users: data.users
     }
   })

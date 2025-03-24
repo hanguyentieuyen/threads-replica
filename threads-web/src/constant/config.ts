@@ -13,6 +13,7 @@ const apiEndpoints = {
     loginWithGoogle: "/users/oauth/google"
   },
   user: {
+    search: "/users",
     getMyProfile: "/users/me",
     getUserProfile: (username: string) => `/users/${username}`,
     follow: "/users/follow",

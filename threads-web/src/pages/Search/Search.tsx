@@ -1,13 +1,38 @@
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { userApi } from "~/apis/user.api"
 import Button from "~/components/Button"
 import ContentContainer from "~/components/ContentContainer"
 import FollowerCard from "~/components/FollowerCard"
 import InputText from "~/components/InputText"
+import InfiniteScroll from "~/components/InfiniteScroll"
 
 export default function Search() {
   const { t } = useTranslation()
-  const fakeData = Array.from({ length: 10 }, (_, index) => index + 1)
-  console.log(fakeData)
+  const [searchText, setSearchText] = useState("")
+  const searchUsers = async ({ pageParam = 1 }: { pageParam?: number }) => {
+    const limit = 5
+    const response = await userApi.searchUsers({ query: searchText, page: pageParam, limit })
+    return response.data
+  }
+
+  const useInfiniteSearchUsers = () =>
+    useInfiniteQuery({
+      initialPageParam: 1,
+      queryKey: ["search_users"],
+      queryFn: searchUsers,
+      getNextPageParam: (lastPage) => {
+        if (lastPage.data) {
+          return lastPage.data?.page < lastPage.data?.total_page ? lastPage.data?.page + 1 : undefined
+        }
+      }
+    })
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteSearchUsers()
+  const users = data?.pages.flatMap((page) => page.data?.users)
+  if (!users || users.length <= 0) return []
+
   return (
     <div>
       <div className='sticky top-0 z-10'>
@@ -15,20 +40,33 @@ export default function Search() {
       </div>
       <ContentContainer>
         <div className='p-4'>
-          <InputText placeholder='Search' name='searchText' className='my-3 text-sm' autoFocus />
+          <InputText
+            placeholder='Search'
+            name='searchText'
+            className='my-3 text-sm'
+            autoFocus
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
         </div>
         <p className='w-full text-slate-400 text-sm font-semibold text-left pl-4'>{t("suggestedFollowUp")}</p>
-        {fakeData.map((item) => (
-          <div key={item} className='p-4 border-b last:border-b-0'>
-            <FollowerCard
-              username='@hayen'
-              fullName='Hayen'
-              profileImage='../src/assets/capela.jpg'
-              followersCount={34}
-              isVerified
-            />
-          </div>
-        ))}
+        <InfiniteScroll
+          loadMore={fetchNextPage}
+          hasMore={hasNextPage || false}
+          isLoading={isFetchingNextPage || isLoading}
+        >
+          {users.map((item) => (
+            <div key={item?._id} className='p-4 border-b last:border-b-0'>
+              <FollowerCard
+                username={item?.username}
+                fullName={item?.name}
+                profileImage='../src/assets/capela.jpg'
+                followersCount={34}
+                isVerified
+              />
+            </div>
+          ))}
+        </InfiniteScroll>
       </ContentContainer>
     </div>
   )

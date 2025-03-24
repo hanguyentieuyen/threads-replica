@@ -1,6 +1,6 @@
 import apiEndpoints from "~/constant/config"
 import { Follow } from "~/types/follow.type"
-import { User, UserFollowers, UserFollowing } from "~/types/user.type"
+import { User, UserFollowers, UserFollowing, Users } from "~/types/user.type"
 import { SuccessResponse } from "~/types/utils.type"
 import axiosInstance from "~/utils/axios"
 
@@ -37,6 +37,17 @@ export const userApi = {
       limit: limit.toString()
     })
     return axiosInstance.get<SuccessResponse<UserFollowing>>(apiEndpoints.user.getUserFollowing(user_id), {
+      params
+    })
+  },
+
+  searchUsers: ({ query, page, limit }: { query: string; page: number; limit: number }) => {
+    const params = new URLSearchParams({
+      query,
+      page: page.toString(),
+      limit: limit.toString()
+    })
+    return axiosInstance.get<SuccessResponse<Users>>(apiEndpoints.user.search, {
       params
     })
   }

@@ -604,6 +604,16 @@ class UsersService {
       .find({ username: regex })
       .skip(limit * (page - 1))
       .limit(limit)
+      .project({
+        date_of_birth: 0,
+        password: 0,
+        verify_email_token: 0,
+        forgot_password_token: 0,
+        verify: 0,
+        post_circle: 0,
+        created_at: 0,
+        updated_at: 0
+      })
       .toArray()
 
     if (users === null) {
