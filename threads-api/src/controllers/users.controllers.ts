@@ -289,6 +289,16 @@ export const changePasswordController = async (
   return res.json(data)
 }
 
+export const usernameController = async (req: Request, res: Response) => {
+  const { username } = req.validateData
+  const isExistUsername = await usersService.checkUsernameExist(username)
+  return res.json({
+    data: {
+      exist: isExistUsername
+    }
+  })
+}
+
 export const getMyProfileController = async (req: Request, res: Response) => {
   const { user_id } = req.decodedAuthorization as TokenPayload
 
@@ -388,7 +398,6 @@ export const searchUsersController = async (req: Request, res: Response) => {
   const limitQuery = Number(limit)
   const pageQuery = Number(page)
   const data = await usersService.searchUsers({ username: query, limit: limitQuery, page: pageQuery })
-  console.log('TOTAL: ', data.total)
   return res.json({
     data: {
       page: pageQuery,

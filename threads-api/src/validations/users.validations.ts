@@ -198,6 +198,15 @@ export const unFollowValidator = Joi.object({
   user_id: userIdSchema
 })
 
+export const usernameValidator = Joi.object({
+  username: Joi.string().messages({
+    'string.base': USERS_MESSAGES.USERNAME_QUERY_MUST_BE_STRING,
+    'string.min': USERS_MESSAGES.USERNAME_LENGTH_MUST_BE_FROM_1_TO_100,
+    'string.max': USERS_MESSAGES.USERNAME_LENGTH_MUST_BE_FROM_1_TO_100,
+    'any.required': USERS_MESSAGES.USERNAME_IS_REQUIRED
+  })
+})
+
 export const getUserFollowersValidator = Joi.object({ user_id: userIdSchema })
 export const getUserFollowingValidator = Joi.object({ user_id: userIdSchema })
 export const getUserBookmarksValidator = Joi.object({ user_id: userIdSchema })

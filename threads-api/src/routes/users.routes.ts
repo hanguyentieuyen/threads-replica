@@ -17,6 +17,7 @@ import {
   searchUsersController,
   unFollowController,
   updateMyProfileController,
+  usernameController,
   verifyEmailController,
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
@@ -35,6 +36,7 @@ import {
   resetPasswordValidator,
   searchUserValidator,
   unFollowValidator,
+  usernameValidator,
   verifyEmailTokenValidator,
   verifyForgotPasswordValidator
 } from '~/validations/users.validations'
@@ -266,4 +268,18 @@ userRouter.get(
   validateMiddleware(searchUserValidator, 'params'),
   requestHandler(searchUsersController)
 )
+
+/**
+ * Description: Check usernam exists
+ * Path: /check-username
+ * Method: GET
+ * Query: username="hayen"
+ */
+userRouter.get(
+  '/check-username',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(usernameValidator, 'params'),
+  requestHandler(usernameController)
+)
+
 export default userRouter

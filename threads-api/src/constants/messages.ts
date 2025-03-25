@@ -68,7 +68,10 @@ export const USERS_MESSAGES = {
   UPLOAD_SUCCESS: 'Upload success',
   REFRESH_TOKEN_SUCCESS: 'Refresh token success',
   GET_VIDEO_STATUS_SUCCESS: 'Get video status success',
-  SEARCH_QUERY_MUST_BE_STRING: 'Search query must be string'
+  SEARCH_QUERY_MUST_BE_STRING: 'Search query must be string',
+  USERNAME_QUERY_MUST_BE_STRING: 'Username query must be string',
+  USERNAME_LENGTH_MUST_BE_FROM_1_TO_100: 'Username length must be from 1 to 100',
+  USERNAME_IS_REQUIRED: 'Username is required'
 } as const
 
 export const POSTS_MESSAGES = {

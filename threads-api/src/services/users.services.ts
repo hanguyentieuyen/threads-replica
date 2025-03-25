@@ -131,6 +131,11 @@ class UsersService {
     return Boolean(user)
   }
 
+  async checkUsernameExist(username: string) {
+    const user = await databaseService.users.findOne({ username })
+    return Boolean(user)
+  }
+
   async verifyEmail(user_id: string) {
     const token = await this.createAccessAndRefreshToken({
       user_id,
