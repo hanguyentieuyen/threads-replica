@@ -290,12 +290,10 @@ export const changePasswordController = async (
 }
 
 export const usernameController = async (req: Request, res: Response) => {
-  const { username } = req.validateData
-  const isExistUsername = await usersService.checkUsernameExist(username)
+  const { username } = req.query
+  const isExistUsername = await usersService.checkUsernameExist(username as string)
   return res.json({
-    data: {
-      exist: isExistUsername
-    }
+    exist: isExistUsername
   })
 }
 

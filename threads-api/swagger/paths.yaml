@@ -676,7 +676,94 @@ paths:
                         $ref: '#/components/schemas/Post'
         '422':
           description: Invalid request parameters.
-        
+  /users/check-username:
+    get:
+      tags:
+        - users
+      summary: Check username exists
+      description:  Check username exists 
+      parameters:
+        - name: username
+          in: query
+          description: The username to search.
+          required: false
+          schema:
+            type: string
+            example: hayen
+      responses:
+        '200':
+          description: Check username exist in database.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exist:
+                    type: boolean
+                    description: Exist or not exist.
+                     
+                    
+        '422':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid page or limit parameters."
+    
+    
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get paginated posts
+      description: Retrieves a paginated list of username.
+      parameters:
+        - name: query
+          in: query
+          description: The username to search.
+          required: false
+          schema:
+            type: string
+            example: hayen
+        - name: page
+          in: query
+          description: The page number to retrieve.
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          description: The number of posts per page.
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Paginated users list retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/User'
+        '422':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid page or limit parameters."
+  
   /posts/{post_id}/bookmark:
     post:
       tags:

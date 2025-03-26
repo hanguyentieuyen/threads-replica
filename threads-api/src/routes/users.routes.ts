@@ -186,11 +186,28 @@ userRouter.patch(
 )
 
 /**
+ * Description: Check username exists
+ * Path: /check-username
+ * Method: GET
+ * Query: username="hayen"
+ */
+userRouter.get(
+  '/check-username',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  validateMiddleware(usernameValidator, 'params'),
+  requestHandler(usernameController)
+)
+
+/**
  * Description: Get user profile
  * Path: /:username
  * Method: GET
  */
-userRouter.get('/:username', requestHandler(getUserProfileController))
+userRouter.get(
+  '/:username',
+  validateMiddleware(accessTokenValidator, 'headers'),
+  requestHandler(getUserProfileController)
+)
 
 /**
  * Description: Follow user
@@ -267,19 +284,6 @@ userRouter.get(
   validateMiddleware(paginationValidator, 'params'),
   validateMiddleware(searchUserValidator, 'params'),
   requestHandler(searchUsersController)
-)
-
-/**
- * Description: Check usernam exists
- * Path: /check-username
- * Method: GET
- * Query: username="hayen"
- */
-userRouter.get(
-  '/check-username',
-  validateMiddleware(accessTokenValidator, 'headers'),
-  validateMiddleware(usernameValidator, 'params'),
-  requestHandler(usernameController)
 )
 
 export default userRouter
