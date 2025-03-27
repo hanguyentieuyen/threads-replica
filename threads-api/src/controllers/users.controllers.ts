@@ -293,7 +293,9 @@ export const usernameController = async (req: Request, res: Response) => {
   const { username } = req.query
   const isExistUsername = await usersService.checkUsernameExist(username as string)
   return res.json({
-    exist: isExistUsername
+    data: {
+      exist: isExistUsername
+    }
   })
 }
 

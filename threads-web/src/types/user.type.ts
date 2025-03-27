@@ -13,7 +13,7 @@ export interface User {
   bio?: string // optional
   location?: string // optional
   website?: string // optional
-  username?: string // optional
+  username: string // optional
   avatar?: string // optional
 }
 
@@ -47,4 +47,8 @@ export interface UserFollowing {
     avatar?: string
     bio?: string
   }[]
+}
+
+export interface UsernameExist {
+  exist: boolean
 }

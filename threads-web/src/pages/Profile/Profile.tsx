@@ -33,7 +33,6 @@ const Profile = () => {
   })
 
   const userData = profileData?.data
-  console.log("userProfileData: ", userData)
 
   if (!userData) return null
   const { name, date_of_birth, bio, location, website, username: userName, avatar } = userData as User

@@ -1,10 +1,18 @@
 import apiEndpoints from "~/constant/config"
 import { Follow } from "~/types/follow.type"
-import { User, UserFollowers, UserFollowing, Users } from "~/types/user.type"
+import { User, UserFollowers, UserFollowing, UsernameExist, Users } from "~/types/user.type"
 import { SuccessResponse } from "~/types/utils.type"
 import axiosInstance from "~/utils/axios"
 
 export const userApi = {
+  checkExistUsername: (username: string) => {
+    const params = new URLSearchParams({
+      username
+    })
+    return axiosInstance.get<SuccessResponse<UsernameExist>>(apiEndpoints.user.checkExistUsername, {
+      params
+    })
+  },
   getMyProfile: () => axiosInstance.get<SuccessResponse<User>>(apiEndpoints.user.getMyProfile),
 
   updateMyProfile: (body: {

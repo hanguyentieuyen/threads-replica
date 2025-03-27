@@ -1,6 +1,16 @@
+/**
+ * Author: HaYen <hanguyentieuyen@gmail.com>
+ * : Xử lý API liên quan đến người dùng
+ */
+
+/**
+ * 🐱 HaYen <hanguyentieuyen@gmail.com>
+ * ✨ Made with ❤️ and ☕ by hanguyentieuyen
+ * 🍀 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 import { useTranslation } from "react-i18next"
 import { userApi } from "~/apis/user.api"
@@ -11,16 +21,18 @@ import InputText from "~/components/InputText"
 import DatePicker from "~/components/DatePicker/DatePicker"
 import Button from "~/components/Button"
 import { User } from "~/types/user.type"
+import { useEffect, useState } from "react"
 
 type FormData = UserSchemaYup
 
 export const EditProfileForm = ({ name, date_of_birth, bio, username, avatar, location, website }: FormData) => {
   const { t } = useTranslation()
   const { userSchemaYup } = useValidationSchemas()
-
+  const [currentUsername, setCurrentUsername] = useState<string>()
   const {
     register,
     setError,
+    clearErrors,
     handleSubmit,
     setValue,
     reset,
@@ -32,6 +44,24 @@ export const EditProfileForm = ({ name, date_of_birth, bio, username, avatar, lo
   const updateMyProfileMutation = useMutation({
     mutationFn: (body: FormData) => userApi.updateMyProfile(body)
   })
+
+  const { data: checkExistUsername } = useQuery({
+    queryKey: ["exist_username", currentUsername], // Thêm currentUsername để theo dõi sự thay đổi
+    queryFn: () => userApi.checkExistUsername(currentUsername as string)
+    //enabled: !!currentUsername // Chỉ chạy khi currentUsername không rỗng
+  })
+
+  const handleCheckExistUsername = (v: string) => {
+    setCurrentUsername(v)
+  }
+
+  useEffect(() => {
+    if (checkExistUsername?.data.data?.exist) {
+      setError("username", { type: "onBlur", message: "Username already exists" })
+    } else {
+      clearErrors("username") // Xóa lỗi nếu username hợp lệ
+    }
+  }, [checkExistUsername, clearErrors, setError])
 
   const onSubmit = handleSubmit((data) => {
     updateMyProfileMutation.mutate(data, {
@@ -111,6 +141,7 @@ export const EditProfileForm = ({ name, date_of_birth, bio, username, avatar, lo
           value={username}
           placeholder={t("username")}
           errorMessage={errors.username?.message}
+          onBlur={(e) => handleCheckExistUsername(e.target.value)}
           autoComplete='on'
           className='w-full mb-4'
         />
