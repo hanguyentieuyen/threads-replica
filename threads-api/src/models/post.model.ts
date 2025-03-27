@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { ObjectId } from 'mongodb'
 import { PostAudience, PostType } from '~/constants/enum'
 import { Media } from './media.model'

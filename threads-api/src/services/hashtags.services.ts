@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { ErrorWithStatus } from '~/models/error.model'
 import databaseService from './database.services'
 import { HASHTAGS_MESSAGES } from '~/constants/messages'

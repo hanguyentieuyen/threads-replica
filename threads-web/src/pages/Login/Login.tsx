@@ -1,5 +1,11 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { t } from "i18next"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"

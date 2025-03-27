@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import express from 'express'
 import databaseService from './services/database.services'
 import usersRouter from './routes/users.routes'

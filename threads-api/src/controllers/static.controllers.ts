@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { NextFunction, Request, Response } from 'express'
 import { UPLOAD_IMAGE_DIR, UPLOAD_VIDEO_DIR } from '~/constants/fileDir'
 import path from 'path'

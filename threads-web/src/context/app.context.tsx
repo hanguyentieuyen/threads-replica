@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { createContext, useState } from "react"
 import { User } from "~/types/user.type"
 import { getAccessTokenFromLocalStorage, getProfileFromLocalStorage } from "~/utils/auth"

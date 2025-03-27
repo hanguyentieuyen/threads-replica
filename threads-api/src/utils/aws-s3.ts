@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { S3 } from '@aws-sdk/client-s3'
 import { envConfig } from './config'
 import { Upload } from '@aws-sdk/lib-storage'

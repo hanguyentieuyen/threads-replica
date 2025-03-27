@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import React from "react"
 import { Calendar } from "../../components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover"

@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { JsonWebTokenError } from 'jsonwebtoken'

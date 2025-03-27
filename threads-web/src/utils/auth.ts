@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { AxiosError, isAxiosError } from "axios"
 import { HttpStatusCode } from "~/constant/enum"
 import { User } from "~/types/user.type"

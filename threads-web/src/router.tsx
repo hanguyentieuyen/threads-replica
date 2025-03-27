@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { Navigate, Outlet, useRoutes } from "react-router-dom"
 import path from "./constant/path"
 import RegisterLayout from "./layouts/RegisterLayout"

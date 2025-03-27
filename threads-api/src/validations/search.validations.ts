@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import Joi from 'joi'
 import { MediaTypeQuery, PeopleFollow } from '~/constants/enum'
 import { POSTS_MESSAGES } from '~/constants/messages'

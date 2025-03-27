@@ -1,12 +1,7 @@
 /**
- * Author: HaYen <hanguyentieuyen@gmail.com>
- * : Xử lý API liên quan đến người dùng
- */
-
-/**
- * 🐱 HaYen <hanguyentieuyen@gmail.com>
- * ✨ Made with ❤️ and ☕ by hanguyentieuyen
- * 🍀 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
  */
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"

@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { Collection, Db, MongoClient } from 'mongodb'
 import { config } from 'dotenv'
 import RefreshToken from '~/models/refreshToken.model'

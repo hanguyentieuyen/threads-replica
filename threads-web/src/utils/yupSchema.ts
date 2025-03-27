@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import * as yup from "yup"
 import { useTranslation } from "react-i18next"
 import { MediaType, PostAudience, PostType } from "~/constant/enum"

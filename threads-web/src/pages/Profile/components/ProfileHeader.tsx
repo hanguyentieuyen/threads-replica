@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { Modal, ModalContent, ModalTrigger } from "~/components/Modal/Modal"
 import Tabs from "~/components/Tab/Tabs"
 import { User } from "~/types/user.type"

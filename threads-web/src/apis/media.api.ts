@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import apiEndpoints from "~/constant/config"
 import { Media } from "~/types/media.type"
 import { SuccessResponse } from "~/types/utils.type"

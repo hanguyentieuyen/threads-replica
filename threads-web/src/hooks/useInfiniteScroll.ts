@@ -1,3 +1,8 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
 import { useEffect, useRef, useState } from "react"
 
 export const useInfiniteScroll = (loadMore: () => void, hasMore: boolean) => {

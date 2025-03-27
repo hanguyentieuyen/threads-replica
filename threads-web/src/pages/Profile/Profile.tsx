@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 import { Helmet } from "react-helmet-async"
@@ -39,7 +45,7 @@ const Profile = () => {
   return (
     <>
       <Helmet>
-        <title>{`${userData?.name ?? "Guest"} (${userData?.username ?? "unknown"}) on Threads`}</title>
+        <title>{`${userData?.data?.name ?? "Guest"} (${userData?.data?.name ?? "unknown"}) on Threads`}</title>
         <meta name='description' content='Profile - Threads Replica' />
       </Helmet>
       <HeaderContainer />

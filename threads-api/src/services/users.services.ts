@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { TokenType, UserVerifyStatus } from '~/constants/enum'
 import { envConfig } from '~/utils/config'
 import { createToken, verifyToken } from '~/utils/jwt'

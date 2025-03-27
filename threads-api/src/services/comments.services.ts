@@ -1,3 +1,9 @@
+/**
+ * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
+ * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
+ * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
+ */
+
 import { ObjectId } from 'mongodb'
 import databaseService from './database.services'
 import { CommentReqBody } from '~/models/requestType/Comment.requests'
