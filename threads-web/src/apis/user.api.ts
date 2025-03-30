@@ -4,7 +4,7 @@
  * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
  */
 
-import apiEndpoints from "~/constant/config"
+import { apiEndpoints } from "~/constant/config"
 import { Follow } from "~/types/follow.type"
 import { User, UserFollowers, UserFollowing, UsernameExist, Users } from "~/types/user.type"
 import { SuccessResponse } from "~/types/utils.type"

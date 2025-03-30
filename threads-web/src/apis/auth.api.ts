@@ -4,7 +4,7 @@
  * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
  */
 
-import apiEndpoints from "~/constant/config"
+import { apiEndpoints } from "~/constant/config"
 import { AuthResponse } from "~/types/auth.type"
 import axiosInstance from "~/utils/axios"
 

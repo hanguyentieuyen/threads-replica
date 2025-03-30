@@ -4,7 +4,12 @@
  * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
  */
 
-const apiEndpoints = {
+export const defaultConstants = {
+  page: 1,
+  limit: 10
+}
+
+export const apiEndpoints = {
   baseUrl: "http://localhost:4000/",
   auth: {
     login: "/users/login",
@@ -57,4 +62,3 @@ const apiEndpoints = {
     searchPost: "/search"
   }
 }
-export default apiEndpoints

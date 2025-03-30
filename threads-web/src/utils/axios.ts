@@ -5,7 +5,7 @@
  */
 
 import axios, { AxiosError, type AxiosInstance } from "axios"
-import apiEndpoints from "~/constant/config"
+import { apiEndpoints } from "~/constant/config"
 import { toast } from "react-toastify"
 import {
   clearLocalStorage,

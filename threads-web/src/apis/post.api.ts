@@ -4,7 +4,7 @@
  * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
  */
 
-import apiEndpoints from "~/constant/config"
+import { apiEndpoints } from "~/constant/config"
 import { MediaType } from "~/constant/enum"
 import { Post, Posts } from "~/types/post.type"
 import { PostBookmark } from "~/types/postBookmark.type"

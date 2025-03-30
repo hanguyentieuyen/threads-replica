@@ -724,7 +724,7 @@ paths:
     get:
       tags:
         - users
-      summary: Get paginated posts
+      summary: Search paginated users by username
       description: Retrieves a paginated list of username.
       parameters:
         - name: query

@@ -13,12 +13,13 @@ import ContentContainer from "~/components/ContentContainer"
 import FollowerCard from "~/components/FollowerCard"
 import InputText from "~/components/InputText"
 import InfiniteScroll from "~/components/InfiniteScroll"
+import { defaultConstants } from "~/constant/config"
 
 export default function Search() {
   const { t } = useTranslation()
   const [searchText, setSearchText] = useState("")
-  const searchUsers = async ({ pageParam = 1 }: { pageParam?: number }) => {
-    const limit = 5
+  const searchUsers = async ({ pageParam = defaultConstants.page }: { pageParam?: number }) => {
+    const limit = defaultConstants.limit
     const response = await userApi.searchUsers({ query: searchText, page: pageParam, limit })
     return response.data
   }
@@ -26,7 +27,7 @@ export default function Search() {
   const useInfiniteSearchUsers = () =>
     useInfiniteQuery({
       initialPageParam: 1,
-      queryKey: ["search_users"],
+      queryKey: ["search_users", searchText],
       queryFn: searchUsers,
       getNextPageParam: (lastPage) => {
         if (lastPage.data) {
