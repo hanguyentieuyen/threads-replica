@@ -80,6 +80,15 @@ export default function Register() {
           <div className='mt-4 w-full'>
             <InputText
               register={register}
+              type='name'
+              name='username'
+              placeholder={t("username")}
+              errorMessage={errors.username?.message}
+            />
+          </div>
+          <div className='mt-4 w-full'>
+            <InputText
+              register={register}
               type='email'
               name='email'
               placeholder={t("email")}

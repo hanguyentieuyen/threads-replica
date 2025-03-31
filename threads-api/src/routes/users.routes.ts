@@ -72,7 +72,7 @@ userRouter.get('/oauth/google', requestHandler(oauthController))
  * Description: Register
  * Path: /register
  * Method: POST
- * Body: {name: string, email: string, password: string, confirm_password: string, date_of_birth: string}
+ * Body: {name: string, username: string, email: string, password: string, confirm_password: string, date_of_birth: string}
  */
 userRouter.post('/register', validateMiddleware(registerValidator, 'body'), requestHandler(registerController))
 /**

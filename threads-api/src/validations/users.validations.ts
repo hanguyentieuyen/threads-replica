@@ -132,6 +132,14 @@ export const registerValidator = Joi.object({
     'any.required': USERS_MESSAGES.NAME_IS_REQUIRED
   }),
 
+  username: Joi.string().trim().min(1).max(10).required().messages({
+    'string.empty': USERS_MESSAGES.USERNAME_IS_REQUIRED,
+    'string.base': USERS_MESSAGES.USERNAME_MUST_BE_STRING,
+    'string.min': USERS_MESSAGES.USERNAME_LENGTH_MUST_BE_FROM_1_TO_100,
+    'string.max': USERS_MESSAGES.USERNAME_LENGTH_MUST_BE_FROM_1_TO_100,
+    'any.required': USERS_MESSAGES.USERNAME_IS_REQUIRED
+  }),
+
   email: Joi.string().trim().email().required().messages({
     'string.empty': USERS_MESSAGES.EMAIL_IS_REQUIRED,
     'string.email': USERS_MESSAGES.EMAIL_IS_INVALID,

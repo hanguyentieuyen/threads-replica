@@ -62,10 +62,17 @@ export const oauthController = async (req: Request, res: Response) => {
 
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
   // Check if the email exists in the database
+  const isExistUsername = await usersService.checkUsernameExist(req.validateData.username)
   const isExistEmail = await usersService.checkEmailExist(req.validateData.email)
+
   if (isExistEmail) {
     throw new Error('Email already exists')
   }
+
+  if (isExistUsername) {
+    throw new Error('Username already exists')
+  }
+
   const data = await usersService.register(req.body)
   return res.json({
     message: USERS_MESSAGES.REGISTER_SUCCESS,

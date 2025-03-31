@@ -237,6 +237,7 @@ class UsersService {
       const data = await this.register({
         email: userInfo.email,
         name: userInfo.name,
+        username: userInfo.email,
         date_of_birth: new Date().toISOString(),
         password,
         confirm_password: password
@@ -258,7 +259,7 @@ class UsersService {
         ...payload,
         _id: userId,
         date_of_birth: new Date(payload.date_of_birth),
-        username: `user${userId.toString()}`,
+        username: payload.username,
         password: hashPassword(payload.password),
         verify_email_token: emailVerifyToken
       })

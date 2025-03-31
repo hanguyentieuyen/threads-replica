@@ -24,6 +24,7 @@ export const useValidationSchemas = () => {
 
   const registerSchemaYup = yup.object({
     name: yup.string().required(t("validation.nameRequired")),
+    username: yup.string().required(t("validation.usernameRequired")),
     email: yup
       .string()
       .required(t("validation.emailRequired"))
