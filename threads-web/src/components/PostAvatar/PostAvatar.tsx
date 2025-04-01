@@ -4,12 +4,15 @@
  * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
  */
 
+import Button from "../Button"
+import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover"
+
 type AvatarProps = {
-  name: string
+  username: string
   postedTime: string
   image: string
 }
-export default function PostAvatar({ name, image, postedTime }: AvatarProps) {
+export default function PostAvatar({ username, image, postedTime }: AvatarProps) {
   return (
     <div className='flex items-center space-x-3'>
       <div className='relative'>
@@ -19,7 +22,51 @@ export default function PostAvatar({ name, image, postedTime }: AvatarProps) {
         </div>
       </div>
       <div className='flex items-center'>
-        <span className='text-sm font-semibold mr-2'>{name}</span>
+        <Popover>
+          <PopoverTrigger>
+            <span
+              onMouseEnter={(e) => {
+                e.stopPropagation()
+                e.currentTarget.click()
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation()
+                e.currentTarget.click()
+              }}
+              className='hover:underline focus:outline-none'
+            >
+              {username}
+            </span>
+          </PopoverTrigger>
+          <PopoverContent className='w-80 rounded-lg shadow-lg bg-white p-4 border border-gray-200' sideOffset={5}>
+            <div className='flex items-start gap-3'>
+              <div className='flex-shrink-0'>
+                <img src='/api/placeholder/64/64' alt='User avatar' className='w-16 h-16 rounded-full object-cover' />
+              </div>
+              <div className='flex-1'>
+                <h3 className='text-lg font-bold'>Tuyet Han</h3>
+                <p className='text-gray-600 text-sm'>imtuyethan</p>
+
+                <div className='mt-2'>
+                  <p className='text-sm'>🌱 I yap about design, art, tech & a bit of everything</p>
+                </div>
+
+                <div className='mt-3 flex items-center gap-1 text-sm text-gray-600'>
+                  <span className='flex items-center gap-1'>
+                    <span className='inline-flex'>🌐👤</span>
+                    <span>1.967 người theo dõi</span>
+                  </span>
+                </div>
+
+                <div className='mt-3'>
+                  <Button className='w-full py-1.5 px-3 bg-gray-100 rounded-full text-sm font-medium hover:bg-gray-200 transition'>
+                    Đang theo dõi
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
         <span className='text-sm text-gray-500'>{postedTime}</span>
       </div>
     </div>

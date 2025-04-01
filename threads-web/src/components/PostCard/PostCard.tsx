@@ -132,7 +132,7 @@ export default function PostCard({
     <div className=' mx-auto'>
       {/* Header */}
       <div className='flex items-center'>
-        <PostAvatar name={username} image='../src/assets/capy.jpg' postedTime='10 hours ago' />
+        <PostAvatar username={username as string} image='../src/assets/capy.jpg' postedTime='10 hours ago' />
       </div>
 
       {/* Content */}
