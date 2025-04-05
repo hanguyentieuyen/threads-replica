@@ -75,6 +75,7 @@ export const Posts: React.FC = () => {
                 bookmarkCount={item?.bookmark_count}
                 likeCount={item?.like_count}
                 createdAt={item?.created_at}
+                user={item.user}
               />
             </div>
           ))}

@@ -28,7 +28,7 @@ export const PostDetail: React.FC = () => {
     queryKey: ["comments", postId],
     queryFn: () => commentApi.get({ post_id: postId as string, page: 1, limit: 20 })
   })
-  console.log(commentsData?.data)
+
   const comments = commentsData?.data
   const post = postDetailsData?.data.data
   if (!post || !comments) return <LoadingScreen />

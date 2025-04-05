@@ -13,6 +13,7 @@ import { AxiosResponse } from "axios"
 import { SuccessResponse } from "~/types/utils.type"
 import Icon from "../Icon"
 import { useState } from "react"
+import { User } from "~/types/user.type"
 
 type PostCardProps = {
   postId: string
@@ -24,6 +25,7 @@ type PostCardProps = {
   bookmarkCount?: number
   likeCount?: number
   createdAt?: string
+  user?: User
 }
 // Test with post_id
 //const post_id = "66d6059974ecbef1214d20ab"
@@ -33,10 +35,10 @@ export default function PostCard({
   hashtags,
   mentions,
   parentId,
-  username,
   bookmarkCount: initialBookmarkCount,
   likeCount: initialLikeCount,
-  createdAt
+  createdAt,
+  user
 }: PostCardProps) {
   const queryClient = useQueryClient()
   const [like, toggleLike] = useToggleState(Boolean(initialLikeCount))
@@ -48,7 +50,6 @@ export default function PostCard({
     const cacheKey = [["post", postId]]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     queryClient.setQueryData(cacheKey, (oldData: any) => {
-      console.log("old data:", oldData)
       if (!oldData) {
         // Initialize the data if it's null
         return { [field]: increment }
@@ -132,7 +133,7 @@ export default function PostCard({
     <div className=' mx-auto'>
       {/* Header */}
       <div className='flex items-center'>
-        <PostAvatar username={username as string} image='../src/assets/capy.jpg' postedTime='10 hours ago' />
+        <PostAvatar user={user} postedTime={createdAt} />
       </div>
 
       {/* Content */}
