@@ -110,7 +110,7 @@ export default function Login() {
     })
   })
   return (
-    <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
+    <div className='mt-36 p-6 w-full max-w-md z-10'>
       <form onSubmit={onSubmit}>
         <div className='p-6 flex flex-col justify-between items-center w-full'>
           <span className='text-md text-stone-950 font-bold'>{t("loginThreads")}</span>
@@ -151,15 +151,15 @@ export default function Login() {
               <Link to={path.register}>{t("signUp")}</Link>
             </span>
           </div>
-          <hr className='w-full mt-8'></hr>
+          <hr className='w-full mt-6'></hr>
         </div>
       </form>
-      <div className='w-full mt-4'>
+      <div className='w-full px-6'>
         <Button
           onClick={handleLogin}
           className='w-full flex justify-center items-center space-x-2 bg-gray-950 text-white text-sm p-3 rounded-xl'
         >
-          <img src='src/assets/signingoogle.svg' className='h-7 w-7' />
+          <img src='src/assets/signingoogle.svg' className='h-6 w-6' />
           <span>{t("signInWithGoogle")}</span>
         </Button>
       </div>

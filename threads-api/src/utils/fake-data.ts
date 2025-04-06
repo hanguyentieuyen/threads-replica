@@ -23,6 +23,7 @@ const DEFAULT_HASHTAGS = ['NodeJS', 'MongoDB', 'NextJS', 'Swagger', 'Docker', 'R
 
 const createRandomUser = (): RegisterReqBody => ({
   name: faker.internet.displayName(),
+  username: `${faker.internet.userName()}_${faker.string.uuid().slice(0, 8)}`,
   email: faker.internet.email(),
   password: PASSWORD,
   confirm_password: PASSWORD,

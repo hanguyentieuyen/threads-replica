@@ -197,12 +197,7 @@ userRouter.patch(
  * Method: GET
  * Query: username="hayen"
  */
-userRouter.get(
-  '/check-username',
-  validateMiddleware(accessTokenValidator, 'headers'),
-  validateMiddleware(usernameValidator, 'params'),
-  requestHandler(usernameController)
-)
+userRouter.get('/check-username', validateMiddleware(usernameValidator, 'params'), requestHandler(usernameController))
 
 /**
  * Description: Get user profile

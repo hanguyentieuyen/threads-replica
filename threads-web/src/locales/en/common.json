@@ -13,6 +13,7 @@
   "loginThreads": "Login Threads",
   "registerThreads": "Register Threads",
   "signInWithGoogle": "Sign In With Google",
+  "alreadyHaveAnAccount": "Already have an account?",
   "signIn": "Sign In",
   "signUp": "Sign Up",
   "logout": "Log Out",

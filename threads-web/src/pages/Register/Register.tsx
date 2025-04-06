@@ -5,12 +5,14 @@
  */
 
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { authApi } from "~/apis/auth.api"
+import { userApi } from "~/apis/user.api"
 import Button from "~/components/Button"
 import DatePicker from "~/components/DatePicker/DatePicker"
 import InputText from "~/components/InputText"
@@ -24,12 +26,24 @@ export default function Register() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { registerSchemaYup } = useValidationSchemas()
+  const [currentUsername, setCurrentUsername] = useState<string>()
+
+  const { data: checkExistUsername } = useQuery({
+    queryKey: ["exist_username", currentUsername], // key currentUsername to track value change
+    queryFn: () => userApi.checkExistUsername(currentUsername as string)
+  })
+
+  const handleCheckExistUsername = (v: string) => {
+    setCurrentUsername(v)
+  }
+
   const {
     register,
     setError,
     handleSubmit,
     setValue,
     reset,
+    clearErrors,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(registerSchemaYup)
@@ -63,8 +77,17 @@ export default function Register() {
       }
     })
   })
+
+  useEffect(() => {
+    if (checkExistUsername?.data.data?.exist) {
+      setError("username", { type: "onBlur", message: "Username already exists" })
+    } else {
+      clearErrors("username")
+    }
+  }, [checkExistUsername, clearErrors, setError])
+
   return (
-    <div className='mt-[30vh] p-6 mb-14 w-full max-w-[400px] z-10'>
+    <div className='mt-36 p-6 w-full max-w-md z-10'>
       <form onSubmit={onSubmit}>
         <div className='p-6 flex flex-col justify-between items-center'>
           <span className='text-md text-stone-950 font-bold'>{t("registerThreads")}</span>
@@ -83,6 +106,7 @@ export default function Register() {
               type='name'
               name='username'
               placeholder={t("username")}
+              onBlur={(e) => handleCheckExistUsername(e.target.value)}
               errorMessage={errors.username?.message}
             />
           </div>
@@ -120,14 +144,16 @@ export default function Register() {
           </div>
 
           <div className='w-full mt-4'>
-            <Button
-              type='submit'
-              className='w-[100%] flex justify-center bg-gray-950 text-white text-sm p-4 rounded-xl'
-            >
+            <Button type='submit' className='w-full flex justify-center bg-gray-950 text-white text-sm p-3 rounded-xl'>
               {t("signUp")}
             </Button>
           </div>
-          <hr className='w-full mt-8'></hr>
+          <div className='mt-5 w-full flex justify-between flex-shrink-0'>
+            <span className='text-sm text-gray-400'>{t("alreadyHaveAnAccount")}</span>
+            <span className='text-sm text-gray-400'>
+              <Link to={path.login}>{t("signIn")}</Link>
+            </span>
+          </div>
         </div>
       </form>
     </div>
