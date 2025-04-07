@@ -13,7 +13,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <div className='md:col-span-1 '>
           <Sidebar className='sticky top-0 left-0' />
         </div>
-        <div className='md:col-span-11 '>{children}</div>
+        <div className='md:col-span-11'>{children}</div>
       </div>
     </div>
   )
