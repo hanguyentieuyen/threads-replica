@@ -5,16 +5,17 @@
  */
 
 import express from 'express'
-import databaseService from './services/database.services'
-import usersRouter from './routes/users.routes'
-import { defaultErrorHandler } from './utils/error.middlewares'
 import cors, { CorsOptions } from 'cors'
+import databaseService from './services/database.services'
+import { defaultErrorHandler } from './utils/error.middlewares'
+import usersRouter from './routes/users.routes'
+import authRouter from './routes/auth.routers'
 import postsRouter from './routes/posts.routes'
 import searchRouter from './routes/search.routes'
 import mediaRouter from './routes/medias.routes'
 import hashTagsRouter from './routes/hashtags.routes'
-import { createUploadFolder } from './utils/fileparser'
 import staticRouter from './routes/static.routes'
+import { createUploadFolder } from './utils/fileparser'
 //import '~/utils/fake-data'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
@@ -72,6 +73,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpeciation))
 
 app.use(cors(corsOption))
 // route endpoint
+app.use('/auth', authRouter)
 app.use('/users', usersRouter)
 app.use('/posts', postsRouter)
 app.use('/search', searchRouter)

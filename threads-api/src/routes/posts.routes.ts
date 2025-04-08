@@ -22,10 +22,10 @@ import {
   postIdValidator,
   postValidator
 } from '~/validations/posts.validations'
-import { accessTokenValidator } from '~/validations/users.validations'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
 import { getCommentsController } from '~/controllers/comments.controllers'
+import { accessTokenValidator } from '~/validations/auth.validations'
 
 const postsRouter = Router()
 

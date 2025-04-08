@@ -9,7 +9,6 @@ import { getNotificationsController } from '~/controllers/notifications.controll
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
 import { paginationValidator } from '~/validations/posts.validations'
-import { accessTokenValidator } from '~/validations/users.validations'
 
 const notificationsRouter = Router()
 

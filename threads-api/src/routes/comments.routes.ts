@@ -14,8 +14,8 @@ import {
 } from '~/controllers/comments.controllers'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
+import { accessTokenValidator } from '~/validations/auth.validations'
 import { commentIdValidator, createCommentValidator, updateCommentValidator } from '~/validations/comment.validations'
-import { accessTokenValidator } from '~/validations/users.validations'
 
 const commentsRouter = Router()
 

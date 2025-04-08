@@ -8,8 +8,8 @@ import { Router } from 'express'
 import { createHashTagController, searchHashTagsController } from '~/controllers/hashtags.controllers'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
+import { accessTokenValidator } from '~/validations/auth.validations'
 import { createHashTagsValidator, searchHashTagsValidator } from '~/validations/hashtags.validations'
-import { accessTokenValidator } from '~/validations/users.validations'
 
 const hashTagsRouter = Router()
 

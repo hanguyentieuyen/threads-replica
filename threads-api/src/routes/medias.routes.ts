@@ -8,7 +8,7 @@ import { Router } from 'express'
 import { uploadImageController, uploadVideoController } from '~/controllers/medias.controllers'
 import { requestHandler } from '~/utils/requestHandler'
 import { validateMiddleware } from '~/utils/validateMiddleware'
-import { accessTokenValidator } from '~/validations/users.validations'
+import { accessTokenValidator } from '~/validations/auth.validations'
 
 const mediaRouter = Router()
 
