@@ -132,7 +132,7 @@ export default function Comment({
     <div className=' mx-auto'>
       {/* Header */}
       <div className='flex items-center justify-between'>
-        <PostAvatar name={username} image={user_avatar || "../src/assets/capy.jpg"} postedTime={created_at} />
+        <PostAvatar user_avatar={user_avatar} username={username} postedTime={created_at} />
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Icon name='Ellipsis' size={16} className='cursor-pointer' />

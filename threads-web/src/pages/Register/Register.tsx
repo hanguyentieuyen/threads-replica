@@ -68,7 +68,7 @@ export default function Register() {
             console.log("formError: ", formError)
             Object.keys(formError).forEach((key) => {
               setError(key as keyof FormData, {
-                message: formError[key as keyof FormData],
+                message: formError[key as keyof FormData] as string,
                 type: "Server"
               })
             })

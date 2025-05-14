@@ -40,7 +40,7 @@ export const useValidationSchemas = () => {
   })
 
   const resetPasswordSchemaYup = yup.object({
-    forgot_password_token: yup.string().required(t("validation.forgotPasswordTokenRequired")).nullable(),
+    forgot_password_token: yup.string().required(t("validation.forgotPasswordTokenRequired")),
     password: yup
       .string()
       .required(t("validation.passwordRequired"))

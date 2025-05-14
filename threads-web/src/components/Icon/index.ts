@@ -1,2 +1,2 @@
-import Icon from "./icon"
+import Icon from "./Icon"
 export default Icon

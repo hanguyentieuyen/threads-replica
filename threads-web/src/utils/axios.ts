@@ -4,7 +4,7 @@
  * 🏠 [Repo](https://github.com/hanguyentieuyen/threads-replica)
  */
 
-import axios, { AxiosError, type AxiosInstance } from "axios"
+import axios, { AxiosError, AxiosRequestHeaders, type AxiosInstance } from "axios"
 import { apiEndpoints } from "~/constant/config"
 import { toast } from "react-toastify"
 import {
@@ -105,7 +105,7 @@ export class Axios {
             return (
               this.refreshTokenRequest &&
               this.refreshTokenRequest.then((access_token) => {
-                if (configError.headers) configError.headers.authorization = access_token
+                if (configError.headers) (configError.headers as AxiosRequestHeaders).authorization = access_token
                 // Nghĩa là chúng ta tiếp tục gọi lại request cũ vừa bị lỗi
                 return this.instance({
                   ...configError,

@@ -38,14 +38,14 @@ const Profile = () => {
     staleTime: 1000 * 60 * 5 // cache 5 minutes
   })
 
-  const userData = profileData?.data
+  const userData = profileData?.data.data as User
 
   if (!userData) return null
-  const { name, date_of_birth, bio, location, website, username: userName, avatar } = userData as User
+  const { name, date_of_birth, bio, location, website, username: userName, avatar } = userData
   return (
     <>
       <Helmet>
-        <title>{`${userData?.data?.name ?? "Guest"} (${userData?.data?.name ?? "unknown"}) on Threads`}</title>
+        <title>{`${name ?? "Guest"} on Threads`}</title>
         <meta name='description' content='Profile - Threads Replica' />
       </Helmet>
       <HeaderContainer />

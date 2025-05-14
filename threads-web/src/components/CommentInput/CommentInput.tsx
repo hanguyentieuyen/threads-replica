@@ -13,7 +13,6 @@ import { useState } from "react"
 import { toast } from "react-toastify"
 
 type CommentProps = {
-  className?: string
   postId: string
   parentCommentId: string | null
 }
@@ -23,7 +22,7 @@ type CommentDataType = {
   post_id: string
   content: string
 }
-export default function CommentInput({ className, postId, parentCommentId }: CommentProps) {
+export default function CommentInput({ postId, parentCommentId }: CommentProps) {
   const [content, setContent] = useState<string>("")
   const createCommentMutation = useMutation({
     mutationFn: (body: CommentDataType) => commentApi.create(body)

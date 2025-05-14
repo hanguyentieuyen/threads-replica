@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * 🐱 Author: HaYen <hanguyentieuyen@gmail.com>
  * 🍀 Made with ❤️ and ☕ by hanguyentieuyen
@@ -32,9 +33,6 @@ type PostCardProps = {
 export default function PostCard({
   postId,
   content,
-  hashtags,
-  mentions,
-  parentId,
   bookmarkCount: initialBookmarkCount,
   likeCount: initialLikeCount,
   createdAt,
@@ -133,7 +131,7 @@ export default function PostCard({
     <div className=' mx-auto'>
       {/* Header */}
       <div className='flex items-center'>
-        <PostAvatar user={user} postedTime={createdAt} />
+        <PostAvatar username={user?.name ?? ""} user_avatar={user?.avatar ?? ""} postedTime={createdAt} />
       </div>
 
       {/* Content */}

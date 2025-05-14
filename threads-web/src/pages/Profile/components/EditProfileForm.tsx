@@ -20,7 +20,8 @@ import { useEffect, useState } from "react"
 
 type FormData = UserSchemaYup
 
-export const EditProfileForm = ({ name, date_of_birth, bio, username, avatar, location, website }: FormData) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const EditProfileForm = ({ name, bio, username, avatar, location, website }: FormData) => {
   const { t } = useTranslation()
   const { userSchemaYup } = useValidationSchemas()
   const [currentUsername, setCurrentUsername] = useState<string>()
@@ -71,7 +72,7 @@ export const EditProfileForm = ({ name, date_of_birth, bio, username, avatar, lo
           if (formError) {
             Object.keys(formError).forEach((key) => {
               setError(key as keyof FormData, {
-                message: formError[key as keyof FormData],
+                message: formError[key as keyof FormData] as string,
                 type: "Server"
               })
             })
