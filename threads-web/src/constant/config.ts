@@ -10,7 +10,7 @@ export const defaultConstants = {
 }
 
 export const apiEndpoints = {
-  baseUrl: "http://localhost:4000/",
+  baseUrl: import.meta.env.VITE_API_URL,
   auth: {
     login: "/users/login",
     logout: "/users/logout",
