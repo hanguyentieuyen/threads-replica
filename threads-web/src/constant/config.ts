@@ -12,16 +12,16 @@ export const defaultConstants = {
 export const apiEndpoints = {
   baseUrl: import.meta.env.VITE_BASE_URL,
   auth: {
-    login: "/users/login",
-    logout: "/users/logout",
-    register: "/users/register",
-    refreshToken: "/refresh-access-token",
-    forgotPassword: "/users/forgot-password",
-    verifyForgotPassword: "/users/verify-forgot-password",
-    resetPassword: "/users/reset-password",
-    changePassword: "/users/change-password",
-    verifyEmail: "/users/verify-email",
-    loginWithGoogle: "/users/oauth/google"
+    login: "/auth/login",
+    logout: "/auth/logout",
+    register: "/auth/register",
+    refreshToken: "/auth/refresh-token",
+    forgotPassword: "/auth/forgot-password",
+    verifyForgotPassword: "/auth/verify-forgot-password",
+    resetPassword: "/auth/reset-password",
+    changePassword: "/auth/change-password",
+    verifyEmail: "/auth/verify-email",
+    loginWithGoogle: "/auth/oauth/google"
   },
   user: {
     checkExistUsername: "/users/check-username",
