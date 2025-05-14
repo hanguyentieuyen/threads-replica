@@ -10,7 +10,7 @@ export const defaultConstants = {
 }
 
 export const apiEndpoints = {
-  baseUrl: import.meta.env.VITE_API_URL,
+  baseUrl: import.meta.env.VITE_BASE_URL,
   auth: {
     login: "/users/login",
     logout: "/users/logout",
